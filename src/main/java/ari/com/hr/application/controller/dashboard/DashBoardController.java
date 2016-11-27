@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author ari-prasetiyo
  */
 @Controller
-
 @RequestMapping("/dashboard")
 public class DashBoardController {
     @RequestMapping("")
