@@ -19,4 +19,10 @@ public class DashBoardController {
     public String dashboard(){
         return "/admin/index";
     }
+    
+    
+    @RequestMapping("/2")
+    public String dashboard2(){
+        return "/admin/index_ori.html";
+    }
 }
