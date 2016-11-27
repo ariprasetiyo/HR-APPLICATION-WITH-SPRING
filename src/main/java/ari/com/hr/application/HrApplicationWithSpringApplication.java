@@ -16,8 +16,6 @@ public class HrApplicationWithSpringApplication {
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(HrApplicationWithSpringApplication.class, args);
         Authentication auth2 = SecurityContextHolder.getContext().getAuthentication();
-        log.debug("------------------------------------------------");
-        System.out.println("------------------------------------------------1");
         if (auth2 != null) {
 
             Collection<?> auths = auth2.getAuthorities();
@@ -32,7 +30,5 @@ public class HrApplicationWithSpringApplication {
             log.debug("principle : " + auth2.getDetails());
             log.debug("principle : " + auth2.getCredentials());
         }
-        
-
     }
 }
