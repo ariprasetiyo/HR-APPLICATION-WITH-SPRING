@@ -1,0 +1,13 @@
+ari/com/hr/application/model/SysUserRoles.class
+ari/com/hr/application/model/ModelSerializable.class
+ari/com/hr/application/model/SysAuthorization.class
+ari/com/hr/application/controller/dashboard/DashBoardController.class
+ari/com/hr/application/dao/SysUserDao.class
+ari/com/hr/application/dao/SysUserRolesDao.class
+ari/com/hr/application/controller/LoginController.class
+ari/com/hr/application/HrApplicationWithSpringApplication.class
+ari/com/hr/application/ConfigurationWeb.class
+ari/com/hr/application/controller/LogoutController.class
+ari/com/hr/application/dao/services/SysUserRolesServices.class
+ari/com/hr/application/model/SysUser.class
+ari/com/hr/application/dao/SysAuthorizationDao.class
