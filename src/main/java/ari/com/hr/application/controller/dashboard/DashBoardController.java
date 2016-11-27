@@ -14,10 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 
- @RequestMapping("/dashboard")
+@RequestMapping("/dashboard")
 public class DashBoardController {
     @RequestMapping("")
     public String dashboard(){
         return "/admin/index";
+    }
+    
+    @RequestMapping("/2")
+    public String dashboard2(){
+        return "/admin/index_ori.html";
     }
 }
