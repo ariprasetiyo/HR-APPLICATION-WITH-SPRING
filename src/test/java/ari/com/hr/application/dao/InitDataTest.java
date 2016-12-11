@@ -13,6 +13,7 @@ import ari.com.hr.application.model.SysUserRoles;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import junit.framework.Assert;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,25 +66,140 @@ public class InitDataTest {
         Assert.assertNotNull(sysRoles.getId());
     }
 
-    //@Before
-    @Ignore
+    @Before
+    //@Ignore
     public void initDataSysAuthorization() {
         sysAuthorizationDao.deleteAll();
 
         Long idRoles = sysRolesDao.getIdByName("admin");
+        Assert.assertNotNull(idRoles);
         SysAuthorization sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/admin/**");
-        sysAuthorization.setSysRoles(idRoles);
-        sysAuthorizationDao.save(sysAuthorization);
-        sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/user/**");
-        sysAuthorization.setSysRoles(idRoles);
-        sysAuthorizationDao.save(sysAuthorization);
-        sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/dashboard/**");
-        sysAuthorization.setSysRoles(idRoles);
-        sysAuthorizationDao.save(sysAuthorization);
 
+        //Parent
+        sysAuthorization.setPatternDispatcherUrl(null);
+        sysAuthorization.setNameMenu("Dashboard");
+        sysAuthorization.setIsDelete(true);
+        sysAuthorization.setIsInsert(true);
+        sysAuthorization.setIsRead(true);
+        sysAuthorization.setIsUpdate(true);
+        sysAuthorization.setParent(null);
+        sysAuthorization.setSysRoles(idRoles);
+        SysAuthorization parentDashBoard = sysAuthorizationDao.save(sysAuthorization);
+        Assert.assertNotNull(sysAuthorization.getId());
+
+        //Parent child
+        sysAuthorization.setPatternDispatcherUrl("/Dashboard/V1");
+        sysAuthorization.setNameMenu("Dashboard V1");
+        sysAuthorization.setIsDelete(true);
+        sysAuthorization.setIsInsert(true);
+        sysAuthorization.setIsRead(true);
+        sysAuthorization.setIsUpdate(true);
+        sysAuthorization.setSysRoles(idRoles);
+        sysAuthorization.setParent(parentDashBoard);
+        sysAuthorizationDao.save(sysAuthorization);
+        Assert.assertNotNull(sysAuthorization.getId());
+
+        //Parent child
+        sysAuthorization.setPatternDispatcherUrl("/Dashboard/V2");
+        sysAuthorization.setNameMenu("Dashboard V2");
+        sysAuthorization.setIsDelete(true);
+        sysAuthorization.setIsInsert(true);
+        sysAuthorization.setIsRead(true);
+        sysAuthorization.setIsUpdate(true);
+        sysAuthorization.setSysRoles(idRoles);
+        sysAuthorization.setParent(parentDashBoard);
+        sysAuthorizationDao.save(sysAuthorization);
+        Assert.assertNotNull(sysAuthorization.getId());
+
+        //Parent
+        sysAuthorization = new SysAuthorization();
+        sysAuthorization.setPatternDispatcherUrl(null);
+        sysAuthorization.setNameMenu("Utility");
+        sysAuthorization.setIsDelete(true);
+        sysAuthorization.setIsInsert(true);
+        sysAuthorization.setIsRead(true);
+        sysAuthorization.setIsUpdate(true);
+        sysAuthorization.setParent(null);
+        sysAuthorization.setSysRoles(idRoles);
+        SysAuthorization parentUtility = sysAuthorizationDao.save(sysAuthorization);
+        Assert.assertNotNull(sysAuthorization.getId());
+
+        //Parent child
+        sysAuthorization = new SysAuthorization();
+        sysAuthorization.setPatternDispatcherUrl(null);
+        sysAuthorization.setNameMenu("Setting User");
+        sysAuthorization.setIsDelete(true);
+        sysAuthorization.setIsInsert(true);
+        sysAuthorization.setIsRead(true);
+        sysAuthorization.setIsUpdate(true);
+        sysAuthorization.setParent(parentUtility);
+        sysAuthorization.setSysRoles(idRoles);
+        SysAuthorization parentSettingUser = sysAuthorizationDao.save(sysAuthorization);
+        Assert.assertNotNull(sysAuthorization.getId());
+
+        //Parent Parent child
+        sysAuthorization = new SysAuthorization();
+        sysAuthorization.setPatternDispatcherUrl("/Utility/SettingUser/User");
+        sysAuthorization.setNameMenu("User");
+        sysAuthorization.setIsDelete(true);
+        sysAuthorization.setIsInsert(true);
+        sysAuthorization.setIsRead(true);
+        sysAuthorization.setIsUpdate(true);
+        sysAuthorization.setParent(parentSettingUser);
+        sysAuthorization.setSysRoles(idRoles);
+        sysAuthorizationDao.save(sysAuthorization);
+        Assert.assertNotNull(sysAuthorization.getId());
+
+        //Parent Parent child
+        sysAuthorization = new SysAuthorization();
+        sysAuthorization.setPatternDispatcherUrl("/Utility/SettingUser/Authorization");
+        sysAuthorization.setNameMenu("Authorization");
+        sysAuthorization.setIsDelete(true);
+        sysAuthorization.setIsInsert(true);
+        sysAuthorization.setIsRead(true);
+        sysAuthorization.setIsUpdate(true);
+        sysAuthorization.setParent(parentSettingUser);
+        sysAuthorization.setSysRoles(idRoles);
+        sysAuthorizationDao.save(sysAuthorization);
+        Assert.assertNotNull(sysAuthorization.getId());
+
+        //Parent child
+        sysAuthorization = new SysAuthorization();
+        sysAuthorization.setPatternDispatcherUrl("/Utility/ProfileSetting");
+        sysAuthorization.setNameMenu("Profile Setting");
+        sysAuthorization.setIsDelete(true);
+        sysAuthorization.setIsInsert(true);
+        sysAuthorization.setIsRead(true);
+        sysAuthorization.setIsUpdate(true);
+        sysAuthorization.setParent(parentUtility);
+        sysAuthorization.setSysRoles(idRoles);
+        sysAuthorizationDao.save(sysAuthorization);
+        Assert.assertNotNull(sysAuthorization.getId());
+
+        //Parent child
+        sysAuthorization = new SysAuthorization();
+        sysAuthorization.setPatternDispatcherUrl("/Utility/ReportSetting");
+        sysAuthorization.setNameMenu("Report Setting");
+        sysAuthorization.setIsDelete(true);
+        sysAuthorization.setIsInsert(true);
+        sysAuthorization.setIsRead(true);
+        sysAuthorization.setIsUpdate(true);
+        sysAuthorization.setParent(parentUtility);
+        sysAuthorization.setSysRoles(idRoles);
+        sysAuthorizationDao.save(sysAuthorization);
+        Assert.assertNotNull(sysAuthorization.getId());
+
+        //Parent child
+        sysAuthorization = new SysAuthorization();
+        sysAuthorization.setPatternDispatcherUrl("/Utility/CalendarSetting");
+        sysAuthorization.setNameMenu("Calendar Setting");
+        sysAuthorization.setIsDelete(true);
+        sysAuthorization.setIsInsert(true);
+        sysAuthorization.setIsRead(true);
+        sysAuthorization.setIsUpdate(true);
+        sysAuthorization.setParent(parentUtility);
+        sysAuthorization.setSysRoles(idRoles);
+        sysAuthorizationDao.save(sysAuthorization);
         Assert.assertNotNull(sysAuthorization.getId());
 
         idRoles = sysRolesDao.getIdByName("user");
