@@ -20,7 +20,7 @@ import javax.persistence.Table;
 @Table(name = "sys_authorization")
 public class SysAuthorization extends ModelSerializable {
 
-    @Column(name = "pattern_dispatcher_url", length = 30, nullable = true)
+    @Column(name = "pattern_dispatcher_url", length = 100, nullable = true)
     private String patternDispatcherUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
