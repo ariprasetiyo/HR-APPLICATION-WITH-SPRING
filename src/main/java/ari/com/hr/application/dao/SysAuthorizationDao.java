@@ -7,7 +7,10 @@ package ari.com.hr.application.dao;
 
 import ari.com.hr.application.dto.SysAuthorizationDto;
 import ari.com.hr.application.model.SysAuthorization;
+import ari.com.hr.application.model.SysRoles;
 import java.util.List;
+import javax.transaction.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -24,6 +27,11 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
     @Query("select a.patternDispatcherUrl as patternDispatcherUrl, b.roleName as roleName from SysAuthorization a left join a.sysRoles b ")
     public List<SysAuthorizationDto> listAll2();
 
-    @Query("SELECT new ari.com.hr.application.dto.SysAuthorizationDto(a.patternDispatcherUrl as patternDispatcherUrl, b.roleName as roleName) from SysAuthorization a left join a.sysRoles b order by a.patternDispatcherUrl ")
+    @Query("SELECT new ari.com.hr.application.dto.SysAuthorizationDto(a.patternDispatcherUrl as patternDispatcherUrl, b.roleName as roleName) from SysAuthorization a left join a.sysRoles b where a.patternDispatcherUrl is not null order by a.patternDispatcherUrl ")
     public List<SysAuthorizationDto> listRolenameAndDispatcherUrl();
+
+    @Modifying(clearAutomatically = true)
+    //@Transactional
+    @Query("update SysAuthorization a set a.parent.id = :nparentId where a.sysRoles.id = :nId")
+    public void updateSysRoleId(@Param("nId") long id, @Param("nparentId") Long parentId);
 }

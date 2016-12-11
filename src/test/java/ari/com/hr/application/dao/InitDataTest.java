@@ -66,14 +66,18 @@ public class InitDataTest {
         Assert.assertNotNull(sysRoles.getId());
     }
 
-    @Before
+    @Test
     //@Ignore
     public void initDataSysAuthorization() {
-        sysAuthorizationDao.deleteAll();
 
         Long idRoles = sysRolesDao.getIdByName("admin");
         Assert.assertNotNull(idRoles);
         SysAuthorization sysAuthorization = new SysAuthorization();
+
+        //sysAuthorization.setParent(null);
+        //sysAuthorization.setSysRoles(idRoles);
+        sysAuthorizationDao.updateSysRoleId(idRoles, null);
+        sysAuthorizationDao.deleteAll();
 
         //Parent
         sysAuthorization.setPatternDispatcherUrl(null);
@@ -88,6 +92,7 @@ public class InitDataTest {
         Assert.assertNotNull(sysAuthorization.getId());
 
         //Parent child
+        sysAuthorization = new SysAuthorization();
         sysAuthorization.setPatternDispatcherUrl("/Dashboard/V1");
         sysAuthorization.setNameMenu("Dashboard V1");
         sysAuthorization.setIsDelete(true);
@@ -100,6 +105,7 @@ public class InitDataTest {
         Assert.assertNotNull(sysAuthorization.getId());
 
         //Parent child
+        sysAuthorization = new SysAuthorization();
         sysAuthorization.setPatternDispatcherUrl("/Dashboard/V2");
         sysAuthorization.setNameMenu("Dashboard V2");
         sysAuthorization.setIsDelete(true);
@@ -302,7 +308,6 @@ public class InitDataTest {
     @PersistenceContext
     public EntityManager em;
 
-    @Test
     @Ignore
     @Transactional
     public void readRolesAndDipatcherUrl() {

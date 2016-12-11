@@ -31,6 +31,7 @@ public class ModelSerializable implements Serializable {
     @Column(nullable = false, name = "modified_time")
     private Date modifiedTime = new Date();
 
+    @Column(length = 5)
     private String version = "1.0";
 
     private boolean disabled = false;

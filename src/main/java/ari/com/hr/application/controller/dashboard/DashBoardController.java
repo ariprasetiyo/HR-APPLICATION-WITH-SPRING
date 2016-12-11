@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author ari-prasetiyo
  */
 @Controller
-@RequestMapping("/dashboard")
+@RequestMapping("/Dashboard")
 public class DashBoardController {
-    @RequestMapping("")
-    public String dashboard(){
+
+    @RequestMapping("/V1")
+    public String dashboard() {
         return "/admin/index";
     }
-    
-    
-    @RequestMapping("/2")
-    public String dashboard2(){
+
+    @RequestMapping("/V2")
+    public String dashboard2() {
         return "/admin/index_ori.html";
     }
 }
