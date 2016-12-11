@@ -27,6 +27,21 @@ public class SysAuthorization extends ModelSerializable {
     @JoinColumn(nullable = false)
     private SysRoles sysRoles;
 
+    @Column(name = "name_menu")
+    private String nameMenu;
+
+    private boolean isUpdate;
+
+    private boolean isDelete;
+
+    private boolean isInsert;
+
+    private boolean isRead;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id", nullable = true)
+    private SysAuthorization parent;
+
     public SysRoles getSysRoles() {
         return sysRoles;
     }
@@ -38,7 +53,7 @@ public class SysAuthorization extends ModelSerializable {
     public void setSysRoles(long id) {
         SysRoles byId = new SysRoles();
         byId.setId(id);
-         this.sysRoles = byId;
+        this.sysRoles = byId;
     }
 
     public String getPatternDispatcherUrl() {
