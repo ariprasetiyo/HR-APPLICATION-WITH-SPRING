@@ -20,7 +20,7 @@ import javax.persistence.Table;
 @Table(name = "sys_authorization")
 public class SysAuthorization extends ModelSerializable {
 
-    @Column(name = "pattern_dispatcher_url", length = 30)
+    @Column(name = "pattern_dispatcher_url", length = 30, nullable = true)
     private String patternDispatcherUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,6 +41,54 @@ public class SysAuthorization extends ModelSerializable {
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = true)
     private SysAuthorization parent;
+
+    public String getNameMenu() {
+        return nameMenu;
+    }
+
+    public void setNameMenu(String nameMenu) {
+        this.nameMenu = nameMenu;
+    }
+
+    public boolean isIsUpdate() {
+        return isUpdate;
+    }
+
+    public void setIsUpdate(boolean isUpdate) {
+        this.isUpdate = isUpdate;
+    }
+
+    public boolean isIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(boolean isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public boolean isIsInsert() {
+        return isInsert;
+    }
+
+    public void setIsInsert(boolean isInsert) {
+        this.isInsert = isInsert;
+    }
+
+    public boolean isIsRead() {
+        return isRead;
+    }
+
+    public void setIsRead(boolean isRead) {
+        this.isRead = isRead;
+    }
+
+    public SysAuthorization getParent() {
+        return parent;
+    }
+
+    public void setParent(SysAuthorization parent) {
+        this.parent = parent;
+    }
 
     public SysRoles getSysRoles() {
         return sysRoles;
