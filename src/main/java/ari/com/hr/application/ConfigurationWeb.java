@@ -5,7 +5,10 @@
  */
 package ari.com.hr.application;
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 //import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
 //import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -16,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author ari-prasetiyo
  */
 @Configuration
+@Component
 public class ConfigurationWeb extends WebMvcConfigurerAdapter {
 
     @Override
@@ -39,4 +43,14 @@ public class ConfigurationWeb extends WebMvcConfigurerAdapter {
 //    protected void configure(HttpSecurity http) throws Exception {
 //        http.antMatcher("/**").authorizeRequests().anyRequest().authenticated();
 //    }
+    @Bean
+    public FilterRegistrationBean helloFilterRegistrationBean() {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean();
+        registrationBean.setName("menuChainFilter");
+        MenuChainFilter helloFilter = new MenuChainFilter();
+        registrationBean.setFilter(helloFilter);
+        registrationBean.setOrder(1);
+        registrationBean.addUrlPatterns("/Dashboard/*","/Admin/*");
+        return registrationBean;
+    }
 }

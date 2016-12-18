@@ -21,7 +21,7 @@ public class ModelSerializable implements Serializable {
     @Id
     @GeneratedValue( strategy = GenerationType.AUTO)
     @Column(length = 100)
-    public Long id;
+    private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, name = "created_time")

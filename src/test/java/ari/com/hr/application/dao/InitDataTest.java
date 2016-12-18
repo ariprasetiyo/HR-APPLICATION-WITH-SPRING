@@ -10,6 +10,7 @@ import ari.com.hr.application.model.SysAuthorization;
 import ari.com.hr.application.model.SysRoles;
 import ari.com.hr.application.model.SysUser;
 import ari.com.hr.application.model.SysUserRoles;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import junit.framework.Assert;
@@ -42,6 +43,25 @@ public class InitDataTest {
     @Autowired
     SysUserRolesDao sysUserRolesDao;
 
+    @Test
+    public void testAll() {
+        List<SysAuthorization> listMenu = sysAuthorizationDao.getForScreenMenu(1);
+//        SysAuthorization data = new SysAuthorization();
+//        data.setNameMenu("a");
+//        listMenu.add(data);
+//        
+//        data = new SysAuthorization();
+//        data.setNameMenu("b");
+//        listMenu.add(data);
+        if (listMenu.size() > 0) {
+            System.out.println("----------------------------" + listMenu.size());
+        }
+
+        for (SysAuthorization menu : listMenu) {
+            System.out.println("----------------------------" + menu.getNameMenu());
+        }
+    }
+
     //@Before
     @Ignore
     public void initDataRoles() {
@@ -66,8 +86,8 @@ public class InitDataTest {
         Assert.assertNotNull(sysRoles.getId());
     }
 
-    @Test
-    //@Ignore
+    //@Test
+    @Ignore
     public void initDataSysAuthorization() {
 
         Long idRoles = sysRolesDao.getIdByName("admin");

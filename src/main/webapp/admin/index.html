@@ -38,7 +38,7 @@
         <![endif]-->
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
-        <#import "inc-sidebar.html" as u />
+        <#import "inc-sidebar.html" as inc_sidebar />
         <#import "inc-header.html" as inc_header />
         <div class="wrapper">
             <@inc_header.headerpage></@inc_header.headerpage>
@@ -68,7 +68,7 @@
                     </form>
                     <!-- /.search form -->
                     <!-- sidebar menu: : style can be found in sidebar.less -->
-                    <@u.sidebarmenu></@u.sidebarmenu>
+                    <@inc_sidebar.sidebarmenu></@inc_sidebar.sidebarmenu>
                 </section>
                 <!-- /.sidebar -->
             </aside>
