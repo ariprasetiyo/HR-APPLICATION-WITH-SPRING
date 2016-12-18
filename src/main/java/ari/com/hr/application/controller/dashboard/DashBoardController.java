@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequestMapping("/Dashboard")
-public class DashBoardController {
+public class DashBoardController  {
 
     @RequestMapping("/V1")
     public String dashboard() {

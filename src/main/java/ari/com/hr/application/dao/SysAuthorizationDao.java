@@ -7,9 +7,7 @@ package ari.com.hr.application.dao;
 
 import ari.com.hr.application.dto.SysAuthorizationDto;
 import ari.com.hr.application.model.SysAuthorization;
-import ari.com.hr.application.model.SysRoles;
 import java.util.List;
-import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -34,4 +32,7 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
     //@Transactional
     @Query("update SysAuthorization a set a.parent.id = :nparentId where a.sysRoles.id = :nId")
     public void updateSysRoleId(@Param("nId") long id, @Param("nparentId") Long parentId);
+
+    @Query("from SysAuthorization  where sysRoles.id = :nsysRolesId and nameMenu is not null")
+    public List<SysAuthorization> getForScreenMenu(@Param("nsysRolesId") long idSysRole);
 }
