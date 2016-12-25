@@ -10,9 +10,8 @@ package ari.com.hr.application;
  * @author ari-prasetiyo
  */
 import ari.com.hr.application.dao.SysAuthorizationDao;
-import ari.com.hr.application.model.SysAuthorization;
+import ari.com.hr.application.dao.services.SysListMenu;
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -34,28 +33,22 @@ public class MenuChainFilter implements Filter {
 
     @Autowired
     SysAuthorizationDao sysAuthorizationDao;
-
+        
     @Override
     @Transactional
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
-        List<SysAuthorization> listMenu = sysAuthorizationDao.getForScreenMenu(1);
-        if (listMenu.size() > 0) {
-            System.out.println("----------------------------" + listMenu.size());
-        }
-
-        for (SysAuthorization menu : listMenu) {
-            if (menu.getParent() != null) {
-                System.out.println("----------------------------" + menu.getParent().getId() + " " + menu.getNameMenu());
-
-            }
-        }
-        servletRequest.setAttribute("ListMenus", listMenu);
+        StringBuilder tmpScript  = new StringBuilder();
+        String listMenu = SysListMenu.getScreenMenu(1, 0, sysAuthorizationDao, tmpScript).toString();
+        servletRequest.setAttribute("scriptMenu", listMenu);
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
     public void destroy() {
 
+    }
+
+    private String createMenus() {
+        return null;
     }
 }

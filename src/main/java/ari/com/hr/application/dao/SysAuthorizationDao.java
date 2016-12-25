@@ -6,6 +6,7 @@
 package ari.com.hr.application.dao;
 
 import ari.com.hr.application.dto.SysAuthorizationDto;
+import ari.com.hr.application.dto.SysScreenMenuDto;
 import ari.com.hr.application.model.SysAuthorization;
 import java.util.List;
 import org.springframework.data.jpa.repository.Modifying;
@@ -35,4 +36,8 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
 
     @Query("from SysAuthorization  where sysRoles.id = :nsysRolesId and nameMenu is not null")
     public List<SysAuthorization> getForScreenMenu(@Param("nsysRolesId") long idSysRole);
+
+    //Using @NamedNativeSQL and sqlResultsetMapping
+    public List<SysScreenMenuDto> listScreenMenu(@Param("nsysRolesId") long id, @Param("nparentId") Long parentId);
+
 }

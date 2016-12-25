@@ -5,12 +5,18 @@
  */
 package ari.com.hr.application.model;
 
+import ari.com.hr.application.dto.SysScreenMenuDto;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  *
@@ -18,6 +24,36 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "sys_authorization")
+@NamedNativeQuery(name = "SysAuthorization.listScreenMenu",
+        query = "select  a.id as id , a.name_menu, a.pattern_dispatcher_url, coalesce(a.parent_id, 0) as parent_id, coalesce(b.con, 0) as con  from "
+        + "sys_authorization as a "
+        + "LEFT join ( select parent_id, count(1) as con from sys_authorization GROUP by parent_id ) as b "
+        + "on a.id = b.parent_id where sys_roles_id = :nsysRolesId and coalesce(a.parent_id, 0) = :nparentId ",
+        //resultClass = SysScreenMenuDto.class,
+        resultSetMapping = "SysAuthorization.listScreenMenu"
+)
+@SqlResultSetMapping(name = "SysAuthorization.listScreenMenu",
+        classes = {
+            @ConstructorResult(
+                    targetClass = SysScreenMenuDto.class,
+                    columns = {
+                        @ColumnResult(name = "id", type = long.class),
+                        @ColumnResult(name = "name_menu", type = String.class),
+                        @ColumnResult(name = "pattern_dispatcher_url", type = String.class),
+                        @ColumnResult(name = "parent_id", type = Long.class),
+                        @ColumnResult(name = "con", type = Integer.class)
+
+                    })
+        })
+//@SqlResultSetMapping(name = "SysAuthorization.listScreenMenu",
+//        entities = @EntityResult(entityClass = SysAuthorization.class,
+//                fields = {
+//                    @FieldResult(name = "id", column = "id"),
+//                    @FieldResult(name = "nameMenu", column = "name_menu"),
+//                    @FieldResult(name = "patternDispatcherUrl", column = "pattern_dispatcher_url"),
+//                    @FieldResult(name = "parent.id", column = "parent_id"),
+//                    @FieldResult(name = "counts", column = "con")
+//                }))
 public class SysAuthorization extends ModelSerializable {
 
     @Column(name = "pattern_dispatcher_url", length = 100, nullable = true)
@@ -37,6 +73,9 @@ public class SysAuthorization extends ModelSerializable {
     private boolean isInsert;
 
     private boolean isRead;
+
+    @Transient
+    private Integer counts;
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = true)
@@ -110,6 +149,14 @@ public class SysAuthorization extends ModelSerializable {
 
     public void setPatternDispatcherUrl(String patternDispatcherUrl) {
         this.patternDispatcherUrl = patternDispatcherUrl;
+    }
+
+    public Integer getCounts() {
+        return counts;
+    }
+
+    public void setCounts(Integer counts) {
+        this.counts = counts;
     }
 
 }

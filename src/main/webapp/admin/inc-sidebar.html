@@ -1,9 +1,7 @@
-<#macro recursiveMethodMenu parentId menuName>
-<li><a href="#"><i class="fa fa-circle-o"></i>${menuName}</a></li>
-</#macro> 
 <#macro sidebarmenu >
 <ul class="sidebar-menu">
     <li class="header">MAIN NAVIGATION</li>
+    <!-- sample menu
     <li class="active treeview">
         <a href="#">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
@@ -16,27 +14,6 @@
             <li><a href="../Dashboard/V2"><i class="fa fa-circle-o"></i> Dashboard v2</a></li>
         </ul>
     </li>
-    <#assign variableX = 0 >
-    <#assign variableY = 0 >
-    <!-- listMenu -->
-    <#list ListMenus as listMenu>
-    <!-- listMenu.parent start -->
-    <#if listMenu.parent??>
-    <@recursiveMethodMenu parentId=listMenu.parent.id menuName=listMenu.nameMenu/>  
-
-    <!-- listMenu.parent else -->
-    <#else>
-    <li class="treeview">
-        <a href="#">
-            <i class="fa fa-share"></i> <span>${listMenu.nameMenu}</span>
-            <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-            </span>
-        </a>
-        <!-- listMenu.parent end -->
-        </#if> 
-        <!-- listMenu end -->
-        </#list> 
     <li class="treeview">
         <a href="#">
             <i class="fa fa-share"></i> <span>Utility</span>
@@ -71,8 +48,7 @@
             <li><a href="#"><i class="fa fa-circle-o"></i>Calendar Setting</a></li>
         </ul>
     </li>
-
-
+    -->
     <li class="treeview">
         <a href="#">
             <i class="fa fa-share"></i> <span>MultiLevel Sample</span>
@@ -106,7 +82,6 @@
             <li><a href="#"><i class="fa fa-circle-o"></i> Level One</a></li>
         </ul>
     </li>
-
-
+    ${scriptMenu}
 </ul>
 </#macro>
