@@ -50,7 +50,7 @@ public class ConfigurationWeb extends WebMvcConfigurerAdapter {
         MenuChainFilter helloFilter = new MenuChainFilter();
         registrationBean.setFilter(helloFilter);
         registrationBean.setOrder(1);
-        registrationBean.addUrlPatterns("/Dashboard/*","/Admin/*");
+        registrationBean.addUrlPatterns("/Dashboard/*","/Admin/*","/V1/*");
         return registrationBean;
     }
 }
