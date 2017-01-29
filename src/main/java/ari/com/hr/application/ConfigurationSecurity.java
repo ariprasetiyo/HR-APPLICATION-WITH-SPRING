@@ -23,9 +23,9 @@ import org.apache.commons.collections.map.MultiValueMap;
 public class ConfigurationSecurity extends WebSecurityConfigurerAdapter {
 
     private static final String SQL_LOGIN
-            = "select username, password, is_active as enabled from sys_user where username = ? ;";
+            = "select username, password, is_active as enabled from sys_user where username = ? and is_active = 1  ;";
 
-    private static final String SQL_PERMISSION
+    private static final String SQL_PERMISSION 
             = "select u.username as username, r.role_name as authority "
             + "from sys_user u join sys_user_roles ur on u.id = ur.sys_user_id "
             + "join sys_roles r on ur.sys_roles_id = r.id where u.username = ? ;";

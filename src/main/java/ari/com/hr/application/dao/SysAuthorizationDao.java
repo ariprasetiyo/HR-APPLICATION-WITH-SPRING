@@ -38,6 +38,8 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
     public List<SysAuthorization> getForScreenMenu(@Param("nsysRolesId") long idSysRole);
 
     //Using @NamedNativeSQL and sqlResultsetMapping
-    public List<SysScreenMenuDto> listScreenMenu(@Param("nsysRolesId") long id, @Param("nparentId") Long parentId);
+    //resultSetMapping = "SysAuthorization.listScreenMenu" in Model
+    //parentId by default setting must be set 0
+    public List<SysScreenMenuDto> listScreenMenu(@Param("nsysRolesId") List<Long> id, @Param("nparentId") Long parentId);
 
 }
