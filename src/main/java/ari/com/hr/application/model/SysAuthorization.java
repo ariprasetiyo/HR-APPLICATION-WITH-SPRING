@@ -28,7 +28,7 @@ import javax.persistence.Transient;
         query = "select  a.id as id , a.name_menu, a.pattern_dispatcher_url, coalesce(a.parent_id, 0) as parent_id, coalesce(b.con, 0) as con  from "
         + "sys_authorization as a "
         + "LEFT join ( select parent_id, count(1) as con from sys_authorization GROUP by parent_id ) as b "
-        + "on a.id = b.parent_id where sys_roles_id = :nsysRolesId and coalesce(a.parent_id, 0) = :nparentId ",
+        + "on a.id = b.parent_id where sys_roles_id in :nsysRolesId and coalesce(a.parent_id, 0) = :nparentId ",
         //resultClass = SysScreenMenuDto.class,
         resultSetMapping = "SysAuthorization.listScreenMenu"
 )

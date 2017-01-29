@@ -15,7 +15,9 @@ import java.util.List;
  */
 public class SysListMenu {
 
-    public static StringBuilder getScreenMenu(long sysRolesId, long parentId, SysAuthorizationDao sysAuthorizationDao, StringBuilder tmpScript) {
+    public static StringBuilder getScreenMenu(List<Long> sysRolesId, long parentId, SysAuthorizationDao sysAuthorizationDao, StringBuilder tmpScript) {
+       
+        //looking for parent menus with sign parentid have values null/zero
         List<SysScreenMenuDto> listMenu = sysAuthorizationDao.listScreenMenu(sysRolesId, parentId);
 
         for (SysScreenMenuDto menu : listMenu) {

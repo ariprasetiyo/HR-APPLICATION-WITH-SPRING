@@ -20,13 +20,12 @@ public class LoginController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login(@RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout) {
-        logger.debug("coba coba ================================================\n===============\n============");
         ModelAndView model = new ModelAndView();
         if (error != null) {
             model.addObject("error", "Invalid Credentials provided.");
         }
         if (logout != null) {
-            model.addObject("message", "Logged out from JournalDEV successfully.");
+            model.addObject("message", "Logged out from AG successfully.");
         }
         model.setViewName("login/login");
         return model;
