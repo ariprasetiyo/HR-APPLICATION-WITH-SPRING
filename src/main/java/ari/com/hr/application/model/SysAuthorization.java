@@ -64,7 +64,7 @@ public class SysAuthorization extends ModelSerializable {
     private SysRoles sysRoles;
 
     @Column(name = "name_menu")
-    private String nameMenu;
+    public String nameMenu;
 
     private boolean isUpdate;
 
@@ -79,7 +79,7 @@ public class SysAuthorization extends ModelSerializable {
 
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = true)
-    private SysAuthorization parent;
+    public SysAuthorization parent;
 
     public String getNameMenu() {
         return nameMenu;
