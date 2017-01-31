@@ -17,6 +17,9 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.apache.commons.collections.map.MultiValueMap;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
@@ -81,12 +84,20 @@ public class ConfigurationSecurity extends WebSecurityConfigurerAdapter {
                 //defaultSuccessUrl is user success login then foward to hallo and boolean true is user login direct access hallo, if false call back user before login
                 //.defaultSuccessUrl("/dashboard", true)
                 .and()
-                .logout();
+                .logout() .and()
+                .addFilterAfter(new configurationCrsfFilter(), CsrfFilter.class)
+                .csrf().csrfTokenRepository(csrfTokenRepository());
     }
 
     @Override
     public void configure(WebSecurity webSecurity) {
         // webSecurity.ignoring().antMatchers("/without_restrict/**", "/login", "/");
         webSecurity.ignoring().antMatchers("/resources/**");
+    }
+    
+    private CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+        repository.setHeaderName("X-XSRF-TOKEN");
+        return repository;
     }
 }
