@@ -18,7 +18,7 @@ import javax.persistence.Table;
 public class SysRoles  extends ModelSerializable{
     
     @Column(name = "role_name", length = 15, nullable = false)
-    private String roleName;
+    public String roleName;
 
     public String getRoleName() {
         return roleName;
