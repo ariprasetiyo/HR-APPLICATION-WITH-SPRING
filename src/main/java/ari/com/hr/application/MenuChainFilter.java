@@ -63,7 +63,7 @@ public class MenuChainFilter implements Filter {
         for (Object xx : listAuthorities) {
             listAuthoritiesString.add(xx.toString());
         }
-      
+
         //Looking for id from sys_roles
         List<SysRoles> listId = sysRolesDao.getListIdByName(listAuthoritiesString);
         //convert SysRoles.getId to List Long
@@ -72,7 +72,7 @@ public class MenuChainFilter implements Filter {
         log.debug("Access page : " + httpServletRquest.getRequestURI());
         log.debug("Authorities : ");
         for (int a = 0; a < listAuthorities.size(); a++) {
-            log.debug("- id  "+ listAuthorities.get(a));
+            log.debug("- id  " + listAuthorities.get(a));
         }
 
         StringBuilder tmpScript = new StringBuilder();
