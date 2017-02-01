@@ -6,7 +6,9 @@
 package ari.com.hr.application.controller.authorization;
 
 import ari.com.hr.application.dao.SysAuthorizationDao;
+import ari.com.hr.application.dao.SysRolesDao;
 import ari.com.hr.application.model.SysAuthorization;
+import ari.com.hr.application.model.SysRoles;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,17 +31,20 @@ public class AuthorizationController {
     @Autowired
     SysAuthorizationDao dsAuthorization;
 
+    @Autowired
+    SysRolesDao dsSysRoles;
+
     @RequestMapping(value = "/authorization", method = RequestMethod.GET)
     public String index(Model model) {
-        List<SysAuthorization> SysAuthorities = (List<SysAuthorization>) dsAuthorization.getForScreenMenu(1);
-        model.addAttribute("authorities", SysAuthorities);
-        //return dsAuthorization.findAll(page);
+        viewSysRoles(model, null);
         return "/admin/v1/authorization/index";
     }
 
     @RequestMapping(value = "/authorization", method = RequestMethod.POST)
-    public String index(Model model, Pageable page, @RequestParam(value = "roles_id", required = false) String roles_id) {
-        List<SysAuthorization> SysAuthorities = (List<SysAuthorization>) dsAuthorization.getForScreenMenu(1);
+    public String index(Model model, Pageable page,
+            @RequestParam(value = "roles_id", required = false) Long roles_id) {
+        viewSysRoles(model, roles_id);
+        List<SysAuthorization> SysAuthorities = (List<SysAuthorization>) dsAuthorization.getForScreenMenu(roles_id);
         model.addAttribute("authorities", SysAuthorities);
         //return dsAuthorization.findAll(page);
         return "/admin/v1/authorization/index";
@@ -59,5 +64,11 @@ public class AuthorizationController {
     @RequestMapping("/Authorization/Delete")
     public void authorizationDelete() {
 
+    }
+
+    private void viewSysRoles(Model model, Long idRoles) {
+        model.addAttribute("selectRoleValue", idRoles);
+        List<SysRoles> listAllSysRole = (List<SysRoles>) dsSysRoles.findAll();
+        model.addAttribute("listRoles", listAllSysRole);
     }
 }

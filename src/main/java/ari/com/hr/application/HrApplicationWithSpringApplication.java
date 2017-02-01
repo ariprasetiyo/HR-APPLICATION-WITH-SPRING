@@ -21,7 +21,7 @@ public class HrApplicationWithSpringApplication {
             Collection<?> auths = auth2.getAuthorities();
 
             for (Object da : auths) {
-                
+
                 log.debug(da);
             }
 
