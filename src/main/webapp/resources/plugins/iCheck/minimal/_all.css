@@ -20,14 +20,14 @@
         background-position: -20px 0;
     }
     .icheckbox_minimal-red.checked {
-        background-position: -40px 0;
+        background-position: -20px 0;
     }
     .icheckbox_minimal-red.disabled {
-        background-position: -60px 0;
+        background-position: -20px 0;
         cursor: default;
     }
     .icheckbox_minimal-red.checked.disabled {
-        background-position: -80px 0;
+        background-position: -20px 0;
     }
 
 .iradio_minimal-red {
@@ -138,20 +138,20 @@
 }
 
 .icheckbox_minimal-blue {
-    background-position: 0 0;
+    background-position: -20px 0;
 }
     .icheckbox_minimal-blue.hover {
         background-position: -20px 0;
     }
     .icheckbox_minimal-blue.checked {
-        background-position: -40px 0;
+        background-position: -20px 0;
     }
     .icheckbox_minimal-blue.disabled {
-        background-position: -60px 0;
+        background-position: -20px 0;
         cursor: default;
     }
     .icheckbox_minimal-blue.checked.disabled {
-        background-position: -80px 0;
+        background-position: -20px 0;
     }
 
 .iradio_minimal-blue {
