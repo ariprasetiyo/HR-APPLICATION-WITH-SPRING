@@ -6,7 +6,7 @@
         <title>AdminLTE 2 | Dashboard</title>
         <!-- Tell the browser to be responsive to screen width -->
         <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-        
+
         <!-- Bootstrap 3.3.6 -->
         <link rel="stylesheet" href="../../../resources/bootstrap/css/bootstrap.min.css">
         <!-- Font Awesome -->
@@ -26,6 +26,8 @@
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <!-- iCheck for checkboxes and radio inputs -->
+
         <#include "../../inc-lib-header.html"/>
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
@@ -83,10 +85,8 @@
                     <!-- Main row -->
                     <div class="row">
                         <!-- Left col -->
-                        <section class="col-lg-7 connectedSortable">
-
+                        <section class="col-lg-12 connectedSortable">
                             <!-- /.box -->
-
                             <div class="box box-solid">
                                 <div class="box-header">
                                     <i class="fa fa-envelope"></i>
@@ -132,10 +132,6 @@
                                             </div>
                                         </div>
                                     </form>
-
-                                    <div class="box-header">
-                                        <h3 class="box-title">Authorization data </h3>
-                                    </div>
                                     <!-- /.box-header -->
                                     <div class="box-body">
                                         <table id="example1" class="table table-bordered table-striped">
@@ -143,9 +139,12 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Name menu</th>
+                                                    <th>Create Time</th>
+                                                    <th>Modify Time</th>
                                                     <th>Is Create</th>
                                                     <th>Is Update</th>
                                                     <th>Is Delete</th>
+                                                    <th>Is Disabled</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -155,33 +154,53 @@
                                                 <tr>
                                                     <td>${listAuthorities_index+1}</td>
                                                     <td>${listAuthorities.nameMenu}</td>
+                                                    <td>
+                                                        ${listAuthorities.createdTime}
+                                                    </td>
+                                                    <td>
+                                                        ${listAuthorities.modifiedTime}    
+                                                    </td>
                                                     <td><#if listAuthorities.isInsert == true>
-                                                        <input type="checkbox" disabled checked>
+                                                        <input type="checkbox" id="isInsert${listAuthorities_index}" disabled checked>
+                                                        <label for="isInsert${listAuthorities_index}"></label>
                                                         <#else>
-                                                        <input type="checkbox" disabled>
+                                                        <input  type="checkbox" id="isInsert${listAuthorities_index}" disabled>
+                                                        <label for="isInsert${listAuthorities_index}"></label>
                                                         </#if>
                                                     </td>
                                                     <td><#if listAuthorities.isUpdate == true>
-                                                        <input type="checkbox" disabled checked>
+                                                        <input type="checkbox"  id="isUpdate${listAuthorities_index}" disabled checked>
+                                                        <label for="isUpdate${listAuthorities_index}"></label>
                                                         <#else>
-                                                        <input type="checkbox" disabled>
+                                                        <input type="checkbox"  id="isUpdate${listAuthorities_index}" disabled>
+                                                        <label for="isUpdate${listAuthorities_index}"></label>
                                                         </#if>
                                                     </td>
-                                                    <td><#if listAuthorities.isInsert == true>
-                                                        <input type="checkbox" disabled checked>
+                                                    <td><#if listAuthorities.isDelete == true>
+                                                        <input type="checkbox"  id="isDelete${listAuthorities_index}" disabled checked>
+                                                        <label for="isDelete${listAuthorities_index}"></label>
                                                         <#else>
-                                                        <input type="checkbox" disabled>
+                                                        <input type="checkbox"  id="isDelete${listAuthorities_index}" disabled>
+                                                        <label for="isDelete${listAuthorities_index}"></label>
                                                         </#if>
                                                     </td>
-                                                     <td>
-                                                        <button type="submit" id="editAuth${listAuthorities_index+1}" class="btn btn-primary">Edit</button>
+                                                    <td><#if listAuthorities.disabled>
+                                                        <input type="checkbox"  id="disabled${listAuthorities_index}" disabled checked>
+                                                        <label for="disabled${listAuthorities_index}"></label>
+                                                        <#else>
+                                                        <input type="checkbox"  id="disabled${listAuthorities_index}" disabled>
+                                                        <label for="disabled${listAuthorities_index}"></label>
+                                                        </#if>
+                                                    <td>
+                                                        <button type="submit" id="editAuth${listAuthorities_index}" class="btn btn-primary editButton">Edit</button>
+                                                        <button type="submit" id="saveAuth${listAuthorities_index}" class="btn btn-primary saveButton" disabled>Save</button>
                                                     </td>
                                                 </tr>
                                                 </#list>
                                                 <#else>
                                                 </#if>
                                             </tbody>
-            
+
                                         </table>
                                     </div>
                                     <!-- /.box-body -->
@@ -490,9 +509,26 @@
 <script src="../../../resources/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="../../../resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="../../../resources/dist/js/app.min.js"></script>
+
 <script>
     $(function () {
         $("#example1").DataTable();
+        $(".editButton").on("click", function () {
+            var id = $(this).attr('id').replace("editAuth", "");
+            var idInsert = "#isInsert" + id;
+            var idDelete = "#isDelete" + id;
+            var idUpdate = "#isUpdate" + id;
+            var idDisable = "#disabled" + id;
+            $(idInsert).removeAttr("disabled");
+            $(idDelete).removeAttr("disabled");
+            $(idUpdate).removeAttr("disabled");
+            $(idDisable).removeAttr("disabled");
+//            alert($("#isInsert"+id).is(':checked') );
+//            alert($("#isDelete"+id).is(':checked') );
+//            alert($("#isUpdate"+id).is(':checked') );
+//            alert($("#disabled"+id).is(':checked') );
+        });
+
     });
 </script>
 </body>
