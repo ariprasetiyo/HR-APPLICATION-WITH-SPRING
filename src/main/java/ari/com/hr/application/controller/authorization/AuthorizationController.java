@@ -50,7 +50,7 @@ public class AuthorizationController {
         return "/admin/v1/authorization/index";
     }
 
-    @RequestMapping(value = "/Authorization/Save", method = RequestMethod.POST)
+    @RequestMapping(value = "/authorization/Save", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void authorizationSave() {
 

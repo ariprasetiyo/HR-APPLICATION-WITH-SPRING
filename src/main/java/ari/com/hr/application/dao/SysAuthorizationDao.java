@@ -9,6 +9,7 @@ import ari.com.hr.application.dto.SysAuthorizationDto;
 import ari.com.hr.application.dto.SysScreenMenuDto;
 import ari.com.hr.application.model.SysAuthorization;
 import java.util.List;
+import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -41,5 +42,13 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
     //resultSetMapping = "SysAuthorization.listScreenMenu" in Model
     //parentId by default setting must be set 0
     public List<SysScreenMenuDto> listScreenMenu(@Param("nsysRolesId") List<Long> id, @Param("nparentId") Long parentId);
+
+    @Modifying(clearAutomatically = true)
+    @Transactional
+    @Query("update SysAuthorization a set a.isInsert = :nisInsert, a.isUpdate = :nisUpdate, a.isDelete = :nisDelete, a.disabled = :ndisabled where a.id = :nId")
+    public int updateAuthorization(@Param("nId") long id,
+            @Param("nisInsert") boolean isInsert,
+            @Param("nisUpdate") boolean isUpdate,
+            @Param("nisDelete") boolean isDelete, @Param("ndisabled") boolean disabled);
 
 }
