@@ -113,7 +113,7 @@
                                 </div>
                                 <div class="box-body">
                                     <form method="POST" action="">
-                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                        <input type="hidden" id="csrf" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                         <div class="input-group">
                                             <select class="form-control" name="roles_id">
                                                 <#list listRoles as a>
@@ -137,61 +137,71 @@
                                         <table id="example1" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
-                                                    <th>No</th>
-                                                    <th>Name menu</th>
-                                                    <th>Create Time</th>
-                                                    <th>Modify Time</th>
-                                                    <th>Is Create</th>
-                                                    <th>Is Update</th>
-                                                    <th>Is Delete</th>
-                                                    <th>Is Disabled</th>
-                                                    <th>Action</th>
+                                                    <th><div class="center" >No</div></th>
+                                                    <th><div class="center" >Name menu</div></th>
+                                                    <th><div class="center" >Create Time</div></th>
+                                                    <th><div class="center" >Modify Time</div></th>
+                                                    <th><div class="center" >Is Create</div></th>
+                                                    <th><div class="center" >Is Update</div></th>
+                                                    <th><div class="center" >Is Delete</div></th>
+                                                    <th><div class="center" >Is Disabled</div></th>
+                                                    <th><div class="center" >Action</div></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <#if authorities??>
                                                 <#list authorities as listAuthorities>
                                                 <tr>
-                                                    <td>${listAuthorities_index+1}</td>
+                                                    <td><div class="center" >${listAuthorities_index+1}</div></td>
                                                     <td>${listAuthorities.nameMenu}</td>
                                                     <td>
-                                                        ${listAuthorities.createdTime}
+                                                        <div class="center" >${listAuthorities.createdTime}</div>
                                                     </td>
                                                     <td>
-                                                        ${listAuthorities.modifiedTime}    
+                                                        <div class="center" >${listAuthorities.modifiedTime} </div>   
                                                     </td>
-                                                    <td><#if listAuthorities.isInsert == true>
-                                                        <input type="checkbox" id="isInsert${listAuthorities_index}" disabled checked>
-                                                        <label for="isInsert${listAuthorities_index}"></label>
-                                                        <#else>
-                                                        <input  type="checkbox" id="isInsert${listAuthorities_index}" disabled>
-                                                        <label for="isInsert${listAuthorities_index}"></label>
-                                                        </#if>
+                                                    <td><div class="center" >
+                                                            <#if listAuthorities.isInsert == true>
+                                                            <input  type="checkbox" id="isInsert${listAuthorities_index}" disabled checked>
+                                                            <label for="isInsert${listAuthorities_index}"></label>
+                                                            <#else>
+                                                            <input  type="checkbox" id="isInsert${listAuthorities_index}" disabled>
+                                                            <label for="isInsert${listAuthorities_index}"></label>
+                                                            </#if>
+                                                        </div>
                                                     </td>
-                                                    <td><#if listAuthorities.isUpdate == true>
-                                                        <input type="checkbox"  id="isUpdate${listAuthorities_index}" disabled checked>
-                                                        <label for="isUpdate${listAuthorities_index}"></label>
-                                                        <#else>
-                                                        <input type="checkbox"  id="isUpdate${listAuthorities_index}" disabled>
-                                                        <label for="isUpdate${listAuthorities_index}"></label>
-                                                        </#if>
+                                                    <td><div class="center" >
+                                                            <#if listAuthorities.isUpdate == true>
+                                                            <input type="checkbox"  id="isUpdate${listAuthorities_index}" disabled checked>
+                                                            <label for="isUpdate${listAuthorities_index}"></label>
+                                                            <#else>
+                                                            <input type="checkbox"  id="isUpdate${listAuthorities_index}" disabled>
+                                                            <label for="isUpdate${listAuthorities_index}"></label>
+                                                            </#if>
+                                                        </div>
                                                     </td>
-                                                    <td><#if listAuthorities.isDelete == true>
-                                                        <input type="checkbox"  id="isDelete${listAuthorities_index}" disabled checked>
-                                                        <label for="isDelete${listAuthorities_index}"></label>
-                                                        <#else>
-                                                        <input type="checkbox"  id="isDelete${listAuthorities_index}" disabled>
-                                                        <label for="isDelete${listAuthorities_index}"></label>
-                                                        </#if>
+                                                    <td><div class="center" >
+                                                            <#if listAuthorities.isDelete == true>
+                                                            <input type="checkbox"  id="isDelete${listAuthorities_index}" disabled checked>
+                                                            <label for="isDelete${listAuthorities_index}"></label>
+                                                            <#else>
+                                                            <input type="checkbox"  id="isDelete${listAuthorities_index}" disabled>
+                                                            <label for="isDelete${listAuthorities_index}"></label>
+                                                            </#if>
+                                                        </div>
                                                     </td>
-                                                    <td><#if listAuthorities.disabled>
-                                                        <input type="checkbox"  id="disabled${listAuthorities_index}" disabled checked>
-                                                        <label for="disabled${listAuthorities_index}"></label>
-                                                        <#else>
-                                                        <input type="checkbox"  id="disabled${listAuthorities_index}" disabled>
-                                                        <label for="disabled${listAuthorities_index}"></label>
-                                                        </#if>
+                                                    <td><div class="center" >
+                                                            <#if listAuthorities.disabled>
+                                                            <input type="checkbox"  id="disabled${listAuthorities_index}" disabled checked>
+                                                            <label for="disabled${listAuthorities_index}"></label>
+                                                            <#else>
+                                                            <input type="checkbox"  id="disabled${listAuthorities_index}" disabled>
+                                                            <label for="disabled${listAuthorities_index}"></label>
+                                                            </#if>
+                                                        </div>
                                                     <td>
+                                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                                        <input type="hidden" id="idTAU${listAuthorities_index}" value="${listAuthorities.id}"/>
                                                         <button type="submit" id="editAuth${listAuthorities_index}" class="btn btn-primary editButton">Edit</button>
                                                         <button type="submit" id="saveAuth${listAuthorities_index}" class="btn btn-primary saveButton" disabled>Save</button>
                                                     </td>
@@ -509,26 +519,85 @@
 <script src="../../../resources/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="../../../resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script src="../../../resources/dist/js/app.min.js"></script>
-
+<script src="../../../resources/dist/js/pages/all_loading.js"></script>
 <script>
     $(function () {
         $("#example1").DataTable();
         $(".editButton").on("click", function () {
-            var id = $(this).attr('id').replace("editAuth", "");
+            var idAuth = $(this).attr('id');
+            var id = idAuth.replace("editAuth", "");
             var idInsert = "#isInsert" + id;
             var idDelete = "#isDelete" + id;
             var idUpdate = "#isUpdate" + id;
             var idDisable = "#disabled" + id;
+            var idSaveAuth = "#saveAuth" + id;
             $(idInsert).removeAttr("disabled");
             $(idDelete).removeAttr("disabled");
             $(idUpdate).removeAttr("disabled");
             $(idDisable).removeAttr("disabled");
+            $(idSaveAuth).removeAttr("disabled");
+            $("#" + idAuth).attr("disabled", true);
 //            alert($("#isInsert"+id).is(':checked') );
 //            alert($("#isDelete"+id).is(':checked') );
 //            alert($("#isUpdate"+id).is(':checked') );
 //            alert($("#disabled"+id).is(':checked') );
         });
+        $(".saveButton").on("click", function () {
+            var idSaveAuth = $(this).attr('id');
+            var id = idSaveAuth.replace('saveAuth', '');
+            var idInsert = "#isInsert" + id;
+            var idDelete = "#isDelete" + id;
+            var idUpdate = "#isUpdate" + id;
+            var idDisable = "#disabled" + id;
+            var isEditAuth = "#editAuth" + id;
 
+            var vInsert, vDelete, vUpdate, vDisable, idTAU;
+            idTAU = $("#idTAU"+id).val();
+            vInsert = $(idInsert).is(':checked');
+            vDelete = $(idDelete).is(':checked');
+            vUpdate = $(idUpdate).is(':checked');
+            vDisable = $(idDisable).is(':checked');
+
+            console.log(vInsert + "" + vDelete + " " + vUpdate + " " + vDisable);
+            editData(idTAU, vInsert, vDelete, vUpdate, vDisable );
+
+            $(idInsert).attr("disabled", true);
+            $(idDelete).attr("disabled", true);
+            $(idUpdate).attr("disabled", true);
+            $(idDisable).attr("disabled", true);
+            $("#" + idSaveAuth).attr("disabled", true);
+            $(isEditAuth).removeAttr("disabled");
+        });
+
+        function editData(id, vInsert, vDelete, vUpdate, vDisable) {
+            var csrfToken = $("#csrf").val();
+            $.ajax({
+                type: "POST",
+                url: "api/authorization/update/" + id,
+                headers: {'X-XSRF-TOKEN': csrfToken},
+                data: {vInsert: vInsert, 
+                    vDelete: vDelete, 
+                    vUpdate: vUpdate,
+                    vDisable: vDisable
+                },
+                dataType: "json",
+                beforeSend: function () {
+                    ajaxindicatorstart('loading data.. please wait..');
+                    window.setTimeout(ajaxindicatorstart('loading data.. please wait..'), 500);
+                },
+                success: function (data, textStatus, jqXHR) {
+
+                },
+                complete: function () {
+                    timeout = setTimeout(ajaxindicatorstop(), 9000);
+                    clearTimeout(timeout);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    //window.location.href = "http://localhost:8080/sitepat-satelit/";
+                    //window.location.replace("logout.ari");
+                }
+            });
+        }
     });
 </script>
 </body>

@@ -75,12 +75,16 @@ checkbox end
 */
 
 .center {
-    margin: auto;
-    width: 50%;
-    border: 3px solid #73AD21;
-    padding: 50%;
+    text-align: center;
 }
 
+/*TABLE padding */
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 5px;
+    line-height: 1.42857143;
+    vertical-align: top;
+    border-top: 1px solid #ddd;
+}
 
 .content-header {
     position: relative;
