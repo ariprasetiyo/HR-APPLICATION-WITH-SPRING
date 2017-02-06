@@ -20,6 +20,8 @@
         <link rel="stylesheet" href="../../../resources/dist/css/skins/_all-skins.min.css">
 
         <link rel="stylesheet" href="../../../resources/plugins/datatables/dataTables.bootstrap.css">
+
+        <link rel="stylesheet" href="../../../resources/plugins/select2/select2.min.css">
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -91,47 +93,53 @@
                                 <div class="box-header">
                                     <i class="fa fa-envelope"></i>
 
-                                    <h3 class="box-title">Data Auhorization</h3>
+                                    <h3 class="box-title">Setting Auhorization</h3>
                                     <!-- tools box -->
-                                    <div class="pull-right box-tools">
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
-                                                <i class="fa fa-bars"></i></button>
-                                            <ul class="dropdown-menu pull-right" role="menu">
-                                                <li><a href="#">Add new event</a></li>
-                                                <li><a href="#">Clear events</a></li>
-                                                <li class="divider"></li>
-                                                <li><a href="#">View calendar</a></li>
-                                            </ul>
+                                    <div class="pull-right form-inline">
+                                        <div class="form-group">
+                                            <div class="col-sm-7" style="padding-right: 0px;">
+                                                <form method="POST" action="">
+                                                    <input type="hidden" id="csrf" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                                    <div class="input-group">
+                                                        <select class="form-control" name="roles_id">
+                                                            <#list listRoles as a>
+                                                            <#if selectRoleValue??>
+                                                            <#if a.id == selectRoleValue>
+                                                            <option selected value="${a.id}">${a.roleName}</option>
+                                                            <#else> <option value="${a.id}">${a.roleName}</option>
+                                                            </#if>
+                                                            <#else>
+                                                            <option value="${a.id}">${a.roleName}</option>
+                                                            </#if>
+                                                            </#list>
+                                                        </select>
+                                                        <div class="input-group-btn">
+                                                            <button type="submit" class="btn btn-info btn-flat">Action</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="col-sm-5 text-right" style="padding-right: 0px;">
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
+                                                        <i class="fa fa-bars"></i></button>
+                                                    <ul class="dropdown-menu pull-right" role="menu">
+                                                        <li><a href="#" data-toggle="modal" data-target="#myModal">Add new menu</a></li>
+                                                        <li class="divider"></li>
+                                                        <li><a href="#">View calendar</a></li>
+                                                    </ul>
+                                                </div>
+                                                <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                        <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i>
-                                        </button>
+
                                     </div>
                                     <!-- /. tools -->
                                 </div>
                                 <div class="box-body">
-                                    <form method="POST" action="">
-                                        <input type="hidden" id="csrf" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                                        <div class="input-group">
-                                            <select class="form-control" name="roles_id">
-                                                <#list listRoles as a>
-                                                <#if selectRoleValue??>
-                                                <#if a.id == selectRoleValue>
-                                                <option selected value="${a.id}">${a.roleName}</option>
-                                                <#else> <option value="${a.id}">${a.roleName}</option>
-                                                </#if>
-                                                <#else>
-                                                <option value="${a.id}">${a.roleName}</option>
-                                                </#if>
-                                                </#list>
-                                            </select>
-                                            <div class="input-group-btn">
-                                                <button type="submit" class="btn btn-info btn-flat">Action</button>
-                                            </div>
-                                        </div>
-                                    </form>
                                     <!-- /.box-header -->
                                     <div class="box-body">
                                         <table id="example1" class="table table-bordered table-striped">
@@ -513,15 +521,78 @@
     <!-- Add the sidebar's background. This div must be placed
          immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add new menu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Menu:</label>
+                        <select class="form-control select2" style="width: 100%;">
+                            <option selected="selected">Alabama</option>
+                            <option>Alaska</option>
+                            <option disabled="disabled">California (disabled)</option>
+                            <option>Delaware</option>
+                            <option>Tennessee</option>
+                            <option>Texas</option>
+                            <option>Washington</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Parent menu:</label>
+                        <select class="form-control select2" style="width: 100%;">
+                            <option selected="selected">Alabama</option>
+                            <option>Alaska</option>
+                            <option disabled="disabled">California (disabled)</option>
+                            <option>Delaware</option>
+                            <option>Tennessee</option>
+                            <option>Texas</option>
+                            <option>Washington</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div  style="padding: 0px 0px 0px 3%;">
+                            <div class="row">
+                                <label  class="form-control-label">Access Role:</label>
+                            </div>
+                            <div class="row">
+                                <input  type="checkbox" id="modalIsCreate" class="form-control" checked>
+                                <label for="modalIsCreate">Is Create</label>
+                                <input  type="checkbox" id="modalIsUpdate" checked>
+                                <label for="modalIsUpdate">Is Update</label>
+                                <input  type="checkbox" id="modalIsDelete" checked>
+                                <label for="modalIsDelete">Is Delete</label>
+                                <input  type="checkbox" id="modalIsDisabled" checked>
+                                <label for="modalIsDisabled">Is Disabled</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 <!-- ./wrapper -->
 <#include "../../inc-lib-footer.html" />
 <script src="../../../resources/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../../../resources/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="../../../resources/plugins/datatables/dataTables.bootstrap.min.js"></script>\
+<script src="../../../resources/plugins/select2/select2.full.min.js"></script>
 <script src="../../../resources/dist/js/app.min.js"></script>
 <script src="../../../resources/dist/js/pages/all_loading.js"></script>
 <script>
     $(function () {
+        $(".select2").select2();
         $("#example1").DataTable();
         $(".editButton").on("click", function () {
             var idAuth = $(this).attr('id');
@@ -552,14 +623,14 @@
             var isEditAuth = "#editAuth" + id;
 
             var vInsert, vDelete, vUpdate, vDisable, idTAU;
-            idTAU = $("#idTAU"+id).val();
+            idTAU = $("#idTAU" + id).val();
             vInsert = $(idInsert).is(':checked');
             vDelete = $(idDelete).is(':checked');
             vUpdate = $(idUpdate).is(':checked');
             vDisable = $(idDisable).is(':checked');
 
             console.log(vInsert + "" + vDelete + " " + vUpdate + " " + vDisable);
-            editData(idTAU, vInsert, vDelete, vUpdate, vDisable );
+            editData(idTAU, vInsert, vDelete, vUpdate, vDisable);
 
             $(idInsert).attr("disabled", true);
             $(idDelete).attr("disabled", true);
@@ -575,8 +646,8 @@
                 type: "POST",
                 url: "api/authorization/update/" + id,
                 headers: {'X-XSRF-TOKEN': csrfToken},
-                data: {vInsert: vInsert, 
-                    vDelete: vDelete, 
+                data: {vInsert: vInsert,
+                    vDelete: vDelete,
                     vUpdate: vUpdate,
                     vDisable: vDisable
                 },
