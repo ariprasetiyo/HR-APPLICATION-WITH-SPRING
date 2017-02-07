@@ -5,6 +5,7 @@
  */
 package ari.com.hr.application.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -17,6 +18,8 @@ import javax.persistence.Table;
 public class SysMenus extends ModelSerializable {
 
     private String menusName;
+    
+    @Column(nullable = true)
     private String url;
 
     public String getMenusName() {

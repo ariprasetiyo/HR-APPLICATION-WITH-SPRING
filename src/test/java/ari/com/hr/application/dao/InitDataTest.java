@@ -7,6 +7,7 @@ package ari.com.hr.application.dao;
 
 import ari.com.hr.application.dto.SysAuthorizationDto;
 import ari.com.hr.application.model.SysAuthorization;
+import ari.com.hr.application.model.SysMenus;
 import ari.com.hr.application.model.SysRoles;
 import ari.com.hr.application.model.SysUser;
 import ari.com.hr.application.model.SysUserRoles;
@@ -42,6 +43,9 @@ public class InitDataTest {
 
     @Autowired
     SysUserRolesDao sysUserRolesDao;
+
+    @Autowired
+    SysMenusDao sysMenusDao;
 
     @Test
     public void testAll() {
@@ -345,5 +349,27 @@ public class InitDataTest {
 //            System.out.print(sysAuthorization.getRoleName());
 //            System.out.println(":" + sysAuthorization.getPatternDispatcherUrl());
 //        }
+    }
+
+    @Test
+    public void insertDataMenu() {
+        SysMenus sysMenus = new SysMenus();
+        sysMenus.setMenusName("Dashboard");
+        sysMenus.setUrl(null);
+        Long id = sysMenusDao.save(sysMenus).getId();
+        Assert.assertNotNull(id);
+
+        sysMenus = new SysMenus();
+        sysMenus.setMenusName("Dashboard V1");
+        sysMenus.setUrl("/Dashboard/V1");
+        id = sysMenusDao.save(sysMenus).getId();
+        Assert.assertNotNull(id);
+        
+        sysMenus = new SysMenus();
+        sysMenus.setMenusName("Dashboard V2");
+        sysMenus.setUrl("/Dashboard/V2");
+        id = sysMenusDao.save(sysMenus).getId();
+        Assert.assertNotNull(id);
+
     }
 }

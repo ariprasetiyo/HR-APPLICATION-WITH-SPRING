@@ -6,8 +6,10 @@
 package ari.com.hr.application.controller.authorization;
 
 import ari.com.hr.application.dao.SysAuthorizationDao;
+import ari.com.hr.application.dao.SysMenusDao;
 import ari.com.hr.application.dao.SysRolesDao;
 import ari.com.hr.application.model.SysAuthorization;
+import ari.com.hr.application.model.SysMenus;
 import ari.com.hr.application.model.SysRoles;
 import java.util.List;
 import org.slf4j.Logger;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Controller
-@RequestMapping("/admin/v1")
+@RequestMapping("/admin/v1/authorization")
 public class AuthorizationController {
 
     Logger log = LoggerFactory.getLogger(this.getClass());
@@ -34,34 +36,38 @@ public class AuthorizationController {
     @Autowired
     SysRolesDao dsSysRoles;
 
-    @RequestMapping(value = "/authorization", method = RequestMethod.GET)
+    @Autowired
+    SysMenusDao dsSysMenuDao;
+
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String index(Model model) {
         viewSysRoles(model, null);
         return "/admin/v1/authorization/index";
     }
 
-    @RequestMapping(value = "/authorization", method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     public String index(Model model, Pageable page,
             @RequestParam(value = "roles_id", required = false) Long roles_id) {
         viewSysRoles(model, roles_id);
         List<SysAuthorization> SysAuthorities = (List<SysAuthorization>) dsAuthorization.getForScreenMenu(roles_id);
         model.addAttribute("authorities", SysAuthorities);
+        viewSysMenu(model);
         //return dsAuthorization.findAll(page);
         return "/admin/v1/authorization/index";
     }
 
-    @RequestMapping(value = "/authorization/Save", method = RequestMethod.POST)
+    @RequestMapping(value = "/Save", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.CREATED)
     public void authorizationSave() {
 
     }
 
-    @RequestMapping("/Authorization/Edit")
+    @RequestMapping("/Edit")
     public void authorizationEdit() {
 
     }
 
-    @RequestMapping("/Authorization/Delete")
+    @RequestMapping("/Delete")
     public void authorizationDelete() {
 
     }
@@ -70,5 +76,10 @@ public class AuthorizationController {
         model.addAttribute("selectRoleValue", idRoles);
         List<SysRoles> listAllSysRole = (List<SysRoles>) dsSysRoles.findAll();
         model.addAttribute("listRoles", listAllSysRole);
+    }
+
+    private void viewSysMenu(Model model) {
+        List<SysMenus> listAllMenu = (List<SysMenus>) dsSysMenuDao.findAll();
+        model.addAttribute("listAllMenu", listAllMenu);
     }
 }
