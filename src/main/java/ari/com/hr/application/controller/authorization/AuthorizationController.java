@@ -39,13 +39,13 @@ public class AuthorizationController {
     @Autowired
     SysMenusDao dsSysMenuDao;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "", method = RequestMethod.GET)
     public String index(Model model) {
         viewSysRoles(model, null);
         return "/admin/v1/authorization/index";
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public String index(Model model, Pageable page,
             @RequestParam(value = "roles_id", required = false) Long roles_id) {
         viewSysRoles(model, roles_id);
