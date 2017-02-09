@@ -351,7 +351,7 @@ public class InitDataTest {
 //        }
     }
 
-    @Test
+    @Ignore
     public void insertDataMenu() {
         SysMenus sysMenus = new SysMenus();
         sysMenus.setMenusName("Dashboard");
