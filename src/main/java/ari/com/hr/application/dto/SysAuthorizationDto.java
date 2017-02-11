@@ -12,7 +12,7 @@ package ari.com.hr.application.dto;
 public class SysAuthorizationDto {
 
     private String roleName;
-    private String patternDispatcherUrl;
+    private String url;
 
     public String getRoleName() {
         return roleName;
@@ -23,15 +23,15 @@ public class SysAuthorizationDto {
     }
 
     public String getPatternDispatcherUrl() {
-        return patternDispatcherUrl;
+        return url;
     }
 
     public void setPatternDispatcherUrl(String patternDispatcherUrl) {
-        this.patternDispatcherUrl = patternDispatcherUrl;
+        this.url = patternDispatcherUrl;
     }
 
     public SysAuthorizationDto(String patternDispatcherUrl, String roleName) {
         this.roleName = roleName;
-        this.patternDispatcherUrl = patternDispatcherUrl;
+        this.url = patternDispatcherUrl;
     }
 }

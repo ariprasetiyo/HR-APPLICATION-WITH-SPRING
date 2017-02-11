@@ -25,10 +25,10 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "sys_authorization")
 @NamedNativeQuery(name = "SysAuthorization.listScreenMenu",
-        query = "select  a.id as id , a.name_menu, a.pattern_dispatcher_url, coalesce(a.parent_id, 0) as parent_id, coalesce(b.con, 0) as con  from "
+        query = "select  a.id as id , sm.menus_name as name_menu, sm.url as pattern_dispatcher_url, coalesce(a.parent_id, 0) as parent_id, coalesce(b.con, 0) as con  from "
         + "sys_authorization as a "
-        + "LEFT join ( select parent_id, count(1) as con from sys_authorization GROUP by parent_id ) as b "
-        + "on a.id = b.parent_id where sys_roles_id in :nsysRolesId and coalesce(a.parent_id, 0) = :nparentId ",
+        + "LEFT join ( select parent_id, count(1) as con from sys_authorization GROUP by parent_id ) as b \n"
+        + "        on a.id = b.parent_id  left join sys_menu sm on a.sys_menu_id = sm.id where sys_roles_id in :nsysRolesId and coalesce(a.parent_id, 0) = :nparentId",
         //resultClass = SysScreenMenuDto.class,
         resultSetMapping = "SysAuthorization.listScreenMenu"
 )
@@ -56,15 +56,17 @@ import javax.persistence.Transient;
 //                }))
 public class SysAuthorization extends ModelSerializable {
 
-    @Column(name = "pattern_dispatcher_url", length = 100, nullable = true)
-    private String patternDispatcherUrl;
-
+//    @Column(name = "pattern_dispatcher_url", length = 100, nullable = true)
+//    private String patternDispatcherUrl;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private SysRoles sysRoles;
 
-    @Column(name = "name_menu")
-    public String nameMenu;
+//    @Column(name = "name_menu")
+//    public String nameMenu;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = true)
+    private SysMenus sysMenu;
 
     private boolean isUpdate;
 
@@ -80,14 +82,6 @@ public class SysAuthorization extends ModelSerializable {
     @ManyToOne
     @JoinColumn(name = "parent_id", nullable = true)
     public SysAuthorization parent;
-
-    public String getNameMenu() {
-        return nameMenu;
-    }
-
-    public void setNameMenu(String nameMenu) {
-        this.nameMenu = nameMenu;
-    }
 
     public boolean isIsUpdate() {
         return isUpdate;
@@ -143,20 +137,26 @@ public class SysAuthorization extends ModelSerializable {
         this.sysRoles = byId;
     }
 
-    public String getPatternDispatcherUrl() {
-        return patternDispatcherUrl;
-    }
-
-    public void setPatternDispatcherUrl(String patternDispatcherUrl) {
-        this.patternDispatcherUrl = patternDispatcherUrl;
-    }
-
     public Integer getCounts() {
         return counts;
     }
 
     public void setCounts(Integer counts) {
         this.counts = counts;
+    }
+
+    public SysMenus getSysMenu() {
+        return sysMenu;
+    }
+
+    public void setSysMenu(SysMenus sysMenu) {
+        this.sysMenu = sysMenu;
+    }
+
+    public void setSysMenu(long id) {
+        SysMenus sysMenus = new SysMenus();
+        sysMenus.setId(id);
+        this.sysMenu = sysMenus;
     }
 
 }

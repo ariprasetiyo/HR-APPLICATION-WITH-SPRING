@@ -32,9 +32,9 @@
 
         <#include "../../inc-lib-header.html"/>
         <script>
-            
-        var roleForAdd = null;
-        var roleIdForAdd = null;
+
+            var roleForAdd = null;
+            var roleIdForAdd = null;
         </script>
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
@@ -112,8 +112,8 @@
                                                             <#if a.id == selectRoleValue>
                                                             <option selected value="${a.id}">${a.roleName}</option>
                                                             <script>
-                                                                 roleForAdd = '${a.roleName}';
-                                                                 roleIdForAdd = '${a.id}';
+                                                                roleForAdd = '${a.roleName}';
+                                                                roleIdForAdd = '${a.id}';
                                                             </script>
                                                             <#else> <option value="${a.id}">${a.roleName}</option>
                                                             </#if>
@@ -170,7 +170,7 @@
                                                 <#list authorities as listAuthorities>
                                                 <tr>
                                                     <td><div class="center" >${listAuthorities_index+1}</div></td>
-                                                    <td>${listAuthorities.nameMenu}</td>
+                                                    <td>${listAuthorities.sysMenu.menusName}</td>
                                                     <td>
                                                         <div class="center" >${listAuthorities.createdTime}</div>
                                                     </td>
@@ -547,26 +547,22 @@
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="form-control-label">Menu:</label>
-                        <select class="form-control select2" style="width: 100%;">
-                            <option selected="selected">Alabama</option>
-                            <option>Alaska</option>
-                            <option disabled="disabled">California (disabled)</option>
-                            <option>Delaware</option>
-                            <option>Tennessee</option>
-                            <option>Texas</option>
-                            <option>Washington</option>
+                        <select id="modalMenuid" class="form-control select2" style="width: 100%;">
+                            <#if listAllMenu?? > 
+                            <#list listAllMenu as listMenu>
+                            <option value="${listMenu.id}" >${listMenu.menusName}</option>
+                            </#list>
+                            </#if >
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="form-control-label">Parent menu:</label>
-                        <select class="form-control select2" style="width: 100%;">
-                            <option selected="selected">Alabama</option>
-                            <option>Alaska</option>
-                            <option disabled="disabled">California (disabled)</option>
-                            <option>Delaware</option>
-                            <option>Tennessee</option>
-                            <option>Texas</option>
-                            <option>Washington</option>
+                        <select id="modalParentMenuid" class="form-control select2" style="width: 100%;">
+                            <#if listAllMenu?? > 
+                            <#list listAllMenu as listMenu>
+                            <option value="${listMenu.id}" >${listMenu.menusName}</option>
+                            </#list>
+                            </#if >
                         </select>
                     </div>
                     <div class="form-group">
@@ -604,11 +600,13 @@
 <script src="../../../resources/dist/js/pages/all_loading.js"></script>
 <script>
     $(function () {
-        if (roleForAdd != null ){
-           $("#idRoleAdd").val(roleForAdd);
+        if (roleForAdd != null) {
+            $("#idRoleAdd").val(roleForAdd);
         }
-        $("#saveModalAddMenu").on("click", function(){
-             addDataMenu(id, modalIsCreate, modalIsUpdate, modalIsDelete, modalIsDisabled, menuId, parentId) ;
+        $("#saveModalAddMenu").on("click", function () {
+            addDataMenu(roleIdForAdd,$('#modalIsCreate').is(':checked'),$('#modalIsUpdate').is(':checked') , 
+            $('#modalIsDelete').is(':checked'),$('#modalIsDisabled').is(':checked') , 
+            $('#modalMenuid').val(), $('#modalParentMenuid').val());
         });
         $(".select2").select2();
         $("#example1").DataTable();
@@ -626,10 +624,6 @@
             $(idDisable).removeAttr("disabled");
             $(idSaveAuth).removeAttr("disabled");
             $("#" + idAuth).attr("disabled", true);
-//            alert($("#isInsert"+id).is(':checked') );
-//            alert($("#isDelete"+id).is(':checked') );
-//            alert($("#isUpdate"+id).is(':checked') );
-//            alert($("#disabled"+id).is(':checked') );
         });
         $(".saveButton").on("click", function () {
             var idSaveAuth = $(this).attr('id');
@@ -658,7 +652,7 @@
             $(isEditAuth).removeAttr("disabled");
         });
 
-    function addDataMenu(id, vInsert, vDelete, vUpdate, vDisable, menuId, parentId) {
+        function addDataMenu(id, vInsert, vDelete, vUpdate, vDisable, menuId, parentId) {
             var csrfToken = $("#csrf").val();
             $.ajax({
                 type: "POST",
@@ -685,10 +679,8 @@
                     clearTimeout(timeout);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    //window.location.href = "http://localhost:8080/sitepat-satelit/";
-                    //window.location.replace("logout.ari");
                 }
-            });            
+            });
         }
 
         function editData(id, vInsert, vDelete, vUpdate, vDisable) {
@@ -719,8 +711,8 @@
                     //window.location.replace("logout.ari");
                 }
             });
-            
-            
+
+
         }
     });
 </script>
