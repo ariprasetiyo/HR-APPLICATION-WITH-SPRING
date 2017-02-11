@@ -27,7 +27,7 @@ import javax.persistence.Transient;
 @NamedNativeQuery(name = "SysAuthorization.listScreenMenu",
         query = "select  a.id as id , sm.menus_name as name_menu, sm.url as pattern_dispatcher_url, coalesce(a.parent_id, 0) as parent_id, coalesce(b.con, 0) as con  from "
         + "sys_authorization as a "
-        + "LEFT join ( select parent_id, count(1) as con from sys_authorization GROUP by parent_id ) as b \n"
+        + "LEFT join ( select parent_id, count(1) as con from sys_authorization GROUP by parent_id ) as b "
         + "        on a.id = b.parent_id  left join sys_menu sm on a.sys_menu_id = sm.id where sys_roles_id in :nsysRolesId and coalesce(a.parent_id, 0) = :nparentId",
         //resultClass = SysScreenMenuDto.class,
         resultSetMapping = "SysAuthorization.listScreenMenu"
