@@ -36,17 +36,51 @@ public class AuthorizationRestController {
         log.debug(Long.valueOf(id) + "inUpdate" + inUpdate);
     }
 
-//    @RequestMapping("/addMenu/{idAuhtorization}")
-//    @ResponseStatus(HttpStatus.ACCEPTED)
-//    public ResponseEntity<SysAuthorization> authorizationAddMenu(@PathVariable("idAuhtorization") Integer id,
-//            @RequestParam("vInsert") boolean vInsert,
-//            @RequestParam("vUpdate") boolean vUpdate,
-//            @RequestParam("vDelete") boolean vDelete,
-//            @RequestParam("vDisable") boolean vDisable,
-//            @RequestParam("modelMenuId") Integer MenuId,
-//            @RequestParam("modelParentMenuId") Integer parentMenuId) {
-//        dsSysAuthorization.save(id);
-//        return new ResponEntity();
-//
-//    }
+    @RequestMapping("/addMenu/{idAuhtorization}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity<SysAuthorization> authorizationAddMenu(@PathVariable("idAuhtorization") Integer id,
+            @RequestParam("vInsert") boolean vInsert,
+            @RequestParam("vUpdate") boolean vUpdate,
+            @RequestParam("vDelete") boolean vDelete,
+            @RequestParam("vDisable") boolean vDisable,
+            @RequestParam("modelMenuId") Integer MenuId,
+            @RequestParam(value = "modelParentMenuId", required = false) Long parentMenuId) {
+
+        SysAuthorization dataAuthorization = saveDataMenu(id, vInsert, vUpdate, vDelete, vDisable, MenuId, parentMenuId);
+        return new ResponseEntity(dataAuthorization, HttpStatus.ACCEPTED);
+
+    }
+    
+    @RequestMapping("/deleteMenu/{idAuthorization}")
+    public void deleteMenu(@PathVariable("idAuthorization") Long id){
+        dsSysAuthorization.delete(id);
+    }
+
+    private SysAuthorization saveDataMenu(Integer id, boolean vInsert,
+            boolean vUpdate, boolean vDelete,
+            boolean vDisable, Integer MenuId,
+            Long parentMenuId) {
+
+        SysAuthorization dataAuthorization = new SysAuthorization();
+        log.debug("-add new menu on id " + id
+                + ", menuId : " + MenuId
+                + ", parentId " + parentMenuId
+                + " " + vInsert + "" + vUpdate + "" + vDelete + "" + vDisable);
+        dataAuthorization.setSysMenu(MenuId);
+
+        if (parentMenuId == null) {
+            dataAuthorization.setParent(null);
+        } else {
+            dataAuthorization.setParent(parentMenuId);
+        }
+
+        dataAuthorization.setSysRoles(id);
+        dataAuthorization.setIsDelete(vDelete);
+        dataAuthorization.setIsInsert(vInsert);
+        dataAuthorization.setIsUpdate(vUpdate);
+        dataAuthorization.setDisabled(vDisable);
+        dataAuthorization.setIsRead(true);
+        return dsSysAuthorization.save(dataAuthorization);
+
+    }
 }
