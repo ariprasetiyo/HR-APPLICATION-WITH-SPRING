@@ -44,9 +44,9 @@ public class AuthorizationRestController {
         return new ResponseEntity(globalDto, HttpStatus.OK);
     }
 
-    @RequestMapping("/addMenu/{idAuhtorization}")
+    @RequestMapping("/addMenu/{idRoles}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<SysAuthorization> authorizationAddMenu(@PathVariable("idAuhtorization") Integer id,
+    public ResponseEntity<SysAuthorization> authorizationAddMenu(@PathVariable("idRoles") Integer id,
             @RequestParam("vInsert") boolean vInsert,
             @RequestParam("vUpdate") boolean vUpdate,
             @RequestParam("vDelete") boolean vDelete,
