@@ -1,6 +1,7 @@
 package ari.com.hr.application.controller.rest.authorization;
 
 import ari.com.hr.application.dao.SysAuthorizationDao;
+import ari.com.hr.application.dto.GlobalDto;
 import ari.com.hr.application.model.SysAuthorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,19 +26,26 @@ public class AuthorizationRestController {
     SysAuthorizationDao dsSysAuthorization;
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void index(@PathVariable("id") Integer id,
+    public ResponseEntity<GlobalDto> index(@PathVariable("id") Long id,
             @RequestParam(value = "vInsert") boolean vInsert,
             @RequestParam(value = "vUpdate") boolean vUpdate,
             @RequestParam(value = "vDelete") boolean vDelete,
             @RequestParam(value = "vDisable") boolean vDisable) {
-        int inUpdate = dsSysAuthorization.updateAuthorization(Long.valueOf(id), vInsert, vUpdate, vDelete, vDisable);
-        log.debug(Long.valueOf(id) + "inUpdate" + inUpdate);
+        int inUpdate = dsSysAuthorization.updateAuthorization(id, vInsert, vUpdate, vDelete, vDisable);
+        
+        log.debug(id + "inUpdate" + inUpdate);
+        
+        GlobalDto globalDto = new GlobalDto();
+        globalDto.setId(id);
+        globalDto.setCount(inUpdate);
+        
+        return new ResponseEntity(globalDto, HttpStatus.OK);
     }
 
     @RequestMapping("/addMenu/{idAuhtorization}")
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SysAuthorization> authorizationAddMenu(@PathVariable("idAuhtorization") Integer id,
             @RequestParam("vInsert") boolean vInsert,
             @RequestParam("vUpdate") boolean vUpdate,
@@ -46,15 +54,20 @@ public class AuthorizationRestController {
             @RequestParam("modelMenuId") Integer MenuId,
             @RequestParam(value = "modelParentMenuId", required = false) Long parentMenuId) {
 
-        SysAuthorization dataAuthorization = saveDataMenu(id, vInsert, vUpdate, vDelete, vDisable, MenuId, parentMenuId);
-        return new ResponseEntity(dataAuthorization, HttpStatus.ACCEPTED);
-
+        SysAuthorization dataAuthorization = saveDataMenu(id, vInsert, vUpdate,
+                vDelete, vDisable, MenuId, parentMenuId);
+        return new ResponseEntity(dataAuthorization, HttpStatus.OK);
     }
     
     @RequestMapping("/deleteMenu/{idAuthorization}")
-    public void deleteMenu(@PathVariable("idAuthorization") Long id){
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<GlobalDto> deleteMenu(@PathVariable("idAuthorization") Long id){
         dsSysAuthorization.delete(id);
+        GlobalDto globalDto = new GlobalDto();
+        globalDto.setId(id);
+        return new ResponseEntity(globalDto, HttpStatus.OK);
     }
+    
 
     private SysAuthorization saveDataMenu(Integer id, boolean vInsert,
             boolean vUpdate, boolean vDelete,
