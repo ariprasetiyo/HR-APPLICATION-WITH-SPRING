@@ -48,6 +48,9 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
     @Query(nativeQuery = true)
     public Integer countParentId(@Param("nparentId") long nparentId);
     
+    /*
+    Query for rekursif view menu base on parent id
+    */
     @Query("select parent.id  from SysAuthorization where id = :nId ")
     public Long getParentId(@Param("nId") long ntId);
 
