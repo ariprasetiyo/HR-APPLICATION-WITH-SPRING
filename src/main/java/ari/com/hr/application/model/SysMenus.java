@@ -19,7 +19,7 @@ public class SysMenus extends ModelSerializable {
 
     private String menusName;
     
-    @Column(nullable = true)
+    @Column(nullable = true, length = 100)
     private String url;
 
     public String getMenusName() {

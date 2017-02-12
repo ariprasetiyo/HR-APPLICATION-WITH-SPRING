@@ -3,7 +3,7 @@ sys_menu (id, created_by, created_time, disabled, modified_by, modified_time, ve
 VALUES 
 ('1', 'ari', '2017-02-08 00:00:00', 0, 'ari', '2017-02-08 00:00:00', '1.0', 'Dashboard', NULL),
 ('2', 'ari', '2017-02-08 00:00:00', 0, 'ari', '2017-02-08 00:00:00', '1.0', 'Dashboard V1', '/Dashboard/V1' ),
-('3', 'ari', '2017-02-08 00:00:00', 0, 'ari', '2017-02-08 00:00:00', '1.0', 'Dashboard V2', 'Dashboard V2' ),
+('3', 'ari', '2017-02-08 00:00:00', 0, 'ari', '2017-02-08 00:00:00', '1.0', 'Dashboard V2', '/Dashboard/V2' ),
 ('4', 'ari', '2017-02-08 00:00:00', 0, 'ari', '2017-02-08 00:00:00', '1.0', 'Utility', NULL ),
 ('5', 'ari', '2017-02-08 00:00:00', 0, 'ari', '2017-02-08 00:00:00', '1.0', 'Setting User', NULL ),
 ('6', 'ari', '2017-02-08 00:00:00', 0, 'ari', '2017-02-08 00:00:00', '1.0', 'User', '/Utility/SettingUser/User' ),

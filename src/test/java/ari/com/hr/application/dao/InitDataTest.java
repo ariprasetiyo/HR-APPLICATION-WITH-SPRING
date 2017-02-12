@@ -15,7 +15,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import junit.framework.Assert;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,7 +61,7 @@ public class InitDataTest {
         }
 
         for (SysAuthorization menu : listMenu) {
-            System.out.println("----------------------------" + menu.getNameMenu());
+            System.out.println("----------------------------" + menu.getSysMenu().getMenusName());
         }
     }
 
@@ -102,10 +101,9 @@ public class InitDataTest {
         //sysAuthorization.setSysRoles(idRoles);
         sysAuthorizationDao.updateSysRoleId(idRoles, null);
         sysAuthorizationDao.deleteAll();
-
+        
         //Parent
-        sysAuthorization.setPatternDispatcherUrl(null);
-        sysAuthorization.setNameMenu("Dashboard");
+        sysAuthorization.setSysMenu(1);
         sysAuthorization.setIsDelete(true);
         sysAuthorization.setIsInsert(true);
         sysAuthorization.setIsRead(true);
@@ -117,8 +115,7 @@ public class InitDataTest {
 
         //Parent child
         sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/Dashboard/V1");
-        sysAuthorization.setNameMenu("Dashboard V1");
+        sysAuthorization.setSysMenu(2);
         sysAuthorization.setIsDelete(true);
         sysAuthorization.setIsInsert(true);
         sysAuthorization.setIsRead(true);
@@ -130,8 +127,7 @@ public class InitDataTest {
 
         //Parent child
         sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/Dashboard/V2");
-        sysAuthorization.setNameMenu("Dashboard V2");
+        sysAuthorization.setSysMenu(3);
         sysAuthorization.setIsDelete(true);
         sysAuthorization.setIsInsert(true);
         sysAuthorization.setIsRead(true);
@@ -143,8 +139,7 @@ public class InitDataTest {
 
         //Parent
         sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl(null);
-        sysAuthorization.setNameMenu("Utility");
+        sysAuthorization.setSysMenu(4);
         sysAuthorization.setIsDelete(true);
         sysAuthorization.setIsInsert(true);
         sysAuthorization.setIsRead(true);
@@ -156,8 +151,7 @@ public class InitDataTest {
 
         //Parent child
         sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl(null);
-        sysAuthorization.setNameMenu("Setting User");
+        sysAuthorization.setSysMenu(5);
         sysAuthorization.setIsDelete(true);
         sysAuthorization.setIsInsert(true);
         sysAuthorization.setIsRead(true);
@@ -169,8 +163,7 @@ public class InitDataTest {
 
         //Parent Parent child
         sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/Utility/SettingUser/User");
-        sysAuthorization.setNameMenu("User");
+        sysAuthorization.setSysMenu(6);
         sysAuthorization.setIsDelete(true);
         sysAuthorization.setIsInsert(true);
         sysAuthorization.setIsRead(true);
@@ -182,8 +175,7 @@ public class InitDataTest {
 
         //Parent Parent child
         sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/Utility/SettingUser/Authorization");
-        sysAuthorization.setNameMenu("Authorization");
+        sysAuthorization.setSysMenu(7);
         sysAuthorization.setIsDelete(true);
         sysAuthorization.setIsInsert(true);
         sysAuthorization.setIsRead(true);
@@ -195,8 +187,7 @@ public class InitDataTest {
 
         //Parent child
         sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/Utility/ProfileSetting");
-        sysAuthorization.setNameMenu("Profile Setting");
+        sysAuthorization.setSysMenu(8);
         sysAuthorization.setIsDelete(true);
         sysAuthorization.setIsInsert(true);
         sysAuthorization.setIsRead(true);
@@ -208,8 +199,7 @@ public class InitDataTest {
 
         //Parent child
         sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/Utility/ReportSetting");
-        sysAuthorization.setNameMenu("Report Setting");
+       sysAuthorization.setSysMenu(9);
         sysAuthorization.setIsDelete(true);
         sysAuthorization.setIsInsert(true);
         sysAuthorization.setIsRead(true);
@@ -221,8 +211,7 @@ public class InitDataTest {
 
         //Parent child
         sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/Utility/CalendarSetting");
-        sysAuthorization.setNameMenu("Calendar Setting");
+        sysAuthorization.setSysMenu(10);
         sysAuthorization.setIsDelete(true);
         sysAuthorization.setIsInsert(true);
         sysAuthorization.setIsRead(true);
@@ -230,38 +219,6 @@ public class InitDataTest {
         sysAuthorization.setParent(parentUtility);
         sysAuthorization.setSysRoles(idRoles);
         sysAuthorizationDao.save(sysAuthorization);
-        Assert.assertNotNull(sysAuthorization.getId());
-
-        idRoles = sysRolesDao.getIdByName("user");
-        sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/user/**");
-        sysAuthorization.setSysRoles(idRoles);
-        sysAuthorizationDao.save(sysAuthorization);
-        sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/dashboard/**");
-        sysAuthorization.setSysRoles(idRoles);
-        sysAuthorizationDao.save(sysAuthorization);
-
-        Assert.assertNotNull(sysAuthorization.getId());
-
-        idRoles = sysRolesDao.getIdByName("approval");
-        sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/approval/**");
-        sysAuthorization.setSysRoles(idRoles);
-        sysAuthorizationDao.save(sysAuthorization);
-        sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/dashboard/**");
-        sysAuthorization.setSysRoles(idRoles);
-        sysAuthorizationDao.save(sysAuthorization);
-
-        Assert.assertNotNull(sysAuthorization.getId());
-
-        idRoles = sysRolesDao.getIdByName("public");
-        sysAuthorization = new SysAuthorization();
-        sysAuthorization.setPatternDispatcherUrl("/public/**");
-        sysAuthorization.setSysRoles(idRoles);
-        sysAuthorizationDao.save(sysAuthorization);
-
         Assert.assertNotNull(sysAuthorization.getId());
     }
 

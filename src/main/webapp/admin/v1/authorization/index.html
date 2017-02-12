@@ -32,9 +32,9 @@
 
         <#include "../../inc-lib-header.html"/>
         <script>
-            
-        var roleForAdd = null;
-        var roleIdForAdd = null;
+
+            var roleForAdd = null;
+            var roleIdForAdd = null;
         </script>
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
@@ -112,8 +112,8 @@
                                                             <#if a.id == selectRoleValue>
                                                             <option selected value="${a.id}">${a.roleName}</option>
                                                             <script>
-                                                                 roleForAdd = '${a.roleName}';
-                                                                 roleIdForAdd = '${a.id}';
+                                                                roleForAdd = '${a.roleName}';
+                                                                roleIdForAdd = '${a.id}';
                                                             </script>
                                                             <#else> <option value="${a.id}">${a.roleName}</option>
                                                             </#if>
@@ -170,7 +170,7 @@
                                                 <#list authorities as listAuthorities>
                                                 <tr>
                                                     <td><div class="center" >${listAuthorities_index+1}</div></td>
-                                                    <td>${listAuthorities.nameMenu}</td>
+                                                    <td>${listAuthorities.sysMenu.menusName}</td>
                                                     <td>
                                                         <div class="center" >${listAuthorities.createdTime}</div>
                                                     </td>
@@ -221,6 +221,7 @@
                                                         <input type="hidden" id="idTAU${listAuthorities_index}" value="${listAuthorities.id}"/>
                                                         <button type="submit" id="editAuth${listAuthorities_index}" class="btn btn-primary editButton">Edit</button>
                                                         <button type="submit" id="saveAuth${listAuthorities_index}" class="btn btn-primary saveButton" disabled>Save</button>
+                                                        <button type="submit" id="deleteAuth${listAuthorities_index}" class="btn btn-primary deleteButton" disabled>Delete</button>
                                                     </td>
                                                 </tr>
                                                 </#list>
@@ -547,26 +548,23 @@
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="form-control-label">Menu:</label>
-                        <select class="form-control select2" style="width: 100%;">
-                            <option selected="selected">Alabama</option>
-                            <option>Alaska</option>
-                            <option disabled="disabled">California (disabled)</option>
-                            <option>Delaware</option>
-                            <option>Tennessee</option>
-                            <option>Texas</option>
-                            <option>Washington</option>
+                        <select id="modalMenuid" class="form-control select2" style="width: 100%;">
+                            <#if listAllMenu?? > 
+                            <#list listAllMenu as listMenu>
+                            <option value="${listMenu.id}" >${listMenu.menusName}</option>
+                            </#list>
+                            </#if >
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="recipient-name" class="form-control-label">Parent menu:</label>
-                        <select class="form-control select2" style="width: 100%;">
-                            <option selected="selected">Alabama</option>
-                            <option>Alaska</option>
-                            <option disabled="disabled">California (disabled)</option>
-                            <option>Delaware</option>
-                            <option>Tennessee</option>
-                            <option>Texas</option>
-                            <option>Washington</option>
+                        <select id="modalParentMenuid" class="form-control select2" style="width: 100%;">
+                            <option >-</option>
+                            <#if listAllMenuAuthorization?? > 
+                            <#list listAllMenuAuthorization as listMenuAuthorization>
+                            <option value="${listMenuAuthorization.id}" >${listMenuAuthorization.sysMenu.menusName}</option>
+                            </#list>
+                            </#if > 
                         </select>
                     </div>
                     <div class="form-group">
@@ -604,68 +602,105 @@
 <script src="../../../resources/dist/js/pages/all_loading.js"></script>
 <script>
     $(function () {
-        if (roleForAdd != null ){
-           $("#idRoleAdd").val(roleForAdd);
+        if (roleForAdd != null) {
+            $("#idRoleAdd").val(roleForAdd);
         }
-        $("#saveModalAddMenu").on("click", function(){
-             addDataMenu(id, modalIsCreate, modalIsUpdate, modalIsDelete, modalIsDisabled, menuId, parentId) ;
+        $("#saveModalAddMenu").on("click", function () {
+            addDataMenu(roleIdForAdd,$('#modalIsCreate').is(':checked'),$('#modalIsUpdate').is(':checked') , 
+            $('#modalIsDelete').is(':checked'),$('#modalIsDisabled').is(':checked') , 
+            $('#modalMenuid').val(), $('#modalParentMenuid').val());
         });
         $(".select2").select2();
         $("#example1").DataTable();
+        
+        $(".deleteButton").on("click", function(){
+            var id  = $(this).attr('id').replace('deleteAuth','');
+            deleteDataMenu($("#idTAU" + id).val());
+            isEnableTriggerButtonSaveAndDelete(id);
+         
+        });
+        
         $(".editButton").on("click", function () {
             var idAuth = $(this).attr('id');
             var id = idAuth.replace("editAuth", "");
-            var idInsert = "#isInsert" + id;
-            var idDelete = "#isDelete" + id;
-            var idUpdate = "#isUpdate" + id;
-            var idDisable = "#disabled" + id;
-            var idSaveAuth = "#saveAuth" + id;
-            $(idInsert).removeAttr("disabled");
-            $(idDelete).removeAttr("disabled");
-            $(idUpdate).removeAttr("disabled");
-            $(idDisable).removeAttr("disabled");
-            $(idSaveAuth).removeAttr("disabled");
-            $("#" + idAuth).attr("disabled", true);
-//            alert($("#isInsert"+id).is(':checked') );
-//            alert($("#isDelete"+id).is(':checked') );
-//            alert($("#isUpdate"+id).is(':checked') );
-//            alert($("#disabled"+id).is(':checked') );
+            
+            var enabledButton = ["#isInsert" + id,
+                    "#isDelete" + id,
+                    "#isUpdate" + id,
+                    "#disabled" + id,
+                    "#saveAuth" + id,
+                    "#deleteAuth" + id
+              ];
+              var disableButton = ["#editAuth"+id ];
+              enabledDisabledButton(enabledButton, disableButton);
         });
+        
         $(".saveButton").on("click", function () {
             var idSaveAuth = $(this).attr('id');
             var id = idSaveAuth.replace('saveAuth', '');
-            var idInsert = "#isInsert" + id;
-            var idDelete = "#isDelete" + id;
-            var idUpdate = "#isUpdate" + id;
-            var idDisable = "#disabled" + id;
-            var isEditAuth = "#editAuth" + id;
-
+        
             var vInsert, vDelete, vUpdate, vDisable, idTAU;
             idTAU = $("#idTAU" + id).val();
-            vInsert = $(idInsert).is(':checked');
-            vDelete = $(idDelete).is(':checked');
-            vUpdate = $(idUpdate).is(':checked');
-            vDisable = $(idDisable).is(':checked');
+        
+            editData(idTAU, 
+            $("#isInsert" + id).is(':checked'),
+            $("#isDelete" + id).is(':checked'),
+            $("#isUpdate" + id).is(':checked'),
+            $("#disabled" + id).is(':checked'));
 
-            console.log(vInsert + "" + vDelete + " " + vUpdate + " " + vDisable);
-            editData(idTAU, vInsert, vDelete, vUpdate, vDisable);
-
-            $(idInsert).attr("disabled", true);
-            $(idDelete).attr("disabled", true);
-            $(idUpdate).attr("disabled", true);
-            $(idDisable).attr("disabled", true);
-            $("#" + idSaveAuth).attr("disabled", true);
-            $(isEditAuth).removeAttr("disabled");
+            isEnableTriggerButtonSaveAndDelete(id);
         });
+        
+         function isEnableTriggerButtonSaveAndDelete(id){
+             var disableButton = ["#isInsert" + id,
+                    "#isDelete" + id,
+                    "#isUpdate" + id,
+                    "#disabled" + id,
+                    "#saveAuth" + id,
+                    "#deleteAuth" + id
+              ];
+              var enabledButton = ["#editAuth"+id ];
+              enabledDisabledButton(enabledButton,disableButton);
+        }
+        
+        function enabledDisabledButton(idEnableButton, idDisableButton){
+            
+            if (idEnableButton !== null){
+                for (var b = 0; b < idEnableButton.length ; b++){
+                    $(idEnableButton[b]).removeAttr("disabled");   
+                } 
+            }
+            
+            if (idDisableButton !== null){
+            for (var a = 0; a < idDisableButton.length; a++){
+                    $(idDisableButton[a]).attr("disabled", true);
+                }    
+            }
+        }
+        
+        function deleteDataMenu(idMenu){
+             $.ajax({
+                type: "POST",
+                url: "api/authorization/deleteMenu/" + idMenu,
+                headers: {'X-XSRF-TOKEN': $("#csrf").val()},
+                dataType: "json",
+                success: function (data, textStatus, jqXHR) {}
+            });
+        }
 
-    function addDataMenu(id, vInsert, vDelete, vUpdate, vDisable, menuId, parentId) {
+        function addDataMenu(id, vInsert, vDelete, vUpdate, vDisable, menuId, parentId) {
             var csrfToken = $("#csrf").val();
+            if((parentId == '' ) || (parentId == '-')){
+                parentId= null;
+            }
+            alert(parentId);
             $.ajax({
                 type: "POST",
                 url: "api/authorization/addMenu/" + id,
                 headers: {'X-XSRF-TOKEN': csrfToken},
                 data: {
-                    menuId: menuId,
+                    modelMenuId : menuId,
+                    modelParentMenuId : parentId,
                     parentId: parentId,
                     vInsert: vInsert,
                     vDelete: vDelete,
@@ -685,10 +720,8 @@
                     clearTimeout(timeout);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    //window.location.href = "http://localhost:8080/sitepat-satelit/";
-                    //window.location.replace("logout.ari");
                 }
-            });            
+            });
         }
 
         function editData(id, vInsert, vDelete, vUpdate, vDisable) {
@@ -719,8 +752,8 @@
                     //window.location.replace("logout.ari");
                 }
             });
-            
-            
+
+
         }
     });
 </script>

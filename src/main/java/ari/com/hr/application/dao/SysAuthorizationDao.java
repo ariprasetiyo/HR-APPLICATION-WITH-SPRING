@@ -24,10 +24,10 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
     @Query("select id from SysAuthorization where sysRoles.roleName = :nRoleName order by id desc ")
     public long getIdByNameAuthorization(@Param("nRoleName") String nameAuthority);
 
-    @Query("select a.patternDispatcherUrl as patternDispatcherUrl, b.roleName as roleName from SysAuthorization a left join a.sysRoles b ")
+    @Query("select a.sysMenu.url as patternDispatcherUrl, b.roleName as roleName from SysAuthorization a left join a.sysRoles b ")
     public List<SysAuthorizationDto> listAll2();
 
-    @Query("SELECT new ari.com.hr.application.dto.SysAuthorizationDto(a.patternDispatcherUrl as patternDispatcherUrl, b.roleName as roleName) from SysAuthorization a left join a.sysRoles b where a.patternDispatcherUrl is not null order by a.patternDispatcherUrl ")
+    @Query("SELECT new ari.com.hr.application.dto.SysAuthorizationDto(a.sysMenu.url as patternDispatcherUrl, b.roleName as roleName) from SysAuthorization a left join a.sysRoles b where a.sysMenu.url is not null order by a.sysMenu.url ")
     public List<SysAuthorizationDto> listRolenameAndDispatcherUrl();
 
     @Modifying(clearAutomatically = true)
@@ -35,8 +35,21 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
     @Query("update SysAuthorization a set a.parent.id = :nparentId where a.sysRoles.id = :nId")
     public void updateSysRoleId(@Param("nId") long id, @Param("nparentId") Long parentId);
 
-    @Query("from SysAuthorization  where sysRoles.id = :nsysRolesId and nameMenu is not null")
+    /*Query untuk ambil data SysAuthorization*/
+    @Query("from SysAuthorization  where sysRoles.id = :nsysRolesId and sysMenu.menusName is not null")
     public List<SysAuthorization> getForScreenMenu(@Param("nsysRolesId") long idSysRole);
+
+    /*Query count parentId data SysAuthorization. NamedNativeQuery is "SysAuthorization.countParentId"
+    Could using like this method from controller without pass interface
+    Query q = em.createNamedQuery("SysAuthorization.countParentId");
+    log.debug(q.toString());
+    q.setParameter("nparentId", 72);
+     */
+    @Query(nativeQuery = true)
+    public Integer countParentId(@Param("nparentId") long nparentId);
+    
+    @Query("select parent.id  from SysAuthorization where id = :nId ")
+    public Long getParentId(@Param("nId") long ntId);
 
     //Using @NamedNativeSQL and sqlResultsetMapping
     //resultSetMapping = "SysAuthorization.listScreenMenu" in Model

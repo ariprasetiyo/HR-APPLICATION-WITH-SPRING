@@ -11,6 +11,7 @@ import ari.com.hr.application.dao.SysRolesDao;
 import ari.com.hr.application.model.SysAuthorization;
 import ari.com.hr.application.model.SysMenus;
 import ari.com.hr.application.model.SysRoles;
+import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,12 +48,36 @@ public class AuthorizationController {
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String index(Model model, Pageable page,
-            @RequestParam(value = "roles_id", required = false) Long roles_id) {
-        viewSysRoles(model, roles_id);
-        List<SysAuthorization> SysAuthorities = (List<SysAuthorization>) dsAuthorization.getForScreenMenu(roles_id);
-        model.addAttribute("authorities", SysAuthorities);
-        viewSysMenu(model);
-        //return dsAuthorization.findAll(page);
+            @RequestParam(value = "roles_id", required = false) Long idRole) {
+        viewSysRoles(model, idRole);
+
+        List<SysAuthorization> SysAuthorities = (List<SysAuthorization>) dsAuthorization.getForScreenMenu(idRole);
+
+        List<SysAuthorization> SysAuthoritiesNew = new ArrayList<>();
+        Integer countParentId = 0;
+        int countParentIdTemp = 0;
+        StringBuilder parentSign = new StringBuilder() ;
+        long idParent = 0;
+        int levelMenu = 0;
+        for (SysAuthorization sysAuthority : SysAuthorities) {
+
+            idParent = (sysAuthority.getParent() == null) ? 0 : sysAuthority.getParent().getId();
+            levelMenu = recursifMethodCountParentId(sysAuthority.getId());
+            log.debug("result count parent id : "+ sysAuthority.getId()  +". Level menu :"+ levelMenu + ". Id : " + idParent);
+            
+            parentSign.delete(0, parentSign.length());
+            for (int a = 0; a < levelMenu; a++) {
+                parentSign.append("--- ");
+            }
+            
+            SysMenus sysMenu = new SysMenus();
+            sysMenu.setMenusName(parentSign.toString() + sysAuthority.getSysMenu().getMenusName());
+            sysAuthority.setSysMenu(sysMenu);
+            SysAuthoritiesNew.add(sysAuthority);
+        }
+        model.addAttribute("authorities", SysAuthoritiesNew);
+        existingMenuInSysMenu(model);
+        existingMenuInAuthorization(model, idRole);
         return "/admin/v1/authorization/index";
     }
 
@@ -78,8 +103,21 @@ public class AuthorizationController {
         model.addAttribute("listRoles", listAllSysRole);
     }
 
-    private void viewSysMenu(Model model) {
+    private void existingMenuInSysMenu(Model model) {
         List<SysMenus> listAllMenu = (List<SysMenus>) dsSysMenuDao.findAll();
         model.addAttribute("listAllMenu", listAllMenu);
+    }
+
+    private void existingMenuInAuthorization(Model model, Long idRole) {
+        List<SysAuthorization> listParentMenuAuthorization = dsAuthorization.getForScreenMenu(idRole);
+        model.addAttribute("listAllMenuAuthorization", listParentMenuAuthorization);
+    }
+
+    private int recursifMethodCountParentId(long id) {
+        Long a = dsAuthorization.getParentId(id);
+        if(a == null){
+            return 0;
+        }
+        return  recursifMethodCountParentId(a)+1;
     }
 }

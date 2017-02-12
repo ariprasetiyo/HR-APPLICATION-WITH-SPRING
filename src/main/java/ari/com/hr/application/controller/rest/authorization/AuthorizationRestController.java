@@ -1,10 +1,12 @@
 package ari.com.hr.application.controller.rest.authorization;
 
 import ari.com.hr.application.dao.SysAuthorizationDao;
+import ari.com.hr.application.model.SysAuthorization;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,8 +32,55 @@ public class AuthorizationRestController {
             @RequestParam(value = "vUpdate") boolean vUpdate,
             @RequestParam(value = "vDelete") boolean vDelete,
             @RequestParam(value = "vDisable") boolean vDisable) {
-
         int inUpdate = dsSysAuthorization.updateAuthorization(Long.valueOf(id), vInsert, vUpdate, vDelete, vDisable);
-        log.debug("-------------------------------------------------" + Long.valueOf(id) + "inUpdate" + inUpdate );
+        log.debug(Long.valueOf(id) + "inUpdate" + inUpdate);
+    }
+
+    @RequestMapping("/addMenu/{idAuhtorization}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public ResponseEntity<SysAuthorization> authorizationAddMenu(@PathVariable("idAuhtorization") Integer id,
+            @RequestParam("vInsert") boolean vInsert,
+            @RequestParam("vUpdate") boolean vUpdate,
+            @RequestParam("vDelete") boolean vDelete,
+            @RequestParam("vDisable") boolean vDisable,
+            @RequestParam("modelMenuId") Integer MenuId,
+            @RequestParam(value = "modelParentMenuId", required = false) Long parentMenuId) {
+
+        SysAuthorization dataAuthorization = saveDataMenu(id, vInsert, vUpdate, vDelete, vDisable, MenuId, parentMenuId);
+        return new ResponseEntity(dataAuthorization, HttpStatus.ACCEPTED);
+
+    }
+    
+    @RequestMapping("/deleteMenu/{idAuthorization}")
+    public void deleteMenu(@PathVariable("idAuthorization") Long id){
+        dsSysAuthorization.delete(id);
+    }
+
+    private SysAuthorization saveDataMenu(Integer id, boolean vInsert,
+            boolean vUpdate, boolean vDelete,
+            boolean vDisable, Integer MenuId,
+            Long parentMenuId) {
+
+        SysAuthorization dataAuthorization = new SysAuthorization();
+        log.debug("-add new menu on id " + id
+                + ", menuId : " + MenuId
+                + ", parentId " + parentMenuId
+                + " " + vInsert + "" + vUpdate + "" + vDelete + "" + vDisable);
+        dataAuthorization.setSysMenu(MenuId);
+
+        if (parentMenuId == null) {
+            dataAuthorization.setParent(null);
+        } else {
+            dataAuthorization.setParent(parentMenuId);
+        }
+
+        dataAuthorization.setSysRoles(id);
+        dataAuthorization.setIsDelete(vDelete);
+        dataAuthorization.setIsInsert(vInsert);
+        dataAuthorization.setIsUpdate(vUpdate);
+        dataAuthorization.setDisabled(vDisable);
+        dataAuthorization.setIsRead(true);
+        return dsSysAuthorization.save(dataAuthorization);
+
     }
 }
