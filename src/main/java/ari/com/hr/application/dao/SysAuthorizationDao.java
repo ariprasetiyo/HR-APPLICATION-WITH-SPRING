@@ -35,8 +35,21 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
     @Query("update SysAuthorization a set a.parent.id = :nparentId where a.sysRoles.id = :nId")
     public void updateSysRoleId(@Param("nId") long id, @Param("nparentId") Long parentId);
 
+    /*Query untuk ambil data SysAuthorization*/
     @Query("from SysAuthorization  where sysRoles.id = :nsysRolesId and sysMenu.menusName is not null")
     public List<SysAuthorization> getForScreenMenu(@Param("nsysRolesId") long idSysRole);
+
+    /*Query count parentId data SysAuthorization. NamedNativeQuery is "SysAuthorization.countParentId"
+    Could using like this method from controller without pass interface
+    Query q = em.createNamedQuery("SysAuthorization.countParentId");
+    log.debug(q.toString());
+    q.setParameter("nparentId", 72);
+     */
+    @Query(nativeQuery = true)
+    public Integer countParentId(@Param("nparentId") long nparentId);
+    
+    @Query("select parent.id  from SysAuthorization where id = :nId ")
+    public Long getParentId(@Param("nId") long ntId);
 
     //Using @NamedNativeSQL and sqlResultsetMapping
     //resultSetMapping = "SysAuthorization.listScreenMenu" in Model

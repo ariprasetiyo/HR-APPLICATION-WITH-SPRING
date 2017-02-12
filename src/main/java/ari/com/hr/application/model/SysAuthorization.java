@@ -6,13 +6,13 @@
 package ari.com.hr.application.model;
 
 import ari.com.hr.application.dto.SysScreenMenuDto;
-import javax.persistence.Column;
 import javax.persistence.ColumnResult;
 import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
@@ -24,14 +24,20 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name = "sys_authorization")
-@NamedNativeQuery(name = "SysAuthorization.listScreenMenu",
-        query = "select  a.id as id , sm.menus_name as name_menu, sm.url as pattern_dispatcher_url, coalesce(a.parent_id, 0) as parent_id, coalesce(b.con, 0) as con  from "
-        + "sys_authorization as a "
-        + "LEFT join ( select parent_id, count(1) as con from sys_authorization GROUP by parent_id ) as b "
-        + "        on a.id = b.parent_id  left join sys_menu sm on a.sys_menu_id = sm.id where sys_roles_id in :nsysRolesId and coalesce(a.parent_id, 0) = :nparentId",
-        //resultClass = SysScreenMenuDto.class,
-        resultSetMapping = "SysAuthorization.listScreenMenu"
-)
+@NamedNativeQueries({
+    //tidak menggunakan resultClass karena hanya count saja
+    @NamedNativeQuery(name = "SysAuthorization.countParentId", query = "select (sum(ChildCount)+1) as level from "
+            + "( select (select count(*) from sys_authorization where parent_id= m.id ) as ChildCount "
+            + "from sys_authorization m where m.parent_id =:nparentId group by m.id ) a "),
+    @NamedNativeQuery(name = "SysAuthorization.listScreenMenu",
+            query = "select  a.id as id , sm.menus_name as name_menu, sm.url as pattern_dispatcher_url, coalesce(a.parent_id, 0) as parent_id, coalesce(b.con, 0) as con  from "
+            + "sys_authorization as a "
+            + "LEFT join ( select parent_id, count(1) as con from sys_authorization GROUP by parent_id ) as b "
+            + " on a.id = b.parent_id  left join sys_menu sm on a.sys_menu_id = sm.id where sys_roles_id in :nsysRolesId and coalesce(a.parent_id, 0) = :nparentId",
+            //resultClass = SysScreenMenuDto.class,
+            resultSetMapping = "SysAuthorization.listScreenMenu"
+    )
+})
 @SqlResultSetMapping(name = "SysAuthorization.listScreenMenu",
         classes = {
             @ConstructorResult(
@@ -45,6 +51,7 @@ import javax.persistence.Transient;
 
                     })
         })
+
 //@SqlResultSetMapping(name = "SysAuthorization.listScreenMenu",
 //        entities = @EntityResult(entityClass = SysAuthorization.class,
 //                fields = {
@@ -121,6 +128,12 @@ public class SysAuthorization extends ModelSerializable {
 
     public void setParent(SysAuthorization parent) {
         this.parent = parent;
+    }
+
+    public void setParent(long parent) {
+        SysAuthorization sysAuthorization = new SysAuthorization();
+        sysAuthorization.setId(parent);
+        this.parent = sysAuthorization;
     }
 
     public SysRoles getSysRoles() {
