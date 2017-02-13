@@ -5,6 +5,11 @@
  */
 package ari.com.hr.application.controller.rest;
 
+import ari.com.hr.application.dao.SysAuthorizationDao;
+import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,10 +30,15 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 public class AuthorizationApiTest {
 
+    Logger log = Logger.getLogger(AuthorizationApiTest.class);
+    
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
+    
+    @Autowired
+    private SysAuthorizationDao dsSysAuthorization;
 
     @Before
     public void setup() {
@@ -71,7 +81,13 @@ public class AuthorizationApiTest {
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andReturn();
         String content = result.getResponse().getContentAsString();
-        System.out.println(content);
+        JSONObject objDetailUser = new JSONObject(content);
+        
+        Object idNewMenu  = objDetailUser.get("id");
+        Assert.assertNotNull(idNewMenu);
+        log.debug("test-- idNewMenu : "+idNewMenu);
+        dsSysAuthorization.delete(Long.valueOf(idNewMenu.toString()));
+        
     }
 
 }
