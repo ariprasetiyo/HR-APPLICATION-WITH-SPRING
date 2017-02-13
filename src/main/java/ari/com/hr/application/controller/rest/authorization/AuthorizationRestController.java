@@ -34,13 +34,13 @@ public class AuthorizationRestController {
             @RequestParam(value = "vDelete") boolean vDelete,
             @RequestParam(value = "vDisable") boolean vDisable) {
         int inUpdate = dsSysAuthorization.updateAuthorization(id, vInsert, vUpdate, vDelete, vDisable);
-        
+
         log.debug(id + "inUpdate" + inUpdate);
-        
+
         GlobalDto globalDto = new GlobalDto();
         globalDto.setId(id);
         globalDto.setCount(inUpdate);
-        
+
         return new ResponseEntity(globalDto, HttpStatus.OK);
     }
 
@@ -58,16 +58,15 @@ public class AuthorizationRestController {
                 vDelete, vDisable, MenuId, parentMenuId);
         return new ResponseEntity(dataAuthorization, HttpStatus.OK);
     }
-    
+
     @RequestMapping("/deleteMenu/{idAuthorization}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<GlobalDto> deleteMenu(@PathVariable("idAuthorization") Long id){
+    public ResponseEntity<GlobalDto> deleteMenu(@PathVariable("idAuthorization") Long id) {
         dsSysAuthorization.delete(id);
         GlobalDto globalDto = new GlobalDto();
         globalDto.setId(id);
         return new ResponseEntity(globalDto, HttpStatus.OK);
     }
-    
 
     private SysAuthorization saveDataMenu(Integer id, boolean vInsert,
             boolean vUpdate, boolean vDelete,
@@ -93,7 +92,12 @@ public class AuthorizationRestController {
         dataAuthorization.setIsUpdate(vUpdate);
         dataAuthorization.setDisabled(vDisable);
         dataAuthorization.setIsRead(true);
-        return dsSysAuthorization.save(dataAuthorization);
+        dataAuthorization = dsSysAuthorization.save(dataAuthorization);
 
+        return getDataAuthorizationById(dataAuthorization.getId());
+    }
+
+    private SysAuthorization getDataAuthorizationById(Long idAuthorization) {
+        return dsSysAuthorization.getDataAuthorizationById(idAuthorization);
     }
 }

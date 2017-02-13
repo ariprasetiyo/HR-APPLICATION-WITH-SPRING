@@ -66,5 +66,8 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
             @Param("nisInsert") boolean isInsert,
             @Param("nisUpdate") boolean isUpdate,
             @Param("nisDelete") boolean isDelete, @Param("ndisabled") boolean disabled);
+    
+    @Query("select SA , sM from SysAuthorization SA left join SA.sysMenu sM where SA.id = :nidAuthorization ")
+    public SysAuthorization getDataAuthorizationById(@Param("nidAuthorization") long id);
 
 }
