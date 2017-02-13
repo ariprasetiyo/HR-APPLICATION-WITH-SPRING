@@ -151,7 +151,7 @@
                                 <div class="box-body">
                                     <!-- /.box-header -->
                                     <div class="box-body">
-                                        <table id="example1" class="table table-bordered table-striped">
+                                        <table id="tableAuthorization" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
                                                     <th><div class="center" >No</div></th>
@@ -168,7 +168,7 @@
                                             <tbody>
                                                 <#if authorities??>
                                                 <#list authorities as listAuthorities>
-                                                <tr>
+                                                <tr id="rowId${listAuthorities.id}">
                                                     <td><div class="center" >${listAuthorities_index+1}</div></td>
                                                     <td>${listAuthorities.sysMenu.menusName}</td>
                                                     <td>
@@ -234,95 +234,8 @@
                                     <!-- /.box-body -->
                                 </div>
                             </div>
-                            <div class="box-footer clearfix">
-                                <button type="button" class="pull-right btn btn-default" id="sendEmail">Send
-                                    <i class="fa fa-arrow-circle-right"></i></button>
-                            </div>
                     </div>
-
                 </section>
-                <!-- /.Left col -->
-                <!-- right col (We are only adding the ID to make the widgets sortable)-->
-                <section class="col-lg-5 connectedSortable">
-                    <!-- Calendar -->
-                    <div class="box box-solid bg-green-gradient">
-                        <div class="box-header">
-                            <i class="fa fa-calendar"></i>
-
-                            <h3 class="box-title">Calendar</h3>
-                            <!-- tools box -->
-                            <div class="pull-right box-tools">
-                                <!-- button with a dropdown -->
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
-                                        <i class="fa fa-bars"></i></button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Add new event</a></li>
-                                        <li><a href="#">Clear events</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">View calendar</a></li>
-                                    </ul>
-                                </div>
-                                <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
-                                </button>
-                                <button type="button" class="btn btn-success btn-sm" data-widget="remove"><i class="fa fa-times"></i>
-                                </button>
-                            </div>
-                            <!-- /. tools -->
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body no-padding">
-                            <!--The calendar -->
-                            <div id="calendar" style="width: 100%"></div>
-                        </div>
-                        <!-- /.box-body -->
-                        <div class="box-footer text-black">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <!-- Progress bars -->
-                                    <div class="clearfix">
-                                        <span class="pull-left">Task #1</span>
-                                        <small class="pull-right">90%</small>
-                                    </div>
-                                    <div class="progress xs">
-                                        <div class="progress-bar progress-bar-green" style="width: 90%;"></div>
-                                    </div>
-
-                                    <div class="clearfix">
-                                        <span class="pull-left">Task #2</span>
-                                        <small class="pull-right">70%</small>
-                                    </div>
-                                    <div class="progress xs">
-                                        <div class="progress-bar progress-bar-green" style="width: 70%;"></div>
-                                    </div>
-                                </div>
-                                <!-- /.col -->
-                                <div class="col-sm-6">
-                                    <div class="clearfix">
-                                        <span class="pull-left">Task #3</span>
-                                        <small class="pull-right">60%</small>
-                                    </div>
-                                    <div class="progress xs">
-                                        <div class="progress-bar progress-bar-green" style="width: 60%;"></div>
-                                    </div>
-
-                                    <div class="clearfix">
-                                        <span class="pull-left">Task #4</span>
-                                        <small class="pull-right">40%</small>
-                                    </div>
-                                    <div class="progress xs">
-                                        <div class="progress-bar progress-bar-green" style="width: 40%;"></div>
-                                    </div>
-                                </div>
-                                <!-- /.col -->
-                            </div>
-                            <!-- /.row -->
-                        </div>
-                    </div>
-                    <!-- /.box -->
-
-                </section>
-                <!-- right col -->
             </div>
             <!-- /.row (main row) -->
 
@@ -334,7 +247,7 @@
         <div class="pull-right hidden-xs">
             <b>Version</b> 2.3.6
         </div>
-        <strong>Copyright &copy; 2014-2016 <a href="http://almsaeedstudio.com">Almsaeed Studio</a>.</strong> All rights
+        <strong>Copyright &copy; 2014-2016 <a href="#">Almsaeed Studio & Arprast-Soft</a>.</strong> All rights
         reserved.
     </footer>
 
@@ -601,161 +514,218 @@
 <script src="../../../resources/dist/js/app.min.js"></script>
 <script src="../../../resources/dist/js/pages/all_loading.js"></script>
 <script>
-    $(function () {
-        if (roleForAdd != null) {
-            $("#idRoleAdd").val(roleForAdd);
-        }
-        $("#saveModalAddMenu").on("click", function () {
-            addDataMenu(roleIdForAdd,$('#modalIsCreate').is(':checked'),$('#modalIsUpdate').is(':checked') , 
-            $('#modalIsDelete').is(':checked'),$('#modalIsDisabled').is(':checked') , 
-            $('#modalMenuid').val(), $('#modalParentMenuid').val());
-        });
-        $(".select2").select2();
-        $("#example1").DataTable();
-        
-        $(".deleteButton").on("click", function(){
-            var id  = $(this).attr('id').replace('deleteAuth','');
-            deleteDataMenu($("#idTAU" + id).val());
-            isEnableTriggerButtonSaveAndDelete(id);
-         
-        });
-        
-        $(".editButton").on("click", function () {
-            var idAuth = $(this).attr('id');
-            var id = idAuth.replace("editAuth", "");
-            
-            var enabledButton = ["#isInsert" + id,
-                    "#isDelete" + id,
-                    "#isUpdate" + id,
-                    "#disabled" + id,
-                    "#saveAuth" + id,
-                    "#deleteAuth" + id
-              ];
-              var disableButton = ["#editAuth"+id ];
-              enabledDisabledButton(enabledButton, disableButton);
-        });
-        
-        $(".saveButton").on("click", function () {
-            var idSaveAuth = $(this).attr('id');
-            var id = idSaveAuth.replace('saveAuth', '');
-        
-            var vInsert, vDelete, vUpdate, vDisable, idTAU;
-            idTAU = $("#idTAU" + id).val();
-        
-            editData(idTAU, 
-            $("#isInsert" + id).is(':checked'),
-            $("#isDelete" + id).is(':checked'),
-            $("#isUpdate" + id).is(':checked'),
-            $("#disabled" + id).is(':checked'));
-
-            isEnableTriggerButtonSaveAndDelete(id);
-        });
-        
-         function isEnableTriggerButtonSaveAndDelete(id){
-             var disableButton = ["#isInsert" + id,
-                    "#isDelete" + id,
-                    "#isUpdate" + id,
-                    "#disabled" + id,
-                    "#saveAuth" + id,
-                    "#deleteAuth" + id
-              ];
-              var enabledButton = ["#editAuth"+id ];
-              enabledDisabledButton(enabledButton,disableButton);
-        }
-        
-        function enabledDisabledButton(idEnableButton, idDisableButton){
-            
-            if (idEnableButton !== null){
-                for (var b = 0; b < idEnableButton.length ; b++){
-                    $(idEnableButton[b]).removeAttr("disabled");   
-                } 
-            }
-            
-            if (idDisableButton !== null){
-            for (var a = 0; a < idDisableButton.length; a++){
-                    $(idDisableButton[a]).attr("disabled", true);
-                }    
-            }
-        }
-        
-        function deleteDataMenu(idMenu){
-             $.ajax({
-                type: "POST",
-                url: "api/authorization/deleteMenu/" + idMenu,
-                headers: {'X-XSRF-TOKEN': $("#csrf").val()},
-                dataType: "json",
-                success: function (data, textStatus, jqXHR) {}
-            });
-        }
-
-        function addDataMenu(id, vInsert, vDelete, vUpdate, vDisable, menuId, parentId) {
-            var csrfToken = $("#csrf").val();
-            if((parentId == '' ) || (parentId == '-')){
-                parentId= null;
-            }
-            alert(parentId);
-            $.ajax({
-                type: "POST",
-                url: "api/authorization/addMenu/" + id,
-                headers: {'X-XSRF-TOKEN': csrfToken},
-                data: {
-                    modelMenuId : menuId,
-                    modelParentMenuId : parentId,
-                    parentId: parentId,
-                    vInsert: vInsert,
-                    vDelete: vDelete,
-                    vUpdate: vUpdate,
-                    vDisable: vDisable
-                },
-                dataType: "json",
-                beforeSend: function () {
-                    ajaxindicatorstart('loading data.. please wait..');
-                    window.setTimeout(ajaxindicatorstart('loading data.. please wait..'), 500);
-                },
-                success: function (data, textStatus, jqXHR) {
-
-                },
-                complete: function () {
-                    timeout = setTimeout(ajaxindicatorstop(), 9000);
-                    clearTimeout(timeout);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                }
-            });
-        }
-
-        function editData(id, vInsert, vDelete, vUpdate, vDisable) {
-            var csrfToken = $("#csrf").val();
-            $.ajax({
-                type: "POST",
-                url: "api/authorization/update/" + id,
-                headers: {'X-XSRF-TOKEN': csrfToken},
-                data: {vInsert: vInsert,
-                    vDelete: vDelete,
-                    vUpdate: vUpdate,
-                    vDisable: vDisable
-                },
-                dataType: "json",
-                beforeSend: function () {
-                    ajaxindicatorstart('loading data.. please wait..');
-                    window.setTimeout(ajaxindicatorstart('loading data.. please wait..'), 500);
-                },
-                success: function (data, textStatus, jqXHR) {
-
-                },
-                complete: function () {
-                    timeout = setTimeout(ajaxindicatorstop(), 9000);
-                    clearTimeout(timeout);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    //window.location.href = "http://localhost:8080/sitepat-satelit/";
-                    //window.location.replace("logout.ari");
-                }
-            });
-
-
-        }
+$(function () {
+    if (roleForAdd != null) {
+        $("#idRoleAdd").val(roleForAdd);
+    }
+    $("#saveModalAddMenu").on("click", function () {
+        addDataMenu(roleIdForAdd, $('#modalIsCreate').is(':checked'), $('#modalIsUpdate').is(':checked'),
+                $('#modalIsDelete').is(':checked'), $('#modalIsDisabled').is(':checked'),
+                $('#modalMenuid').val(), $('#modalParentMenuid').val());
     });
+    $(".select2").select2();
+    $("#tableAuthorization").DataTable();
+    $(".deleteButton").on("click", function () {
+        var id = $(this).attr('id').replace('deleteAuth', '');
+        deleteDataMenu($("#idTAU" + id).val());
+        isEnableTriggerButtonSaveAndDelete(id);
+    });
+    $(".editButton").on("click", function () {
+        var idAuth = $(this).attr('id');
+        var id = idAuth.replace("editAuth", "");
+        var enabledButton = ["#isInsert" + id,
+            "#isDelete" + id,
+            "#isUpdate" + id,
+            "#disabled" + id,
+            "#saveAuth" + id,
+            "#deleteAuth" + id
+        ];
+        var disableButton = ["#editAuth" + id];
+        enabledDisabledButton(enabledButton, disableButton);
+    });
+    $(".saveButton").on("click", function () {
+        var idSaveAuth = $(this).attr('id');
+        var id = idSaveAuth.replace('saveAuth', '');
+        var vInsert, vDelete, vUpdate, vDisable, idTAU;
+        idTAU = $("#idTAU" + id).val();
+        editData(idTAU,
+                $("#isInsert" + id).is(':checked'),
+                $("#isDelete" + id).is(':checked'),
+                $("#isUpdate" + id).is(':checked'),
+                $("#disabled" + id).is(':checked'));
+        isEnableTriggerButtonSaveAndDelete(id);
+    });
+    function isEnableTriggerButtonSaveAndDelete(id) {
+        var disableButton = ["#isInsert" + id,
+            "#isDelete" + id,
+            "#isUpdate" + id,
+            "#disabled" + id,
+            "#saveAuth" + id,
+            "#deleteAuth" + id
+        ];
+        var enabledButton = ["#editAuth" + id];
+        enabledDisabledButton(enabledButton, disableButton);
+    }
+
+    function enabledDisabledButton(idEnableButton, idDisableButton) {
+
+        if (idEnableButton !== null) {
+            for (var b = 0; b < idEnableButton.length; b++) {
+                $(idEnableButton[b]).removeAttr("disabled");
+            }
+        }
+
+        if (idDisableButton !== null) {
+            for (var a = 0; a < idDisableButton.length; a++) {
+                $(idDisableButton[a]).attr("disabled", true);
+            }
+        }
+    }
+
+    function deleteDataMenu(idMenu) {
+        $.ajax({
+            type: "POST",
+            url: "api/authorization/deleteMenu/" + idMenu,
+            headers: {'X-XSRF-TOKEN': $("#csrf").val()},
+            dataType: "json",
+            success: function (data, textStatus, jqXHR) {
+                alert(data.id);
+                //$('rowId'+data.id).remove();
+                var tr = $('#rowId' + data.id).closest('tr');
+                tr.css("background-color", "#00acd6");
+                tr.fadeOut(400, function () {
+                    tr.remove();
+                });
+                return false;
+            }
+        });
+    }
+
+    function addDataMenu(id, vInsert, vDelete, vUpdate, vDisable, menuId, parentId) {
+        var csrfToken = $("#csrf").val();
+        if ((parentId == '') || (parentId == '-')) {
+            parentId = null;
+        }
+        alert(parentId);
+        $.ajax({
+            type: "POST",
+            url: "api/authorization/addMenu/" + id,
+            headers: {'X-XSRF-TOKEN': csrfToken},
+            data: {
+                modelMenuId: menuId,
+                modelParentMenuId: parentId,
+                parentId: parentId,
+                vInsert: vInsert,
+                vDelete: vDelete,
+                vUpdate: vUpdate,
+                vDisable: vDisable
+            },
+            dataType: "json",
+            beforeSend: function () {
+                ajaxindicatorstart('loading data.. please wait..');
+                window.setTimeout(ajaxindicatorstart('loading data.. please wait..'), 500);
+            },
+            success: function (data, textStatus, jqXHR) {
+                var datas = '<tr id="">'
+                        + '< td > < div class = "center" > ' + data.id + ' < /div></td >'
+                        + '< td > ' + data.id + ' < /td>'
+                        + '< td >'
+                        + '< div class = "center" > data.createdTime < /div>'
+                        + '< /td>'
+                        + '< td >'
+                        + '< div class = "center" > data.modifiedTime < /div>   '
+                        + '< /td>'
+                        + '< td > < div class = "center" >data.isInsert'
+                        + '< input  type = "checkbox" id = "isInsert2" disabled checked >'
+                        + '< label for = "isInsert2" > < /label>'
+
+                        + '< /div>'
+                        + '< /td>'
+                        + '< td > < div class = "center" >'
+                        + '< input type = "checkbox"  id = "isUpdate1" disabled checked >'
+                        + '< label for = "isUpdate1" > < /label>'
+                        + '< /div>'
+                        + '< /td>'
+                        + '< td > < div class = "center" >data.isDelete'
+
+                        + '< input type = "checkbox"  id = "isDelete3" disabled checked >'
+                        + '< label for = "isDelete3}" > < /label>'
+                        + '< /div>'
+                        + '< /td>'
+                        + '< td > < div class = "center" >'
+                        + '< input type = "checkbox"  id = "disabled4" disabled checked >'
+                        + '< label for = "disabled4" > < /label>'
+                        + '< input type = "checkbox"  id = "disabled4" disabled >'
+                        + '< label for = "disabled4" > < /label>'
+                        + '< /div>'
+                        + '< td >'
+                        + '< input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" / >'
+                        + '< input type = "hidden" id = "idTAUid" value = "id" / >'
+                        + '< button type = "submit" id = "editAuthindex" class = "btn btn-primary editButton" > Edit < /button>'
+                        + '< button type = "submit" id = "saveAuthidex" class = "btn btn-primary saveButton" disabled > Save < /button>'
+                        + '< button type = "submit" id = "deleteAuthindex" class = "btn btn-primary deleteButton" disabled > Delete < /button>'
+                        + '< /td>'
+                        + '< /tr>';
+                
+                //$('#tableAuthorization').add("<tr><td>sasa</td></tr>");
+                var table = $('#tableAuthorization').DataTable();
+
+                var rowNode = table
+                        .row.add([data.id,data.menusName, data.createdTime, data.modifiedTime, '1', '2', 'Fiona White', 32, 
+                     function () { return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
+                        + '<input type = "hidden" id = "idTAUid" value = "id" />'
+                        + '<button type = "submit" id = "editAuthindex" class = "btn btn-primary editButton" > Edit </button>'
+                        + '<button type = "submit" id = "saveAuthidex" class = "btn btn-primary saveButton" disabled > Save </button>'
+                        + '<button type = "submit" id = "deleteAuthindex" class = "btn btn-primary deleteButton" disabled > Delete </button>'
+                                         
+        ; }  
+            ])
+                        .draw()
+                        .node();
+
+                $(rowNode)
+                        .css('color', 'red')
+                        .animate({color: 'black'});
+            },
+            complete: function () {
+                timeout = setTimeout(ajaxindicatorstop(), 9000);
+                clearTimeout(timeout);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+            }
+        });
+    }
+
+    function editData(id, vInsert, vDelete, vUpdate, vDisable) {
+        var csrfToken = $("#csrf").val();
+        $.ajax({
+            type: "POST",
+            url: "api/authorization/update/" + id,
+            headers: {'X-XSRF-TOKEN': csrfToken},
+            data: {vInsert: vInsert,
+                vDelete: vDelete,
+                vUpdate: vUpdate,
+                vDisable: vDisable
+            },
+            dataType: "json",
+            beforeSend: function () {
+                ajaxindicatorstart('loading data.. please wait..');
+                window.setTimeout(ajaxindicatorstart('loading data.. please wait..'), 500);
+            },
+            success: function (data, textStatus, jqXHR) {
+
+            },
+            complete: function () {
+                timeout = setTimeout(ajaxindicatorstop(), 9000);
+                clearTimeout(timeout);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                //window.location.href = "http://localhost:8080/sitepat-satelit/";
+                //window.location.replace("logout.ari");
+            }
+        });
+    }
+});
 </script>
 </body>
 
