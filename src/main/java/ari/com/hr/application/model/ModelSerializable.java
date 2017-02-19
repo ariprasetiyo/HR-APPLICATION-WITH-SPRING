@@ -1,4 +1,3 @@
-
 package ari.com.hr.application.model;
 
 import java.io.Serializable;
@@ -18,8 +17,10 @@ import javax.persistence.TemporalType;
 @MappedSuperclass
 public class ModelSerializable implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     @Id
-    @GeneratedValue( strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(length = 100)
     private Long id;
 
@@ -39,7 +40,7 @@ public class ModelSerializable implements Serializable {
     @Column(name = "created_by", length = 50, nullable = true)
     private String createdBy = null;
 
-    @Column(name = "modified_by", length = 50,  nullable = true)
+    @Column(name = "modified_by", length = 50, nullable = true)
     private String modifiedBy = null;
 
     public String getCreatedBy() {

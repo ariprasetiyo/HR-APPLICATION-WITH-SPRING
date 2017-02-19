@@ -14,11 +14,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author ari-prasetiyo
  */
+@Repository
 public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAuthorization, Long> {
 
     @Query("select id from SysAuthorization where sysRoles.roleName = :nRoleName order by id desc ")
@@ -47,10 +49,10 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
      */
     @Query(nativeQuery = true)
     public Integer countParentId(@Param("nparentId") long nparentId);
-    
+
     /*
     Query for rekursif view menu base on parent id
-    */
+     */
     @Query("select parent.id  from SysAuthorization where id = :nId ")
     public Long getParentId(@Param("nId") long ntId);
 
@@ -66,8 +68,9 @@ public interface SysAuthorizationDao extends PagingAndSortingRepository<SysAutho
             @Param("nisInsert") boolean isInsert,
             @Param("nisUpdate") boolean isUpdate,
             @Param("nisDelete") boolean isDelete, @Param("ndisabled") boolean disabled);
-    
-    @Query("select SA , sM from SysAuthorization SA left join SA.sysMenu sM where SA.id = :nidAuthorization ")
-    public SysAuthorization getDataAuthorizationById(@Param("nidAuthorization") long id);
+
+    @Query(value = "select new  ari.com.hr.application.dto.SysAuthorizationDto( SA.createdTime as createTime, SA.modifiedTime as modifyTime, SA.id as id, SA.sysMenu.menusName as menuName,  SA.parent.id as parentId,  SA.isUpdate as isUpdate,  SA.isDelete as isDelete,  SA.isInsert as isInsert,  SA.isRead as isRead ) from SysAuthorization SA  where SA.id =:nidMenu "
+    )
+    public SysAuthorizationDto getDataAuthorizationById(@Param("nidMenu") Long idMenu);
 
 }
