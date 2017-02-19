@@ -7,7 +7,6 @@ package ari.com.hr.application.controller.rest;
 
 import ari.com.hr.application.dao.SysAuthorizationDao;
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.Before;
@@ -31,12 +30,12 @@ import org.springframework.web.context.WebApplicationContext;
 public class AuthorizationApiTest {
 
     Logger log = Logger.getLogger(AuthorizationApiTest.class);
-    
+
     @Autowired
     private WebApplicationContext webApplicationContext;
 
     private MockMvc mockMvc;
-    
+
     @Autowired
     private SysAuthorizationDao dsSysAuthorization;
 
@@ -68,26 +67,33 @@ public class AuthorizationApiTest {
 
     @Test
     public void apiAddAuthorizationTest() throws Exception {
-        MvcResult result = mockMvc.perform(post("/admin/v1/api/authorization/addMenu/{id}", 2)
+        MvcResult result = mockMvc.perform(post("/admin/v1/api/authorization/addMenu/{id}", Long.valueOf(2))
                 .contentType(MediaType.APPLICATION_JSON)
-                .param("vInsert", "1")
-                .param("vUpdate", "1")
-                .param("vDelete", "1")
-                .param("vDisable", "1")
-                .param("modelMenuId", "1")
-                .param("modelParentMenuId", "132"))
+                .param("vInsert", "true")
+                .param("vUpdate", "true")
+                .param("vDelete", "true")
+                .param("vDisable", "true")
+                .param("modelMenuId", "2")
+                .param("modelParentMenuId", "183"))
                 .andDo(print())
+                //   .andExpect(status().isUnauthorized())
+                // .andExpect(status().reason(containsString("Bad credentials")))
+                //                .andExpect(unauthenticated())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andReturn();
         String content = result.getResponse().getContentAsString();
+        log.debug(content);
         JSONObject objDetailUser = new JSONObject(content);
-        
-        Object idNewMenu  = objDetailUser.get("id");
+
+        Object idNewMenu = objDetailUser.get("id");
+
+        Object menuName = objDetailUser.get("menuName");
         Assert.assertNotNull(idNewMenu);
-        log.debug("test-- idNewMenu : "+idNewMenu);
+        log.debug("test-- idNewMenu : " + idNewMenu);
+        log.debug("test-- menu name : " + menuName);
         dsSysAuthorization.delete(Long.valueOf(idNewMenu.toString()));
-        
+
     }
 
 }
