@@ -32,13 +32,4 @@ public class AuthorizationTest {
         // log.debug("test--" + result.getSysMenu().getMenusName());
         Assert.assertNotNull(result.getSysMenu().getMenusName());
     }
-
-    @Test
-    public void getAuthorizationJoinSysMenu() {
-        SysAuthorization result = dsSysAuthorization.getDataAuthorizationById(132);
-
-        log.debug("test-- getAuthorizationJoinSysMenu : " + result.getSysMenu().getMenusName());
-        Assert.assertEquals(result.getId(), Long.valueOf(132));
-        Assert.assertNotNull(result.getSysMenu().getMenusName());
-    }
 }
