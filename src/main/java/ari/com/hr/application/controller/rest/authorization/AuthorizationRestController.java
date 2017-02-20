@@ -4,8 +4,6 @@ import ari.com.hr.application.dao.SysAuthorizationDao;
 import ari.com.hr.application.dto.GlobalDto;
 import ari.com.hr.application.dto.SysAuthorizationDto;
 import ari.com.hr.application.model.SysAuthorization;
-import java.util.ArrayList;
-import java.util.List;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

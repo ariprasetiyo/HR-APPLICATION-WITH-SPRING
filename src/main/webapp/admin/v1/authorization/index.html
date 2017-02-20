@@ -168,8 +168,8 @@
                                             <tbody>
                                                 <#if authorities??>
                                                 <#list authorities as listAuthorities>
-                                                <tr id="rowId${listAuthorities.id}">
-                                                    <td><div class="center" >${listAuthorities_index+1}</div></td>
+                                                <tr id="rowId${listAuthorities.id}" accesskey="${listAuthorities_index+1}">
+                                                    <td><div class="center">${listAuthorities_index+1}</div></td>
                                                     <td>${listAuthorities.sysMenu.menusName}</td>
                                                     <td>
                                                         <div class="center" >${listAuthorities.createdTime}</div>
@@ -524,13 +524,20 @@ $(function () {
                 $('#modalMenuid').val(), $('#modalParentMenuid').val());
     });
     $(".select2").select2();
-    $("#tableAuthorization").DataTable();
-    $(".deleteButton").on("click", function () {
+    $("#tableAuthorization").DataTable({
+        "iDisplayLength": 25
+    });
+    
+    $('#tableAuthorization').on('click', '.deleteButton', function(){
+    //$(".deleteButton").on("click", function () {
         var id = $(this).attr('id').replace('deleteAuth', '');
         deleteDataMenu($("#idTAU" + id).val());
         isEnableTriggerButtonSaveAndDelete(id);
     });
-    $(".editButton").on("click", function () {
+    
+    $('#tableAuthorization').on('click', '.editButton', function(){
+     //$(".editButton").on("click", function () {
+        
         var idAuth = $(this).attr('id');
         var id = idAuth.replace("editAuth", "");
         var enabledButton = ["#isInsert" + id,
@@ -543,7 +550,8 @@ $(function () {
         var disableButton = ["#editAuth" + id];
         enabledDisabledButton(enabledButton, disableButton);
     });
-    $(".saveButton").on("click", function () {
+     $('#tableAuthorization').on('click', '.saveButton', function(){
+    //$(".saveButton").on("click", function () {
         var idSaveAuth = $(this).attr('id');
         var id = idSaveAuth.replace('saveAuth', '');
         var vInsert, vDelete, vUpdate, vDisable, idTAU;
@@ -555,6 +563,13 @@ $(function () {
                 $("#disabled" + id).is(':checked'));
         isEnableTriggerButtonSaveAndDelete(id);
     });
+ 
+    function getLastNumberDataTables(){
+        var table = $('#tableAuthorization').DataTable();
+        var xx = table.row(':last').data();
+        var result = xx[0].toString().replace('<div class="center">','').replace('</div>','');
+        return (parseInt(result)+1);
+    }    
     function isEnableTriggerButtonSaveAndDelete(id) {
         var disableButton = ["#isInsert" + id,
             "#isDelete" + id,
@@ -589,7 +604,7 @@ $(function () {
             headers: {'X-XSRF-TOKEN': $("#csrf").val()},
             dataType: "json",
             success: function (data, textStatus, jqXHR) {
-                alert(data.id);
+                //alert(data.id);
                 //$('rowId'+data.id).remove();
                 var tr = $('#rowId' + data.id).closest('tr');
                 tr.css("background-color", "#00acd6");
@@ -606,7 +621,7 @@ $(function () {
         if ((parentId == '') || (parentId == '-')) {
             parentId = null;
         }
-        alert(parentId);
+        //alert(parentId);
         $.ajax({
             type: "POST",
             url: "api/authorization/addMenu/" + id,
@@ -671,18 +686,14 @@ $(function () {
                 var table = $('#tableAuthorization').DataTable();
 
                 var rowNode = table
-                        .row.add([data.id,data.menusName, data.createdTime, data.modifiedTime, '1', '2', 'Fiona White', 32, 
+                        .row.add([getLastNumberDataTables(),data.menuName, data.createdTime, data.modifiedTime, '1', '2', 'Fiona White', 32, 
                      function () { return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
                         + '<input type = "hidden" id = "idTAUid" value = "id" />'
                         + '<button type = "submit" id = "editAuthindex" class = "btn btn-primary editButton" > Edit </button>'
                         + '<button type = "submit" id = "saveAuthidex" class = "btn btn-primary saveButton" disabled > Save </button>'
-                        + '<button type = "submit" id = "deleteAuthindex" class = "btn btn-primary deleteButton" disabled > Delete </button>'
-                                         
-        ; }  
-            ])
+                        + '<button type = "submit" id = "deleteAuthindex" class = "btn btn-primary deleteButton" disabled > Delete </button>';}])
                         .draw()
                         .node();
-
                 $(rowNode)
                         .css('color', 'red')
                         .animate({color: 'black'});
