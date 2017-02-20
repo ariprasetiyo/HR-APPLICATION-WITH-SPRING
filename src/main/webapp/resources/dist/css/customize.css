@@ -131,6 +131,8 @@ body {
     min-height: 100%;
     background-color: #CCD8DE;
     z-index: 800;
+    /* distance with side line ( customize menu side ) */ 
+    margin-left: 200px;
 }
 .box {
     position: relative;
@@ -156,10 +158,39 @@ body {
     background-image: none;
     border: 1px solid #ccc;
 }
+
+/*menu size */
+.main-sidebar, .left-side {
+    width: 200px;
+}
+.main-header .logo {
+    width: 200px;
+}
+.main-header .navbar {
+    margin-left: 200px;
+}
+
 @media (min-width: 768px) {
     /*design for side menu*/
     .sidebar-mini.sidebar-collapse .sidebar-menu>li:hover>.treeview-menu {
         top: 40px;
         margin-left: 0;
+    }
+
+}
+@media(max-width:767px){
+    .content-wrapper, .right-side {
+        /* distance with side line ( customize menu side ) */ 
+        margin-left: 0px;
+    }
+
+    .main-sidebar, .left-side {
+        width: 30%;
+    }
+    .main-header .logo {
+        width: 100%;
+    }
+    .main-header .navbar {
+        margin-left: 0px;
     }    
 }
