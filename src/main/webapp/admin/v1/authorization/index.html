@@ -560,7 +560,7 @@ $(function () {
         var table = $('#tableAuthorization').DataTable();
         var xx = table.row(':last').data();
         var result = xx[0].toString().replace('<div class="center">','').replace('</div>','');
-        return (parseInt(result)+1);
+        return result;
     }    
     function isEnableTriggerButtonSaveAndDelete(id) {
         var disableButton = ["#isInsert" + id,
@@ -633,57 +633,37 @@ $(function () {
                 window.setTimeout(ajaxindicatorstart('loading data.. please wait..'), 500);
             },
             success: function (data, textStatus, jqXHR) {
-                var datas = '<tr id="">'
-                        + '< td > < div class = "center" > ' + data.id + ' < /div></td >'
-                        + '< td > ' + data.id + ' < /td>'
-                        + '< td >'
-                        + '< div class = "center" > data.createdTime < /div>'
-                        + '< /td>'
-                        + '< td >'
-                        + '< div class = "center" > data.modifiedTime < /div>   '
-                        + '< /td>'
-                        + '< td > < div class = "center" >data.isInsert'
-                        + '< input  type = "checkbox" id = "isInsert2" disabled checked >'
-                        + '< label for = "isInsert2" > < /label>'
-
-                        + '< /div>'
-                        + '< /td>'
-                        + '< td > < div class = "center" >'
-                        + '< input type = "checkbox"  id = "isUpdate1" disabled checked >'
-                        + '< label for = "isUpdate1" > < /label>'
-                        + '< /div>'
-                        + '< /td>'
-                        + '< td > < div class = "center" >data.isDelete'
-
-                        + '< input type = "checkbox"  id = "isDelete3" disabled checked >'
-                        + '< label for = "isDelete3}" > < /label>'
-                        + '< /div>'
-                        + '< /td>'
-                        + '< td > < div class = "center" >'
-                        + '< input type = "checkbox"  id = "disabled4" disabled checked >'
-                        + '< label for = "disabled4" > < /label>'
-                        + '< input type = "checkbox"  id = "disabled4" disabled >'
-                        + '< label for = "disabled4" > < /label>'
-                        + '< /div>'
-                        + '< td >'
-                        + '< input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" / >'
-                        + '< input type = "hidden" id = "idTAUid" value = "id" / >'
-                        + '< button type = "submit" id = "editAuthindex" class = "btn btn-primary editButton" > Edit < /button>'
-                        + '< button type = "submit" id = "saveAuthidex" class = "btn btn-primary saveButton" disabled > Save < /button>'
-                        + '< button type = "submit" id = "deleteAuthindex" class = "btn btn-primary deleteButton" disabled > Delete < /button>'
-                        + '< /td>'
-                        + '< /tr>';
                 
                 //$('#tableAuthorization').add("<tr><td>sasa</td></tr>");
                 var table = $('#tableAuthorization').DataTable();
-
+                var numberRow = getLastNumberDataTables();
                 var rowNode = table
-                        .row.add([getLastNumberDataTables(),data.menuName, data.createdTime, data.modifiedTime, '1', '2', 'Fiona White', 32, 
-                     function () { return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
-                        + '<input type = "hidden" id = "idTAUid" value = "id" />'
-                        + '<button type = "submit" id = "editAuthindex" class = "btn btn-primary editButton" > Edit </button>'
-                        + '<button type = "submit" id = "saveAuthidex" class = "btn btn-primary saveButton" disabled > Save </button>'
-                        + '<button type = "submit" id = "deleteAuthindex" class = "btn btn-primary deleteButton" disabled > Delete </button>';}])
+                        .row.add([
+                    function(){return '<div class="center">'+(parseInt(numberRow)+1)+'</div>';},
+                    data.menuName, 
+                    function(){return '<div class="center">'+data.createTime+'</div>'; },
+                    function(){return '<div class="center">'+ data.modifyTime+'</div>'; },
+                    function(){
+                      return '<div class="center" ><input type="checkbox"  id="isInsert'+numberRow+'" disabled checked>'
+                             +' <label for="isInsert'+numberRow+'"></label>   </div>';  
+                    },
+                    function(){
+                      return '<div class="center" ><input type="checkbox"  id="isUpdate'+numberRow+'" disabled checked>'
+                             +' <label for="isUpdate'+numberRow+'"></label>   </div>';  
+                    },
+                    function(){
+                      return '<div class="center" ><input type="checkbox"  id="isDelete'+numberRow+'" disabled checked>'
+                             +' <label for="isDelete'+numberRow+'"></label>   </div>';  
+                    },
+                    function(){
+                      return '<div class="center" ><input type="checkbox"  id="disabled'+numberRow+'" disabled checked>'
+                             +' <label for="disabled'+numberRow+'"></label>   </div>';  
+                    }, 
+                    function () { return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
+                        + '<input type = "hidden" id = "idTAU'+numberRow+'" value = "'+data.id+'" />'
+                        + '<button type = "submit" id = "editAuth'+numberRow+'" class = "btn btn-primary editButton" > Edit </button>'
+                        + ' <button type = "submit" id = "saveAuth'+numberRow+'" class = "btn btn-primary saveButton" disabled > Save </button>'
+                        + ' <button type = "submit" id = "deleteAuth'+numberRow+'" class = "btn btn-primary deleteButton" disabled > Delete </button>';}])
                         .draw()
                         .node();
                 $(rowNode)
