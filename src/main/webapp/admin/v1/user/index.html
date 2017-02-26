@@ -42,7 +42,7 @@
                 <!-- sidebar: style can be found in sidebar.less -->
                 <section class="sidebar">
                     <!-- Sidebar user panel -->
-                    
+
                     <!-- search form -->
                     <form action="#" method="get" class="sidebar-form">
                         <div class="input-group">
@@ -89,8 +89,8 @@
                                     <!-- tools box -->
                                     <div class="pull-right form-inline">
                                         <div class="form-group">
-                                            <div class="col-sm-7" style="padding-right: 0px;">
-                                               <form method="POST" action="">
+                                            <div class="col-sm-7" style="padding-right: 5%;">
+                                                <form method="POST" action="">
                                                     <input type="hidden" id="csrf" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                                     <div class="input-group">
                                                         <select class="form-control" name="roles_id">
@@ -102,7 +102,7 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div class="col-sm-5 text-right" style="padding-right: 0px;">
+                                            <div class="col-sm-5 text-right" style="padding-left: 0%;padding-right: 0%;">
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
                                                         <i class="fa fa-bars"></i></button>
@@ -125,7 +125,7 @@
                                 <div class="box-body">
                                     <!-- /.box-header -->
                                     <div class="box-body">
-                                        <table id="tableAuthorization" class="table table-bordered table-striped">
+                                        <table id="tableUser" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
                                                     <th><div class="center" >No</div></th>
@@ -140,7 +140,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                               
+
                                             </tbody>
 
                                         </table>
@@ -359,7 +359,7 @@
          immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
     <!-- Modal -->
-    
+
 </div>
 <!-- ./wrapper -->
 <#include "../../inc-lib-footer.html" />
@@ -368,5 +368,24 @@
 <script src="../../../resources/plugins/select2/select2.full.min.js"></script>
 <script src="../../../resources/dist/js/app.min.js"></script>
 <script src="../../../resources/dist/js/pages/all_loading.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#tableUser').DataTable({
+        });
+        $('#tableUser').on('search.dt', function () {
+            var value = $('.dataTables_filter input').val();
+            alert(value);
+        });
+        var table = $('#tableUser').DataTable();
+
+        $('#next').on('click', function () {
+            table.page('next').draw('page');
+        });
+
+        $('#previous').on('click', function () {
+            table.page('previous').draw('page');
+        });
+    });
+</script>
 </body>
 </html>
