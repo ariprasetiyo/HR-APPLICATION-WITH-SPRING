@@ -5,8 +5,12 @@
  */
 package ari.com.hr.application.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,8 +19,8 @@ public class SysUser extends ModelSerializable {
 
     @Column(length = 50, nullable = false)
     private String username;
-    
-    @Column(length = 50, nullable = true)    
+
+    @Column(length = 50, nullable = true)
     private String name;
 
     @Column(nullable = false)
@@ -30,6 +34,18 @@ public class SysUser extends ModelSerializable {
 
     @Column(name = "is_active")
     private boolean isActive;
+
+    @OneToOne( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(nullable = true)
+    private SysRoles SysUserRoles;
+
+    public SysRoles getSysUserRoles() {
+        return SysUserRoles;
+    }
+
+    public void setSysUserRoles(SysRoles SysUserRoles) {
+        this.SysUserRoles = SysUserRoles;
+    }
 
     public String getName() {
         return name;

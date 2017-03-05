@@ -19,8 +19,8 @@ import javax.persistence.Table;
 @Table(name = "sys_user_roles")
 public class SysUserRoles extends ModelSerializable {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @ManyToOne
+    @JoinColumn(nullable = false, name="sys_user_id")
     private SysUser sysUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
