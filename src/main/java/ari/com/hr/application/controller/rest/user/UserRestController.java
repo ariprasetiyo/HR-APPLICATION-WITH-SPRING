@@ -6,7 +6,9 @@
 package ari.com.hr.application.controller.rest.user;
 
 import ari.com.hr.application.dao.SysUserDao;
+import ari.com.hr.application.dto.SysUserDto;
 import ari.com.hr.application.model.SysUser;
+import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,16 +23,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/admin/v1/api/user")
 public class UserRestController {
-    
-    Logger log = LoggerFactory.getLogger(this.getClass());
-    
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
-    SysUserDao sysUserDao;
-    
+    private SysUserDao sysUserDao;
+
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public ResponseEntity<SysUser> getListUser(@RequestParam("start") int start, @RequestParam("length") int lengthPage) {
         log.debug("start : " + start + "length" + lengthPage);
-        List<SysUser> listSysUser= (List<SysUser>) sysUserDao.findAll();
-        return new ResponseEntity(listSysUser, HttpStatus.OK);
+        List<SysUser> listSysUser = (List<SysUser>) sysUserDao.findAll();
+
+        return new ResponseEntity(functionSysUserDto(listSysUser), HttpStatus.OK);
+    }
+
+    private List<SysUserDto> functionSysUserDto(List<SysUser> listSysUser) {
+        List<SysUserDto> listUserDto = new ArrayList<SysUserDto>();
+        for (SysUser sysUser : listSysUser) {
+            SysUserDto sysUserDto = new SysUserDto();
+            sysUserDto.setUsername(sysUser.getUsername());
+            if (sysUser.getSysUserRoles() != null) {
+                sysUserDto.setRoleName(sysUser.getSysUserRoles().getRoleName());
+                log.debug(sysUser.getUsername() + ", role : " + sysUser.getSysUserRoles().getRoleName());
+            }
+            listUserDto.add(sysUserDto);
+        }
+        return listUserDto;
     }
 }

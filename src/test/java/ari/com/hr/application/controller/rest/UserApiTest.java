@@ -43,6 +43,7 @@ public class UserApiTest {
 
     @Test
     public void testApiUserList() throws Exception {
+
         MvcResult mvcResult = mockMvc.perform(post("/admin/v1/api/user/list")
                 .param("start", "0")
                 .param("length", "25"))
