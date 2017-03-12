@@ -636,6 +636,7 @@ $(function () {
                 
                 //$('#tableAuthorization').add("<tr><td>sasa</td></tr>");
                 var numberRow = getLastNumberDataTables();
+                var table =  $("#tableAuthorization").DataTable();
                 var rowNode = table
                         .row.add([
                     function(){return '<div class="center">'+(parseInt(numberRow)+1)+'</div>';},
