@@ -135,6 +135,7 @@
                                                     <th><div class="center" >Name</div></th>
                                                     <th><div class="center" >Email</div></th>
                                                     <th><div class="center" >No Hp</div></th>
+                                                    <th><div class="center" >Roles</div></th>
                                                     <th><div class="center" >Is Active</div></th>
                                                     <th><div class="center" >Action</div></th>
                                                 </tr>
@@ -374,37 +375,63 @@
         $('#tableUser').DataTable({
             serverSide: true,
             ordering: false,
-            searching: false,
-            "iDisplayLength": 25,
-            ajax: {
-                type: "POST",
-                url: "/admin/v1/api/user/list",
-                headers: {'X-XSRF-TOKEN': csrfToken},
-                data: {},
-                dataType: "json",
-                beforeSend: function () {
-                    ajaxindicatorstart('loading data.. please wait..');
-                    window.setTimeout(ajaxindicatorstart('loading data.. please wait..'), 500);
-                },
-                success: function (data, textStatus, jqXHR) {
-                },
-                complete: function () {
-                    timeout = setTimeout(ajaxindicatorstop(), 9000);
-                    clearTimeout(timeout);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                }
+            searching: true,
+            ajax: function (data, callback, settings) {
+                var coba;
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/v1/api/user/list',
+                    headers: {'X-XSRF-TOKEN': csrfToken},
+                    data: {
+                        limit: data.length,
+                        offset: data.start,
+                        search: data.search.value
+                    },
+                    dataType: "json",
+                    beforeSend: function () {
+                        ajaxindicatorstart('loading data.. please wait..');
+                        window.setTimeout(ajaxindicatorstart('loading data.. please wait..'), 500);
+                    },
+                    success: function (dataResponse, textStatus, jqXHR) {
+                        var out = [];
+//                        for (var i = data.start, ien = data.start + data.length; i < ien; i++) {
+//                            out.push([i + 1, dataResponse.listSysUserDto[0].username, i + '-1', i + '-1', i + '-1', i + '-1', i + '-2', i + '-3', i + '-4', i + function () {
+//                                    return '<input type = "submit" name = "" value = "${_csrf.token}" />';
+//                                }]);
+//                        }
+                        for (var i = data.start, ien = dataResponse.listSysUserDto.length; i < ien; i++) {
+                            out.push([i + 1, dataResponse.listSysUserDto[i].username, i + '-1', i + '-1', i + '-1', i + '-1', i + '-2', i + '-3', i + '-4', i + function () {
+                                    return '<input type = "submit" name = "" value = "${_csrf.token}" />';
+                                }]);
+                        }
+
+                        setTimeout(function () {
+                            callback({
+                                draw: data.draw,
+                                data: out,
+                                recordsTotal: dataResponse.totalRecord,
+                                recordsFiltered: dataResponse.totalRecord
+                            });
+                        }, 50);
+                    },
+                    complete: function () {
+                        timeout = setTimeout(ajaxindicatorstop(), 9000);
+                        clearTimeout(timeout);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    }
+                });
             },
             scrollY: 600,
             scroller: {
                 loadingIndicator: true
             }
         });
+
         $('#tableUser').on('search.dt', function () {
             var value = $('.dataTables_filter input').val();
             //alert(value);
         });
-        //var table = $('#tableUser').DataTable();
     });
 </script>
 </body>

@@ -7,9 +7,12 @@ package ari.com.hr.application.controller.rest.user;
 
 import ari.com.hr.application.dao.SysUserDao;
 import ari.com.hr.application.dto.SysUserDto;
+import ari.com.hr.application.dto.SysUserHeader;
 import ari.com.hr.application.model.SysUser;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +32,28 @@ public class UserRestController {
     @Autowired
     private SysUserDao sysUserDao;
 
-    @RequestMapping(value = "/list", method = RequestMethod.POST)
-    public ResponseEntity<SysUser> getListUser(@RequestParam("start") int start, @RequestParam("length") int lengthPage) {
-        log.debug("start : " + start + "length" + lengthPage);
-        List<SysUser> listSysUser = (List<SysUser>) sysUserDao.findAll();
+    @Autowired
+    private EntityManager em;
 
-        return new ResponseEntity(functionSysUserDto(listSysUser), HttpStatus.OK);
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    public ResponseEntity<SysUser> getListUser(
+            @RequestParam("offset") int offset, 
+            @RequestParam("limit") int limit, 
+            @RequestParam(value = "search", required = false) String keySearch) {
+        
+        log.debug("offset : " + offset + " limit : " + limit + ", search : " + keySearch);
+
+        return new ResponseEntity(functionSysUserDto(offset, limit), HttpStatus.OK);
     }
 
-    private List<SysUserDto> functionSysUserDto(List<SysUser> listSysUser) {
+    private SysUserHeader functionSysUserDto(int offset, int limit) {
+        List<SysUser> listSysUser = em.createQuery("from SysUser order by username asc")
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+
+        SysUserHeader sysUserHeader = new SysUserHeader();
+
         List<SysUserDto> listUserDto = new ArrayList<SysUserDto>();
         for (SysUser sysUser : listSysUser) {
             SysUserDto sysUserDto = new SysUserDto();
@@ -48,6 +64,8 @@ public class UserRestController {
             }
             listUserDto.add(sysUserDto);
         }
-        return listUserDto;
+        sysUserHeader.setListSysUserDto(listUserDto);
+        sysUserHeader.setTotalRecord(sysUserDao.count());
+        return sysUserHeader;
     }
 }
