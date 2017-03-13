@@ -389,19 +389,29 @@
                     },
                     dataType: "json",
                     beforeSend: function () {
-                        ajaxindicatorstart('loading data.. please wait..');
-                        window.setTimeout(ajaxindicatorstart('loading data.. please wait..'), 500);
+//                        ajaxindicatorstart('loading data.. please wait..');
+//                        window.setTimeout(ajaxindicatorstart('loading data.. please wait..'), 500);
                     },
                     success: function (dataResponse, textStatus, jqXHR) {
                         var out = [];
-//                        for (var i = data.start, ien = data.start + data.length; i < ien; i++) {
-//                            out.push([i + 1, dataResponse.listSysUserDto[0].username, i + '-1', i + '-1', i + '-1', i + '-1', i + '-2', i + '-3', i + '-4', i + function () {
-//                                    return '<input type = "submit" name = "" value = "${_csrf.token}" />';
-//                                }]);
-//                        }
+                        var idUser = null;
                         for (var i = data.start, ien = dataResponse.listSysUserDto.length; i < ien; i++) {
-                            out.push([i + 1, dataResponse.listSysUserDto[i].username, i + '-1', i + '-1', i + '-1', i + '-1', i + '-2', i + '-3', i + '-4', i + function () {
-                                    return '<input type = "submit" name = "" value = "${_csrf.token}" />';
+                            idUser = dataResponse.listSysUserDto[i].id;
+                            out.push([i + 1,
+                                dataResponse.listSysUserDto[i].createdTime,
+                                dataResponse.listSysUserDto[i].modifiedTime,
+                                dataResponse.listSysUserDto[i].username,
+                                dataResponse.listSysUserDto[i].name,
+                                dataResponse.listSysUserDto[i].email,
+                                dataResponse.listSysUserDto[i].noHp,
+                                dataResponse.listSysUserDto[i].roleName,
+                                dataResponse.listSysUserDto[i].isActive,
+                                function () {
+                                    return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
+                                            + '<input type = "hidden" id = "idTAU' + idUser + '"  /> '
+                                            + '<button type = "submit" id = "editAuth' + idUser + '" class = "btn btn-primary editButton" > Edit </button> '
+                                            + '<button type = "submit" id = "saveAuth' + idUser + '" class = "btn btn-primary saveButton" disabled > Save </button> '
+                                            + '<button type = "submit" id = "deleteAuth' + idUser + '" class = "btn btn-primary deleteButton" disabled > Delete </button>';
                                 }]);
                         }
 
@@ -415,8 +425,8 @@
                         }, 50);
                     },
                     complete: function () {
-                        timeout = setTimeout(ajaxindicatorstop(), 9000);
-                        clearTimeout(timeout);
+//                        timeout = setTimeout(ajaxindicatorstop(), 9000);
+//                        clearTimeout(timeout);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                     }
