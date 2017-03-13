@@ -91,7 +91,7 @@
                                         <div class="form-group">
                                             <div class="col-sm-7" style="padding-right: 5%;">
                                                 <form method="POST" action="">
-                                                    <input type="hidden" id="csrf" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                                                    <input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                                     <div class="input-group">
                                                         <select class="form-control" name="roles_id">
                                                             <option selected value="1"></option>
@@ -135,6 +135,7 @@
                                                     <th><div class="center" >Name</div></th>
                                                     <th><div class="center" >Email</div></th>
                                                     <th><div class="center" >No Hp</div></th>
+                                                    <th><div class="center" >Roles</div></th>
                                                     <th><div class="center" >Is Active</div></th>
                                                     <th><div class="center" >Action</div></th>
                                                 </tr>
@@ -370,20 +371,76 @@
 <script src="../../../resources/dist/js/pages/all_loading.js"></script>
 <script type="text/javascript">
     $(function () {
+        var csrfToken = $('#csrfToken').val();
         $('#tableUser').DataTable({
+            serverSide: true,
+            ordering: false,
+            searching: true,
+            ajax: function (data, callback, settings) {
+                var coba;
+                $.ajax({
+                    type: 'POST',
+                    url: '/admin/v1/api/user/list',
+                    headers: {'X-XSRF-TOKEN': csrfToken},
+                    data: {
+                        limit: data.length,
+                        offset: data.start,
+                        search: data.search.value
+                    },
+                    dataType: "json",
+                    beforeSend: function () {
+//                        ajaxindicatorstart('loading data.. please wait..');
+//                        window.setTimeout(ajaxindicatorstart('loading data.. please wait..'), 500);
+                    },
+                    success: function (dataResponse, textStatus, jqXHR) {
+                        var out = [];
+                        var idUser = null;
+                        for (var i = data.start, ien = dataResponse.listSysUserDto.length; i < ien; i++) {
+                            idUser = dataResponse.listSysUserDto[i].id;
+                            out.push([i + 1,
+                                dataResponse.listSysUserDto[i].createdTime,
+                                dataResponse.listSysUserDto[i].modifiedTime,
+                                dataResponse.listSysUserDto[i].username,
+                                dataResponse.listSysUserDto[i].name,
+                                dataResponse.listSysUserDto[i].email,
+                                dataResponse.listSysUserDto[i].noHp,
+                                dataResponse.listSysUserDto[i].roleName,
+                                dataResponse.listSysUserDto[i].isActive,
+                                function () {
+                                    return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
+                                            + '<input type = "hidden" id = "idTAU' + idUser + '"  /> '
+                                            + '<button type = "submit" id = "editAuth' + idUser + '" class = "btn btn-primary editButton" > Edit </button> '
+                                            + '<button type = "submit" id = "saveAuth' + idUser + '" class = "btn btn-primary saveButton" disabled > Save </button> '
+                                            + '<button type = "submit" id = "deleteAuth' + idUser + '" class = "btn btn-primary deleteButton" disabled > Delete </button>';
+                                }]);
+                        }
+
+                        setTimeout(function () {
+                            callback({
+                                draw: data.draw,
+                                data: out,
+                                recordsTotal: dataResponse.totalRecord,
+                                recordsFiltered: dataResponse.totalRecord
+                            });
+                        }, 50);
+                    },
+                    complete: function () {
+//                        timeout = setTimeout(ajaxindicatorstop(), 9000);
+//                        clearTimeout(timeout);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    }
+                });
+            },
+            scrollY: 600,
+            scroller: {
+                loadingIndicator: true
+            }
         });
+
         $('#tableUser').on('search.dt', function () {
             var value = $('.dataTables_filter input').val();
-            alert(value);
-        });
-        var table = $('#tableUser').DataTable();
-
-        $('#next').on('click', function () {
-            table.page('next').draw('page');
-        });
-
-        $('#previous').on('click', function () {
-            table.page('previous').draw('page');
+            //alert(value);
         });
     });
 </script>
