@@ -360,6 +360,72 @@
          immediately after the control sidebar -->
     <div class="control-sidebar-bg"></div>
     <!-- Modal -->
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content col-sm-8 col-md-offset-3">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add new menu</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="input-group">
+                        <select class="form-control" name="roles_id">
+                            <option selected="" value="1"></option>
+                        </select>
+                        <div class="input-group-btn">
+                            <label >sas</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Menu:</label>
+                        <select id="modalMenuid" class="form-control select2" style="width: 100%;">
+                            <#if listAllMenu?? > 
+                            <#list listAllMenu as listMenu>
+                            <option value="${listMenu.id}" >${listMenu.menusName}</option>
+                            </#list>
+                            </#if >
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="form-control-label">Parent menu:</label>
+                        <select id="modalParentMenuid" class="form-control select2" style="width: 100%;">
+                            <option >-</option>
+                            <#if listAllMenuAuthorization?? > 
+                            <#list listAllMenuAuthorization as listMenuAuthorization>
+                            <option value="${listMenuAuthorization.id}" >${listMenuAuthorization.sysMenu.menusName}</option>
+                            </#list>
+                            </#if > 
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <div  style="padding: 0px 0px 0px 3%;">
+                            <div class="row">
+                                <label  class="form-control-label">Access Role:</label>
+                            </div>
+                            <div class="row">
+                                <input  type="checkbox" id="modalIsCreate" class="form-control" checked>
+                                <label for="modalIsCreate">Is Create</label>
+                                <input  type="checkbox" id="modalIsUpdate" checked>
+                                <label for="modalIsUpdate">Is Update</label>
+                                <input  type="checkbox" id="modalIsDelete" checked>
+                                <label for="modalIsDelete">Is Delete</label>
+                                <input  type="checkbox" id="modalIsDisabled" checked>
+                                <label for="modalIsDisabled">Is Disabled</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="saveModalAddMenu" class="btn btn-default" data-dismiss="modal">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <!-- ./wrapper -->
