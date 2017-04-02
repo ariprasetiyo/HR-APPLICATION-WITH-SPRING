@@ -25,7 +25,7 @@ public class SysUserDto extends Dto {
 
     private String roleName;
 
-    private Long roleId;
+    private long[] roleId;
 
     private String url;
 
@@ -93,11 +93,11 @@ public class SysUserDto extends Dto {
         this.roleName = roleName;
     }
 
-    public Long getRoleId() {
+    public long[] getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Long roleId) {
+    public void setRoleId(long[] roleId) {
         this.roleId = roleId;
     }
 }
