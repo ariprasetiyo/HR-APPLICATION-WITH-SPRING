@@ -35,17 +35,17 @@ public class SysUser extends ModelSerializable {
     @Column(name = "is_active")
     private boolean isActive;
 
-    @OneToOne( cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(nullable = true)
-    private SysRoles SysUserRoles;
-
-    public SysRoles getSysUserRoles() {
-        return SysUserRoles;
-    }
-
-    public void setSysUserRoles(SysRoles SysUserRoles) {
-        this.SysUserRoles = SysUserRoles;
-    }
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinColumn(nullable = true)
+//    private SysRoles SysUserRoles;
+//
+//    public SysRoles getSysUserRoles() {
+//        return SysUserRoles;
+//    }
+//
+//    public void setSysUserRoles(SysRoles SysUserRoles) {
+//        this.SysUserRoles = SysUserRoles;
+//    }
 
     public String getName() {
         return name;

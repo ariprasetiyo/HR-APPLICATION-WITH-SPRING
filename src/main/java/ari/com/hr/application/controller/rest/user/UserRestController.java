@@ -6,11 +6,16 @@
 package ari.com.hr.application.controller.rest.user;
 
 import ari.com.hr.application.dao.SysUserDao;
+import ari.com.hr.application.dao.SysUserRolesDao;
+import ari.com.hr.application.dto.SysRolesDto;
 import ari.com.hr.application.dto.SysUserDto;
 import ari.com.hr.application.dto.SysUserHeader;
 import ari.com.hr.application.model.SysUser;
+import ari.com.hr.application.model.SysUserRoles;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +37,9 @@ public class UserRestController {
     private SysUserDao sysUserDao;
 
     @Autowired
+    private SysUserRolesDao sysUserRolesDao;
+
+    @Autowired
     private EntityManager em;
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
@@ -43,6 +51,47 @@ public class UserRestController {
         log.debug("offset : " + offset + " limit : " + limit + ", search : " + keySearch);
 
         return new ResponseEntity(functionSysUserDto(offset, limit, keySearch), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/saveUser", method = RequestMethod.POST)
+    public Map<String, Object> saveUser(
+            @RequestParam("textUserName") String textUserName,
+            @RequestParam("textName") String textName,
+            @RequestParam("textEmail") String textEmail,
+            @RequestParam("textNoHp") String noHp,
+            @RequestParam("selectRole[]") Long[] selectRole,
+            @RequestParam("checkBoxIsActive") boolean isActiveUser,
+            @RequestParam("textPassword") String textPassword
+    ) {
+        log.debug(" textUserName : " + textUserName
+                + "\n textPassword : " + textPassword
+                + "\n textName : " + textName
+                + "\n textEmail : " + textEmail
+                + "\n noHp : " + noHp
+                + "\n selectRole : " + selectRole[0]
+                + "\n isActiveUser : " + isActiveUser
+        );
+        SysUser sysUser = new SysUser();
+        sysUser.setUsername(textUserName);
+        sysUser.setPassword(textPassword);
+        sysUser.setName(textName);
+        sysUser.setEmail(textEmail);
+        sysUser.setNoHp(noHp);
+        sysUser.setIsActive(isActiveUser);
+        sysUser = sysUserDao.save(sysUser);
+
+        SysUserRoles sysUserRoles = new SysUserRoles();
+        sysUserRoles.setSysUser(sysUser);
+        sysUserRoles.setSysRoles(selectRole[0]);
+        sysUserRolesDao.save(sysUserRoles);
+
+        Map<String, Object> mapJson = new HashMap();
+        boolean isSuccessSave = false;
+        if (sysUser.getId() != null) {
+            isSuccessSave = true;
+        }
+        mapJson.put("isSuccessSave", isSuccessSave);
+        return mapJson;
     }
 
     private SysUserHeader functionSysUserDto(int offset, int limit, String keySearch) {
@@ -66,11 +115,25 @@ public class UserRestController {
             sysUserDto.setEmail(sysUser.getEmail());
             sysUserDto.setNoHp(sysUser.getNoHp());
 
-            if (sysUser.getSysUserRoles() != null) {
-                sysUserDto.setRoleName(sysUser.getSysUserRoles().getRoleName());
-                sysUserDto.setRoleId(sysUser.getSysUserRoles().getId());
-                log.debug(sysUser.getUsername() + ", role : " + sysUser.getSysUserRoles().getRoleName());
+            List<SysRolesDto> listSysRoles = sysUserRolesDao.listRolesByNameUser(sysUser.getUsername());
+            if (listSysRoles.size() != 0) {
+                StringBuilder builderRoleName = new StringBuilder();
+                long[] roloIdArrayLong = new long[listSysRoles.size()];
+                int tmpPlusPlus = 0;
+                for (SysRolesDto sysRoleDto : listSysRoles) {
+                    builderRoleName.append(sysRoleDto.getRoleName());
+                    roloIdArrayLong[tmpPlusPlus] = sysRoleDto.getId();
+                    log.debug(sysUser.getUsername() + ", role : " + sysRoleDto.getRoleName());
+                    if (tmpPlusPlus == (listSysRoles.size() - 1)) {
+                        continue;
+                    }
+                    builderRoleName.append(", ");
+                    tmpPlusPlus++;
+                }
+                sysUserDto.setRoleName(builderRoleName.toString());
+                sysUserDto.setRoleId(roloIdArrayLong);
             }
+
             listUserDto.add(sysUserDto);
         }
         sysUserHeader.setListSysUserDto(listUserDto);
