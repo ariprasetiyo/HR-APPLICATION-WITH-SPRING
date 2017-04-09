@@ -31,7 +31,7 @@
         <!-- iCheck for checkboxes and radio inputs -->
 
         <#include "../../inc-lib-header.html"/>
-        <link rel="stylesheet" href="https://jqueryvalidation.org/files/demo/site-demos.css">
+        <link rel="stylesheet" href="../../resources/plugins/jquery-validation/site-demos.css">
 
     </head>
     <body class="hold-transition skin-blue sidebar-mini">
@@ -143,9 +143,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
                                             </tbody>
-
                                         </table>
                                     </div>
                                     <!-- /.box-body -->
@@ -184,10 +182,8 @@
                     <li>
                         <a href="javascript:void(0)">
                             <i class="menu-icon fa fa-birthday-cake bg-red"></i>
-
                             <div class="menu-info">
                                 <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
-
                                 <p>Will be 23 on April 24th</p>
                             </div>
                         </a>
@@ -397,13 +393,16 @@
                                     <label class="control-label col-sm-3" style="padding-left:  1%">No Hp</label>
                                     <input class="col-sm-9"type="text" id="TextNoHp" name="TextNoHp" placeholder="No Hp" >
                                 </div>
-                                <div class="row margin-bottom" style="width:100%">
+                                <div class="row margin-bottom" style="width:100%" id="select2RoleDiv">
                                     <label class="control-label col-sm-3" style="padding-left:  1%">Role</label>
                                     <select id="SelectRole" name="SelectRole" class="role-select2-multiple" multiple="multiple">
                                         <#list selectroles as a>
                                         <option value="${a.id}">${a.roleName}</option>
                                         </#list>
                                     </select>
+                                    <#list selectroles as a>
+                                    <input id="tempSelect2Roles${a.roleName}" value="${a.id}" type="hidden"/>
+                                    </#list>
                                 </div>
                                 <div class="row margin-bottom" style="width:100%">
                                     <label class="control-label col-sm-3" style="padding-left:  1%">Is Active</label>
@@ -430,15 +429,15 @@
 <script src="../../../resources/plugins/select2/select2.full.min.js"></script>
 <script src="../../../resources/dist/js/app.min.js"></script>
 <script src="../../../resources/dist/js/pages/all_loading.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.0/additional-methods.min.js"></script>\
+<script src="../../../resources/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="../../../resources/plugins/jquery-validation/additional-methods.min.js"></script>\
 <script src="../../../resources/plugins/numeric/jquery.numeric.min.js"></script>
 
 <script type="text/javascript">
     $(function () {
         $(".role-select2-multiple").select2({
             width: 75 + "%",
-            maximumSelectionLength: 1
+            maximumSelectionLength: 10
         });
 
         //http://www.texotela.co.uk/code/jquery/numeric/
@@ -537,6 +536,14 @@
                     success: function (dataResponse, textStatus, jqXHR) {
                         var out = [];
                         var idUser = null;
+
+                        function buttonAction(i, idUser) {
+                            return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
+                                    + '<input type = "hidden" id = "idData' + idUser + '"  /> '
+                                    + '<button type = "submit" id = "editAuth' + i + '" class = "btn btn-primary editButton" > Edit </button> '
+                                    + '<button type = "submit" id = "deleteAuth' + i + '" class = "btn btn-primary deleteButton" disabled > Delete </button>';
+                        }
+
                         for (var i = data.start, ien = dataResponse.listSysUserDto.length; i < ien; i++) {
                             idUser = dataResponse.listSysUserDto[i].id;
                             out.push([i + 1,
@@ -548,13 +555,8 @@
                                 dataResponse.listSysUserDto[i].noHp,
                                 dataResponse.listSysUserDto[i].roleName,
                                 dataResponse.listSysUserDto[i].isActive,
-                                function () {
-                                    return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
-                                            + '<input type = "hidden" id = "idTAU' + idUser + '"  /> '
-                                            + '<button type = "submit" id = "editAuth' + idUser + '" class = "btn btn-primary editButton" > Edit </button> '
-                                            + '<button type = "submit" id = "saveAuth' + idUser + '" class = "btn btn-primary saveButton" disabled > Save </button> '
-                                            + '<button type = "submit" id = "deleteAuth' + idUser + '" class = "btn btn-primary deleteButton" disabled > Delete </button>';
-                                }]);
+                                buttonAction(i, idUser)
+                            ]);
                         }
 
                         setTimeout(function () {
@@ -582,6 +584,75 @@
             var value = $('.dataTables_filter input').val();
             //alert(value);
         });
+
+        $("#tableUser").on('click', '.editButton', function () {
+            var idEditButton = $(this).attr('id');
+            $('#' + idEditButton).attr("disabled", true);
+            var id = idEditButton.replace("editAuth", "");
+
+            //gettting data from datatables
+            var textUserName, textName, textEmail, textNoHp, textSelectRole, textPassword, CheckBoxIsActive;
+            //            get data from table 1 by 1
+//            var $row = $(this).closest("tr"), $tds = $row.find("td:nth-child(3)");
+//            $.each($tds, function () {
+//                $("#TextUsername").val($(this).text());
+//            });
+
+            var $row = $(this).closest("tr");    // Find the row
+            var $tds = $row.find("td");
+            var loopColumn = 1;
+            $.each($tds, function () {
+                if (loopColumn === 4) {
+                    $("#TextUsername").val($(this).text());
+                } else if (loopColumn === 5) {
+                    $("#TextName").val($(this).text());
+                } else if (loopColumn === 6) {
+                    $("#TextEmail").val($(this).text());
+                } else if (loopColumn === 7) {
+                    $("#TextNoHp").val($(this).text());
+                } else if (loopColumn === 8) {
+                    var test = $(this).text();
+                    var splitData =  test.split(",");
+                    //alert( test.lenght);
+                    var appendSelect2 = [];
+                    for(var xx = 0; xx <= splitData.length; xx++ ){
+                         appendSelect2[xx] = $("#tempSelect2Roles" +splitData[xx]).val();
+                         alert(appendSelect2[xx]);
+                    }
+                    //alert(appendSelect2);
+                     $("#SelectRole").select2('val',appendSelect2);
+                    //alert(valSelect2);
+
+//                    var data = $('#SelectRole').select2('data');
+
+//                    var myTest = new Array();
+//                    myTest = $("#SelectRole").select2('data');
+//                    alert(myTest);
+                    //$("#SelectRole").select2("data").concat($(this).text()));
+                    //$("#SelectRole").val("admin").change();
+//                    var text1 = 'admin';
+//                    $("#SelectRole").filter(function () {
+//                        //may want to use $.trim in here
+//                        return $(this).text() == text1;
+//                    }).prop('selected', true);
+// $("#SelectRole").select2('data', $("#SelectRole").select2("data").concat("admin"), true);
+                } else if (loopColumn === 9) {
+                    if ($(this).text() === true) {
+                        $("#CheckBoxIsActive").is(':checked');
+                    } else {
+                        $("#CheckBoxIsActive").is(':unchecked');
+                    }
+                }
+                $("#TextPassword").val("dummay");
+                loopColumn += 1;
+            });
+            enableForm(id);
+        });
+        function enableForm(id) {
+            $('#myModal').modal('show');
+            //$('#deleteAuth' + id).removeAttr("disabled");
+        }
+        ;
     });
 </script>
 </body>
