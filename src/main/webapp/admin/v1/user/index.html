@@ -400,9 +400,11 @@
                                         <option value="${a.id}">${a.roleName}</option>
                                         </#list>
                                     </select>
-                                    <#list selectroles as a>
-                                    <input id="tempSelect2Roles${a.roleName}" value="${a.id}" type="hidden"/>
-                                    </#list>
+                                    <select id="tempSelect2Roles"  type="hidden">
+                                        <#list selectroles as a>
+                                        <option value="${a.id}">${a.roleName}</option>
+                                        </#list>
+                                    </select>
                                 </div>
                                 <div class="row margin-bottom" style="width:100%">
                                     <label class="control-label col-sm-3" style="padding-left:  1%">Is Active</label>
@@ -612,15 +614,33 @@
                     $("#TextNoHp").val($(this).text());
                 } else if (loopColumn === 8) {
                     var test = $(this).text();
-                    var splitData =  test.split(",");
-                    //alert( test.lenght);
-                    var appendSelect2 = [];
-                    for(var xx = 0; xx <= splitData.length; xx++ ){
-                         appendSelect2[xx] = $("#tempSelect2Roles" +splitData[xx]).val();
-                         alert(appendSelect2[xx]);
+                    var splitData = test.split(",");
+                    //var mapSelect2 = {}; //= {"admin":"public", "public":"public"};
+                    var mapSelect2 = {};
+                    for (var a = 0; a < splitData.length; a++) {
+                        mapSelect2[splitData[a]] = splitData[a];
                     }
+
+                    var arrayTempVal = {};
+                    $('select#SelectRole').find('option').each(function () {
+                        var intNumberSelect2 = parseInt($(this).val()) - 1;
+                        //  alert(splitData[intNumberSelect2]+ " anmd"+$(this).text());
+//                        if (splitData[intNumberSelect2] === $(this).text()) {
+//                            //alert($(this).val());
+//                            //arrayTempVal[intNumberSelect2] = $(this).val();
+//                        }
+
+                        var key;
+                        for (key in mapSelect2) {
+                            // alert($(this).text() +"==="+key);
+                            if ($(this).text().trim() === key.trim()) {
+                                alert(key + "zzzz");
+                            }
+                        }
+                    });
+
+                    $("#SelectRole").val(arrayTempVal).trigger('change');
                     //alert(appendSelect2);
-                     $("#SelectRole").select2('val',appendSelect2);
                     //alert(valSelect2);
 
 //                    var data = $('#SelectRole').select2('data');
