@@ -400,11 +400,6 @@
                                         <option value="${a.id}">${a.roleName}</option>
                                         </#list>
                                     </select>
-                                    <select id="tempSelect2Roles"  type="hidden">
-                                        <#list selectroles as a>
-                                        <option value="${a.id}">${a.roleName}</option>
-                                        </#list>
-                                    </select>
                                 </div>
                                 <div class="row margin-bottom" style="width:100%">
                                     <label class="control-label col-sm-3" style="padding-left:  1%">Is Active</label>
@@ -587,22 +582,20 @@
             //alert(value);
         });
 
+        //get data from table
         $("#tableUser").on('click', '.editButton', function () {
             var idEditButton = $(this).attr('id');
             $('#' + idEditButton).attr("disabled", true);
             var id = idEditButton.replace("editAuth", "");
 
-            //gettting data from datatables
             var textUserName, textName, textEmail, textNoHp, textSelectRole, textPassword, CheckBoxIsActive;
-            //            get data from table 1 by 1
-//            var $row = $(this).closest("tr"), $tds = $row.find("td:nth-child(3)");
-//            $.each($tds, function () {
-//                $("#TextUsername").val($(this).text());
-//            });
 
-            var $row = $(this).closest("tr");    // Find the row
+            //find the row
+            var $row = $(this).closest("tr");
             var $tds = $row.find("td");
             var loopColumn = 1;
+
+            //loop the column of per row
             $.each($tds, function () {
                 if (loopColumn === 4) {
                     $("#TextUsername").val($(this).text());
@@ -613,54 +606,36 @@
                 } else if (loopColumn === 7) {
                     $("#TextNoHp").val($(this).text());
                 } else if (loopColumn === 8) {
+                    //begin1 : get authorization and set to select2
+                    //
+                    //split data from table, example admin, approval, public 
                     var test = $(this).text();
                     var splitData = test.split(",");
-                    //var mapSelect2 = {}; //= {"admin":"public", "public":"public"};
+
                     var mapSelect2 = {};
                     for (var a = 0; a < splitData.length; a++) {
                         mapSelect2[splitData[a]] = splitData[a];
                     }
 
-                    var arrayTempVal = {};
+                    var arrayTempVal = [];
                     $('select#SelectRole').find('option').each(function () {
                         var intNumberSelect2 = parseInt($(this).val()) - 1;
-                        //  alert(splitData[intNumberSelect2]+ " anmd"+$(this).text());
-//                        if (splitData[intNumberSelect2] === $(this).text()) {
-//                            //alert($(this).val());
-//                            //arrayTempVal[intNumberSelect2] = $(this).val();
-//                        }
-
                         var key;
                         for (key in mapSelect2) {
-                            // alert($(this).text() +"==="+key);
                             if ($(this).text().trim() === key.trim()) {
-                                alert(key + "zzzz");
+                                //get number for to set select2
+                                //select2 just recieve val, not text
+                                arrayTempVal.push($(this).val());
                             }
                         }
                     });
-
                     $("#SelectRole").val(arrayTempVal).trigger('change');
-                    //alert(appendSelect2);
-                    //alert(valSelect2);
-
-//                    var data = $('#SelectRole').select2('data');
-
-//                    var myTest = new Array();
-//                    myTest = $("#SelectRole").select2('data');
-//                    alert(myTest);
-                    //$("#SelectRole").select2("data").concat($(this).text()));
-                    //$("#SelectRole").val("admin").change();
-//                    var text1 = 'admin';
-//                    $("#SelectRole").filter(function () {
-//                        //may want to use $.trim in here
-//                        return $(this).text() == text1;
-//                    }).prop('selected', true);
-// $("#SelectRole").select2('data', $("#SelectRole").select2("data").concat("admin"), true);
+                    //end1
                 } else if (loopColumn === 9) {
-                    if ($(this).text() === true) {
-                        $("#CheckBoxIsActive").is(':checked');
+                    if ($(this).text().trim() === 'true') {
+                        $("#CheckBoxIsActive").prop("checked", true);
                     } else {
-                        $("#CheckBoxIsActive").is(':unchecked');
+                        $("#CheckBoxIsActive").prop('checked', false);
                     }
                 }
                 $("#TextPassword").val("dummay");
@@ -670,9 +645,7 @@
         });
         function enableForm(id) {
             $('#myModal').modal('show');
-            //$('#deleteAuth' + id).removeAttr("disabled");
         }
-        ;
     });
 </script>
 </body>
