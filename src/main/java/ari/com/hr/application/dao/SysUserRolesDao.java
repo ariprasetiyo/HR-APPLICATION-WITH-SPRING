@@ -33,6 +33,10 @@ public interface SysUserRolesDao extends PagingAndSortingRepository<SysUserRoles
     @Query("from SysUserRoles where sysUser.username = :nUsername order by id")
     public List<SysUserRoles> listUserRolesByNameUser(@Param("nUsername") String userName);
 
-    @Query("select new ari.com.hr.application.dto.SysRolesDto(sysRoles.id as id, sysRoles.roleName as roleName) from SysUserRoles where sysUser.username = :nUsername order by id")
-    public List<SysRolesDto> listRolesByNameUser(@Param("nUsername") String userName);
+    @Query("select new ari.com.hr.application.dto.SysRolesDto(sysRoles.id as id, sysRoles.roleName as roleName) from SysUserRoles where sysUser.id = :nId order by id")
+    public List<SysRolesDto> listRolesByNameUser(@Param("nId") Long nId);
+
+    @Query("select count(id) from SysUserRoles where sysUser.id = :userId ")
+    public Integer countIdByUser(@Param("userId") Long userId);
+
 }
