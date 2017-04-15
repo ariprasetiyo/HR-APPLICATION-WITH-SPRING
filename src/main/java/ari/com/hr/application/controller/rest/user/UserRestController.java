@@ -78,7 +78,7 @@ public class UserRestController {
         SysUser sysUser = new SysUser();
 
         boolean isUpdate = false;
-        if (idUser != null || !idUser.isEmpty()) {
+        if (idUser != null && !idUser.isEmpty()) {
             sysUser.setId(Long.valueOf(idUser));
             isUpdate = true;
         }
