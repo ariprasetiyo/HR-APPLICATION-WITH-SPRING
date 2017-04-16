@@ -115,11 +115,22 @@ public class UserRestController {
     }
 
     private SysUserHeader functionSysUserDto(int offset, int limit, String keySearch) {
-        List<SysUser> listSysUser = em.createQuery("from SysUser where username like :searchUserName order by username asc")
-                .setFirstResult(offset)
-                .setMaxResults(limit)
-                .setParameter("searchUserName", "%" + keySearch + "%")
-                .getResultList();
+        List<SysUser> listSysUser = new ArrayList();
+        StringBuilder queryListUser = new StringBuilder();
+        if (keySearch == null || keySearch.isEmpty()) {
+            queryListUser.append("from SysUser order by username asc");
+            listSysUser = em.createQuery(queryListUser.toString())
+                    .setFirstResult(offset)
+                    .setMaxResults(limit)
+                    .getResultList();
+        } else {
+            queryListUser.append("from SysUser where username like :searchUserName order by username asc");
+            listSysUser = em.createQuery(queryListUser.toString())
+                    .setFirstResult(offset)
+                    .setMaxResults(limit)
+                    .setParameter("searchUserName", "%" + keySearch + "%")
+                    .getResultList();
+        }
 
         SysUserHeader sysUserHeader = new SysUserHeader();
 
