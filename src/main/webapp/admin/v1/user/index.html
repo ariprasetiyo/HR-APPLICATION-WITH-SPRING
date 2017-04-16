@@ -436,7 +436,7 @@
     $(function () {
         $(".role-select2-multiple").select2({
             width: 75 + "%",
-            maximumSelectionLength: 10
+            maximumSelectionLength: 3
         });
 
         //http://www.texotela.co.uk/code/jquery/numeric/
@@ -545,6 +545,7 @@
                     },
                     dataType: "json",
                     beforeSend: function () {
+
                     },
                     success: function (dataResponse, textStatus, jqXHR) {
                         var out = [];
@@ -557,7 +558,7 @@
                                     + '<button type = "submit" id = "deleteAuth' + i + '" class = "btn btn-primary deleteButton" disabled > Delete </button>';
                         }
 
-                        for (var i = data.start, ien = dataResponse.listSysUserDto.length; i < ien; i++) {
+                        for (var i = 0, ien = dataResponse.listSysUserDto.length; i < ien; i++) {
                             idUser = dataResponse.listSysUserDto[i].id;
                             out.push([i + 1,
                                 dataResponse.listSysUserDto[i].id,
