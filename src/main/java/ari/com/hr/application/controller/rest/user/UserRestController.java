@@ -7,6 +7,7 @@ package ari.com.hr.application.controller.rest.user;
 
 import ari.com.hr.application.dao.SysUserDao;
 import ari.com.hr.application.dao.SysUserRolesDao;
+import ari.com.hr.application.dto.GlobalDto;
 import ari.com.hr.application.dto.SysRolesDto;
 import ari.com.hr.application.dto.SysUserDto;
 import ari.com.hr.application.dto.SysUserHeader;
@@ -23,9 +24,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,6 +45,15 @@ public class UserRestController {
 
     @Autowired
     private EntityManager em;
+
+    @ResponseStatus(HttpStatus.OK)
+    @RequestMapping(value = "/delete{idUser}", method = RequestMethod.DELETE)
+    public ResponseEntity<GlobalDto> deleteUser(@PathVariable("idUser") Long idUser) {
+        sysUserDao.delete(idUser);
+        GlobalDto globalDto = new GlobalDto();
+        globalDto.setId(idUser);
+        return new ResponseEntity(globalDto, HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     public ResponseEntity<SysUser> getListUser(

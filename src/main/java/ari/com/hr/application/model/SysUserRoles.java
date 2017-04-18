@@ -10,6 +10,8 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 /**
  *
@@ -21,6 +23,7 @@ public class SysUserRoles extends ModelSerializable {
 
     @ManyToOne
     @JoinColumn(nullable = false, name="sys_user_id")
+    @Cascade(CascadeType.REMOVE)
     private SysUser sysUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
