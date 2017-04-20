@@ -5,7 +5,11 @@
  */
 package ari.com.hr.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -14,7 +18,11 @@ import java.util.Date;
 public class Dto {
 
     private Long id;
+    
+    @JsonFormat(pattern="dd-MM-yyyy hh:mm:ss")
     private Date createdTime;
+    
+    @JsonFormat(pattern="dd-MM-yyyy hh:mm:ss")
     private Date modifiedTime;
 
     private String version;
