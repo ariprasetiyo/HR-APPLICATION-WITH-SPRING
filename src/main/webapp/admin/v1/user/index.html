@@ -610,7 +610,7 @@
                     }
                 });
             },
-            scrollY: 600,
+            scrollY: 400,
             scroller: {
                 loadingIndicator: true
             }
@@ -653,6 +653,7 @@
                         tr.remove();
                     });
                     $("#modalDeleteUser").modal('hide');
+                     $('#tableUser').DataTable().ajax.reload();
                     return false;
                 }
             });
@@ -661,7 +662,8 @@
         //get data from table
         $("#tableUser").on('click', '.editButton', function () {
             var idEditButton = $(this).attr('id');
-            $('#' + idEditButton).attr("disabled", true);
+            //disable button edit
+            //$('#' + idEditButton).attr("disabled", true);
             var id = idEditButton.replace("editAuth", "");
 
             var textUserName, textName, textEmail, textNoHp, textSelectRole, textPassword, CheckBoxIsActive;
