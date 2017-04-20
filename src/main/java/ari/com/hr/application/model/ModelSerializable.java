@@ -1,5 +1,6 @@
 package ari.com.hr.application.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -26,10 +27,13 @@ public class ModelSerializable implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, name = "created_time")
+    //@DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
+    @JsonFormat(pattern="dd-MM-yyyy hh:mm:ss")
     private Date createdTime = new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false, name = "modified_time")
+    @JsonFormat(pattern="dd-MM-yyyy hh:mm:ss")
     private Date modifiedTime = new Date();
 
     @Column(length = 5)
