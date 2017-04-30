@@ -495,7 +495,14 @@ $(function () {
     
     $("#tableAuthorization").DataTable({
         "sDom": '<"top"fl>rt<"bottom"p><"clear">',
-        "iDisplayLength": 25
+        "iDisplayLength": 25,
+             scrollY: 360,
+        "columnDefs": [
+                {"width": "130px", "targets": 8}
+            ],
+       scroller: {
+                loadingIndicator: true
+            }
     });
     
     if (roleForAdd != null) {
@@ -649,11 +656,11 @@ $(function () {
                       return '<div class="center" ><input type="checkbox"  id="disabled'+numberRow+'" disabled checked>'
                              +' <label for="disabled'+numberRow+'"></label>   </div>';  
                     }, 
-                    function () { return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
+                    function () { return '<div style="white-space: nowrap;"><input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
                         + '<input type = "hidden" id = "idTAU'+numberRow+'" value = "'+data.id+'" />'
                         + '<button type = "submit" id = "editAuth'+numberRow+'" class = "btn btn-primary editButton" > Edit </button>'
                         + ' <button type = "submit" id = "saveAuth'+numberRow+'" class = "btn btn-primary saveButton" disabled > Save </button>'
-                        + ' <button type = "submit" id = "deleteAuth'+numberRow+'" class = "btn btn-primary deleteButton" disabled > Delete </button>';}])
+                        + ' <button type = "submit" id = "deleteAuth'+numberRow+'" class = "btn btn-primary deleteButton" disabled > Delete </button></div>';}])
                         .draw()
                         .node();
                 $(rowNode)

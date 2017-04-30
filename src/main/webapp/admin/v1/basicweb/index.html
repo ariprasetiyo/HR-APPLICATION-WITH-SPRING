@@ -478,10 +478,10 @@
                         var idUser = null;
 
                         function buttonAction(i, idUser) {
-                            return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
+                            return '<div style="white-space: nowrap;"><input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
                                     + '<input type = "hidden" id = "idData' + idUser + '" class="idDataHide' + i + '" /> '
                                     + '<button type = "submit" id = "editAuth' + i + '" class = "btn btn-primary editButton" > Edit </button> '
-                                    + '<button type = "submit" id = "deleteAuth' + i + '" class = "btn btn-primary deleteButton" > Delete </button>';
+                                    + '<button type = "submit" id = "deleteAuth' + i + '" class = "btn btn-primary deleteButton" > Delete </button></div>';
                         }
 
                         for (var i = 0, ien = dataResponse.listSysUserDto.length; i < ien; i++) {
@@ -516,10 +516,16 @@
                 });
             },
             scrollY: 360,
+            //scrollX: true,
+            "columnDefs": [
+                {"width": "75px", "targets": 10}
+            ],
             scroller: {
                 loadingIndicator: true
             }
         });
+        //$(".dataTables_wrapper").css("width","100%");
+        //$(".dataTables_scrollBody").css("overflow", "hidden").css("width", "100%");
 
 //        $(".role-select2-multiple").select2({
 //            width: 75 + "%",

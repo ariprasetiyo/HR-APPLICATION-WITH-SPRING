@@ -261,6 +261,9 @@ label {
     .pull-right {
         float: left!important;
     }
+/*    .dataTables_scrollBody{
+        overflow: auto; height: 360px; width: 100%;
+    }*/
 }
 @media(max-width:768px){
     .content-wrapper, .right-side {
