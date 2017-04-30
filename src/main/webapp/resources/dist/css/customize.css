@@ -129,15 +129,17 @@ body {
 }
 .box-header {
     /*padding: 10px 10px 0px 10px;*/
-    margin-left: 80%;
+    /*margin-left: 80%;*/
     position:  absolute;
     padding: 10px 0px 0px 0px;
+    right: 0;
+    margin-right: 10px;
 }
 .dataTables_wrapper{
     margin-top: 10px;
 }
 .sidebar-menu .treeview-menu > li > a {
-  font-size: 12px;
+    font-size: 12px;
 }
 label {
     margin-bottom: 0px; 
@@ -205,28 +207,89 @@ label {
     border: 1px solid #374850;
     margin: 0px 1px;
 }
-/*menu size end */
+/*header menu colour*/
+.skin-blue .main-header .navbar {
+    background-color: #3498db;
+}
+.skin-blue .main-header .logo {
+    background-color: #2980b9;
+    color: #fff;
+    border-bottom: 0 solid transparent;
+}
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+    z-index: 3;
+    color: #fff;
+    cursor: default;
+    background-color: #3498db;
+    border-color: #3498db;
+}
+.skin-blue .main-sidebar, .skin-blue .left-side {
+    background-color: #2c3e50;
+}
+.btn-info {
+    background-color: #2ecc71;
+    border-color: #2ecc71;
+}
+.btn-success {
+    background-color: #2ecc71;
+    border-color: #2ecc71;
+}
+/* end header menu colour*/
+
+/*menu size end *
 @media (min-width: 768px) {
-    /*design for side menu*/
+    /*design for side menu*
     .sidebar-mini.sidebar-collapse .sidebar-menu>li:hover>.treeview-menu {
         top: 40px;
         margin-left: 0;
     }
 
+}*/
+@media(max-width:1000px){
+
+    .box-header {
+        /* padding: 10px 10px 0px 10px; */
+        margin-left: 0%;
+        position: relative;
+        padding: 10px 0px 0px 0px;
+        margin-right: 0%;
+    }
+    .pull-right {
+        float: left!important;
+    }
 }
-@media(max-width:767px){
+@media(max-width:768px){
     .content-wrapper, .right-side {
         /* distance with side line ( customize menu side ) */ 
         margin-left: 0px;
     }
-
+    .box-header {
+        /* padding: 10px 10px 0px 10px; */
+        margin-left: 0%;
+        position: relative;
+        padding: 10px 0px 0px 0px;
+        margin-right: 0%;
+    }
     .main-sidebar, .left-side {
-        width: 30%;
+        width: 230px;
     }
     .main-header .logo {
         width: 100%;
     }
     .main-header .navbar {
         margin-left: 0px;
+    }
+    .text-left-customize-mobile {
+        text-align: left;
+        margin-left: 2%;
+        margin-top: 1%;
+    }
+    .dropdown-menu.pull-right {
+        /* right: 0; */
+        left: 0;
     }    
 }
