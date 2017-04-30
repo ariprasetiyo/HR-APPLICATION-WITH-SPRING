@@ -173,9 +173,16 @@ label {
 }
 .main-header .logo {
     width: 180px;
+    height: 40px;
+    font-size: 18px;
+    line-height: 40px;
+    text-align: center;
+    padding: 0 15px;
 }
 .main-header .navbar {
     margin-left: 180px;
+    max-height: 0px;
+    min-height: 40px;
 }
 .content-wrapper, .right-side {
     min-height: 100%;
@@ -183,6 +190,20 @@ label {
     z-index: 800;
     /* distance with side line ( customize menu side ) */ 
     margin-left: 180px;
+}
+.navbar-nav>li>a {
+    line-height: 5px;
+}
+.navbar-nav>.user-menu .user-image {
+    margin-top: -8px;
+}
+.main-header .sidebar-toggle {
+    padding: 10px 15px;
+}
+.skin-blue .sidebar-form {
+    border-radius: 3px;
+    border: 1px solid #374850;
+    margin: 0px 1px;
 }
 /*menu size end */
 @media (min-width: 768px) {
