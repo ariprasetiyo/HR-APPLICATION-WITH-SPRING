@@ -121,18 +121,26 @@ body {
 /*design for content */
 .content {
     min-height: 250px;
-    padding: 8px;
+    padding: 7px;
     margin-right: auto;
     margin-left: auto;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 7px;
+    padding-right: 7px;
 }
-.content-wrapper, .right-side {
-    min-height: 100%;
-    background-color: #CCD8DE;
-    z-index: 800;
-    /* distance with side line ( customize menu side ) */ 
-    margin-left: 200px;
+.box-header {
+    /*padding: 10px 10px 0px 10px;*/
+    margin-left: 80%;
+    position:  absolute;
+    padding: 10px 0px 0px 0px;
+}
+.dataTables_wrapper{
+    margin-top: 10px;
+}
+.sidebar-menu .treeview-menu > li > a {
+  font-size: 12px;
+}
+label {
+    margin-bottom: 0px; 
 }
 .box {
     position: relative;
@@ -161,15 +169,22 @@ body {
 
 /*menu size */
 .main-sidebar, .left-side {
-    width: 200px;
+    width: 180px;
 }
 .main-header .logo {
-    width: 200px;
+    width: 180px;
 }
 .main-header .navbar {
-    margin-left: 200px;
+    margin-left: 180px;
 }
-
+.content-wrapper, .right-side {
+    min-height: 100%;
+    background-color: #CCD8DE;
+    z-index: 800;
+    /* distance with side line ( customize menu side ) */ 
+    margin-left: 180px;
+}
+/*menu size end */
 @media (min-width: 768px) {
     /*design for side menu*/
     .sidebar-mini.sidebar-collapse .sidebar-menu>li:hover>.treeview-menu {
