@@ -65,16 +65,6 @@
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
-                <section class="content-header">
-                    <h1>
-                        Menu
-                        <small>Management</small>
-                    </h1>
-                    <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Menu</a></li>
-                        <li class="active">Dashboard</li>
-                    </ol>
-                </section>
                 <!-- Main content -->
                 <section class="content">
 
@@ -101,7 +91,7 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div class="col-sm-5 text-right" style="padding-left: 0%;padding-right: 0%;">
+                                            <div class="col-sm-5 text-right text-left-customize-mobile" style="padding-left: 0%;padding-right: 0%;">
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
                                                         <i class="fa fa-bars"></i></button>
@@ -124,7 +114,7 @@
                                 <div class="box-body">
                                     <!-- /.box-header -->
                                     <div class="box-body">
-                                        <table id="tableUser" class="table table-bordered table-striped">
+                                        <table id="tableMenu" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
                                                     <th><div class="center" >No</div></th>
@@ -380,9 +370,9 @@
 
             <!-- Modal content-->
             <div class="modal-content col-sm-8 col-md-offset-3">
-                <form method="post" id="adduser" action="">
+                <form method="post" id="addMenu" action="">
                     <input type="hidden" id="csrfToken" name="${_csrf.parameterName}" value="${_csrf.token}" />
-                    <input type="hidden" id="idUserNya" value="" />
+                    <input type="hidden" id="idMenu" value="" />
                     <div class="modal-header">
                         <button type="button" class="close buttonClose" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Add new menu<div id="infoSaveUser"></div></h4>
@@ -391,15 +381,15 @@
                         <div class="form-group">
                             <div  style="padding: 0px 0px 0px 3%;">
                                 <div class="row margin-bottom" style="width:100%">
-                                    <label class="control-label col-sm-3" style="padding-left:  1%">Username</label>
-                                    <input class="col-sm-9"type="text" id="TextMenuName" name="TextMenuName" placeholder="menu name" >
+                                    <label class="control-label col-sm-4" style="padding-left:  1%">Name Menu</label>
+                                    <input class="col-sm-8"type="text" id="TextMenuNameId" name="TextMenuName" placeholder="menu name" >
                                 </div>
                                 <div class="row margin-bottom" style="width:100%">
-                                    <label class="control-label col-sm-3" style="padding-left:  1%">Password</label>
-                                    <input class="col-sm-9" type="password" id="TextUrl" name="TextUrl" placeholder="url" >
+                                    <label class="control-label col-sm-4" style="padding-left:  1%">Url</label>
+                                    <input class="col-sm-8" type="text" id="TextUrlId" name="TextUrl" placeholder="url" >
                                 </div>
                                 <div class="row margin-bottom" style="width:100%">
-                                    <label class="control-label col-sm-3" style="padding-left:  1%">Is Active</label>
+                                    <label class="control-label col-sm-4" style="padding-left:  1%">Is Active</label>
                                     <input id="CheckBoxIsActive" type="checkbox" style="position: initial">
                                 </div>
                             </div>
@@ -431,7 +421,7 @@
         var csrfToken = $('#csrfToken').val();
 
         //dataTables ajax logic
-        $('#tableUser').DataTable({
+        $('#tableMenu').DataTable({
             /*
              * l - Length changing
              f - Filtering input
@@ -501,9 +491,22 @@
                     }
                 });
             },
-            scrollY: 400,
+            scrollY: 360,
             scroller: {
                 loadingIndicator: true
+            }
+        });
+
+        //http://www.texotela.co.uk/code/jquery/numeric/
+        //$("#TextNoHp").numeric();
+        $("#addMenu").validate({
+            rules: {
+                TextMenuName: {
+                    required: true
+                },
+                TextUrl: {
+                    required: true
+                }
             }
         });
 
@@ -512,90 +515,53 @@
 //            maximumSelectionLength: 3
 //        });
 //
-//        //http://www.texotela.co.uk/code/jquery/numeric/
-//        $("#TextNoHp").numeric();
-//        $("#adduser").validate({
-//            rules: {
-//                TextEmail: {
-//                    required: true,
-//                    email: true
-//                },
-//                TextUsername: {
-//                    required: true
-//                },
-//                TextName: {
-//                    required: true
-//                },
-//                TextNoHp: {
-//                    required: true,
-//                    minlength: 10,
-//                    maxlength: 13
-//                },
-//                SelectRole: {
-//                    required: true
-//                }
-//            }
-//        });
-//
 
 //        //save user
-//        $("#saveModalAddMenu").on('click', function () {
-//            var textUsername, textName, textEmail, textNoHp, selectRole, checkBoxIsActive, textPassword, idUSerNya;
-//            textUsername = $("#TextUsername").val();
-//            textName = $("#TextName").val();
-//            textEmail = $("#TextEmail").val();
-//            textNoHp = $("#TextNoHp").val();
-//            selectRole = $("#SelectRole").val();
-//            textPassword = $("#TextPassword").val();
-//            checkBoxIsActive = $("#CheckBoxIsActive").is(':checked');
-//            idUSerNya = $("#idUserNya").val();
-//            $.ajax({
-//                type: 'POST',
-//                url: '/admin/v1/api/user/saveUser',
-//                headers: {'X-XSRF-TOKEN': csrfToken},
-//                data: {
-//                    textUserName: textUsername,
-//                    textName: textName,
-//                    textEmail: textEmail,
-//                    textNoHp: textNoHp,
-//                    selectRole: selectRole,
-//                    checkBoxIsActive: checkBoxIsActive,
-//                    textPassword: textPassword,
-//                    idUSerNya: idUSerNya
-//                },
-//                datatype: 'json',
-//                success: function (data, textStatus, jqXHR) {
-//                    removeModalInputUser();
-//                    $("#infoSaveUser").text("Save user success");
-//                    //datatable reload
-//                    $('#tableUser').DataTable().ajax.reload();
-//                },
-//                complete: function () {
-//                }
-//            });
-//        });
+        $("#saveModalAddMenu").on('click', function () {
+            var TextMenuName, TextUrl, checkBoxIsActive, idMenuNya;
+            TextMenuName = $("#TextMenuNameId").val();
+            TextUrl = $("#TextUrlId").val();
+            checkBoxIsActive = $("#CheckBoxIsActive").is(':checked');
+            idMenuNya = $("#idMenu").val();
+            $.ajax({
+                type: 'POST',
+                url: '/admin/v1/api/screen_menu/save',
+                headers: {'X-XSRF-TOKEN': csrfToken},
+                data: {
+                    textMenuName: TextMenuName,
+                    textUrl: TextUrl,
+                    checkBoxIsActive: checkBoxIsActive,
+                    idMenu: idMenuNya
+                },
+                datatype: 'json',
+                success: function (data, textStatus, jqXHR) {
+                    removeModalInputUser();
+                    $("#infoSaveUser").text("Save menu success");
+                    //datatable reload
+                    $('#tableMenu').DataTable().ajax.reload();
+                },
+                complete: function () {
+                }
+            });
+        });
 //
-//        function removeModalInputUser() {
-//            $("#TextUsername").val("");
-//            $("#TextName").val("");
-//            $("#TextEmail").val("");
-//            $("#TextNoHp").val("");
-//            $("#SelectRole").val("");
-//            $("#TextPassword").val("");
-//            $("#CheckBoxIsActive").is(':unchecked');
-//        }
+        function removeModalInputUser() {
+            $("#TextMenuNameId").val("");
+            $("#TextUrlId").val("");
+            $("#CheckBoxIsActive").is(':unchecked');
+        }
 //        $(".buttonClose").on("click", function () {
 //            $("#infoSaveUser").text("");
 //        });
 //
 
 //
-//        $('#tableUser').on('search.dt', function () {
+//        $('#tableMenu').on('search.dt', function () {
 //            var value = $('.dataTables_filter input').val();
 //        });
 //
 //        var idUserForDelete = null;
-//        $("#tableUser").on("click", ".deleteButton", function () {
+//        $("#tableMenu").on("click", ".deleteButton", function () {
 //            //get value table with spesific tr and td
 //            //var val1 =$(t).find('tr:eq(2) td:eq(4)').text();            
 //            var idButtonDelete = $(this).attr("id").replace("deleteAuth", "").trim();
@@ -627,80 +593,49 @@
 //                        tr.remove();
 //                    });
 //                    $("#modalDeleteUser").modal('hide');
-//                    $('#tableUser').DataTable().ajax.reload();
+//                    $('#tableMenu').DataTable().ajax.reload();
 //                    return false;
 //                }
 //            });
 //        }
 //
-//        //get data from table
-//        $("#tableUser").on('click', '.editButton', function () {
-//            var idEditButton = $(this).attr('id');
-//            //disable button edit
-//            //$('#' + idEditButton).attr("disabled", true);
-//            var id = idEditButton.replace("editAuth", "");
-//
-//            var textUserName, textName, textEmail, textNoHp, textSelectRole, textPassword, CheckBoxIsActive;
-//
-//            //find the row
-//            var $row = $(this).closest("tr");
-//            var $tds = $row.find("td");
-//            var loopColumn = 1;
-//
-//            //loop the column of per row
-//            $.each($tds, function () {
-//                if (loopColumn === 2) {
-//                    $("#idUserNya").val($(this).text());
-//                }
-//                if (loopColumn === 5) {
-//                    $("#TextUsername").val($(this).text());
-//                } else if (loopColumn === 6) {
-//                    $("#TextName").val($(this).text());
-//                } else if (loopColumn === 7) {
-//                    $("#TextEmail").val($(this).text());
-//                } else if (loopColumn === 8) {
-//                    $("#TextNoHp").val($(this).text());
-//                } else if (loopColumn === 9) {
-//                    //begin1 : get authorization and set to select2
-//                    //
-//                    //split data from table, example admin, approval, public 
-//                    var test = $(this).text();
-//                    var splitData = test.split(",");
-//
-//                    var mapSelect2 = {};
-//                    for (var a = 0; a < splitData.length; a++) {
-//                        mapSelect2[splitData[a]] = splitData[a];
-//                    }
-//
-//                    var arrayTempVal = [];
-//                    $('select#SelectRole').find('option').each(function () {
-//                        var intNumberSelect2 = parseInt($(this).val()) - 1;
-//                        var key;
-//                        for (key in mapSelect2) {
-//                            if ($(this).text().trim() === key.trim()) {
-//                                //get number for to set select2
-//                                //select2 just recieve val, not text
-//                                arrayTempVal.push($(this).val());
-//                            }
-//                        }
-//                    });
-//                    $("#SelectRole").val(arrayTempVal).trigger('change');
-//                    //end1
-//                } else if (loopColumn === 10) {
-//                    if ($(this).text().trim() === 'true') {
-//                        $("#CheckBoxIsActive").prop("checked", true);
-//                    } else {
-//                        $("#CheckBoxIsActive").prop('checked', false);
-//                    }
-//                }
-//                $("#TextPassword").val("dummay");
-//                loopColumn += 1;
-//            });
-//            enableForm(id);
-//        });
-//        function enableForm(id) {
-//            $('#myModal').modal('show');
-//        }
+        //get data from table
+        $("#tableMenu").on('click', '.editButton', function () {
+            var idEditButton = $(this).attr('id');
+            //disable button edit
+            //$('#' + idEditButton).attr("disabled", true);
+            var id = idEditButton.replace("editAuth", "");
+
+            var textMenuName, textUrl, checkBoxIsActive;
+
+            //find the row
+            var $row = $(this).closest("tr");
+            var $tds = $row.find("td");
+            var loopColumn = 1;
+
+            //loop the column of per row
+            $.each($tds, function () {
+                if (loopColumn === 2) {
+                    $("#idMenu").val($(this).text());
+                }
+                if (loopColumn === 5) {
+                    $("#TextMenuNameId").val($(this).text());
+                } else if (loopColumn === 6) {
+                    $("#TextUrlId").val($(this).text());
+                } else if (loopColumn === 7) {
+                    if ($(this).text().trim() === 'true') {
+                        $("#CheckBoxIsActive").prop("checked", true);
+                    } else {
+                        $("#CheckBoxIsActive").prop('checked', false);
+                    }
+                }
+                loopColumn += 1;
+            });
+            enableForm(id);
+        });
+        function enableForm(id) {
+            $('#myModal').modal('show');
+        }
     });
 </script>
 </body>

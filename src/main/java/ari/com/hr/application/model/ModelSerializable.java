@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -19,22 +21,22 @@ import javax.persistence.TemporalType;
 public class ModelSerializable implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(length = 100)
     private Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false, name = "created_time")
+    @Column(nullable = false, name = "created_time", insertable = true, updatable = false)
     //@DateTimeFormat(pattern = "dd-MM-yyyy hh:mm:ss")
-    @JsonFormat(pattern="dd-MM-yyyy hh:mm:ss")
-    private Date createdTime = new Date();
+    @JsonFormat(pattern = "dd-MM-yyyy hh:mm:ss")
+    private Date createdTime ;//= new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = false, name = "modified_time")
-    @JsonFormat(pattern="dd-MM-yyyy hh:mm:ss")
-    private Date modifiedTime = new Date();
+    @Column(nullable = false, name = "modified_time", insertable = false, updatable = true)
+    @JsonFormat(pattern = "dd-MM-yyyy hh:mm:ss")
+    private Date modifiedTime; //= new Date();
 
     @Column(length = 5)
     private String version = "1.0";
@@ -47,6 +49,7 @@ public class ModelSerializable implements Serializable {
     @Column(name = "modified_by", length = 50, nullable = true)
     private String modifiedBy = null;
 
+    
     public String getCreatedBy() {
         return createdBy;
     }
@@ -75,16 +78,18 @@ public class ModelSerializable implements Serializable {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
-        this.createdTime = createdTime;
+    @PrePersist
+    public void setCreatedTime() {
+        this.createdTime = new Date();
     }
 
     public Date getModifiedTime() {
         return modifiedTime;
     }
 
-    public void setModifiedTime(Date modifiedTime) {
-        this.modifiedTime = modifiedTime;
+    @PreUpdate
+    public void setModifiedTime() {
+        this.modifiedTime = new Date();
     }
 
     public String getVersion() {

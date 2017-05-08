@@ -7,8 +7,12 @@ package ari.com.hr.application.controller.rest.menu;
 
 import ari.com.hr.application.dao.SysMenusDao;
 import ari.com.hr.application.model.SysMenus;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.EntityManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/v1/api/screen_menu")
 public class MenuRestController {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private SysMenusDao sysMenusDao;
@@ -46,5 +52,33 @@ public class MenuRestController {
                 .getResultList();
 
         return new ResponseEntity(listSysMenus, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public Map<String, Object> saveMenu(
+            @RequestParam("textMenuName") String textNameMenu,
+            @RequestParam("textUrl") String textUrl,
+            @RequestParam("checkBoxIsActive") Boolean checkBoxIsActive,
+            @RequestParam(value = "idMenu", required = false) Long idMenu
+    ) {
+        logger.debug("textNameMenu : " + textNameMenu + ", textUrl : " + textUrl + ", checkBoxIsActive : " + checkBoxIsActive + ", idMenu : " + idMenu);
+        SysMenus sysMenus = new SysMenus();
+        sysMenus.setMenusName(textNameMenu);
+        sysMenus.setUrl(textUrl);
+        sysMenus.setDisabled(checkBoxIsActive);
+        if (idMenu == null) {
+            sysMenus.setId(idMenu);
+        }
+        sysMenus.setId(idMenu);
+        sysMenus = sysMenusDao.save(sysMenus);
+
+        boolean isSuccessSave = false;
+        if (sysMenus.getModifiedTime() != null) {
+            isSuccessSave = true;
+        }
+
+        Map<String, Object> mapJson = new HashMap<String, Object>();
+        mapJson.put("isSuccessSave", isSuccessSave);
+        return mapJson;
     }
 }

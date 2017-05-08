@@ -31,8 +31,8 @@
         <!-- iCheck for checkboxes and radio inputs -->
 
         <#include "../../inc-lib-header.html"/>
+        <link rel="stylesheet" href="../../resources/plugins/jquery-validation/site-demos.css">
         <script>
-
             var roleForAdd = null;
             var roleIdForAdd = null;
         </script>
@@ -67,17 +67,6 @@
 
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                <section class="content-header">
-                    <h1>
-                        Setting
-                        <small>authorization</small>
-                    </h1>
-                    <ol class="breadcrumb">
-                        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                        <li class="active">Dashboard</li>
-                    </ol>
-                </section>
                 <!-- Main content -->
                 <section class="content">
 
@@ -88,10 +77,6 @@
                             <!-- /.box -->
                             <div class="box box-solid">
                                 <div class="box-header">
-                                    <i class="fa fa-envelope"></i>
-
-                                    <h3 class="box-title">Setting Auhorization</h3>
-                                    <!-- tools box -->
                                     <div class="pull-right form-inline">
                                         <div class="form-group">
                                             <div class="col-sm-7" style="padding-right: 0px;">
@@ -120,7 +105,7 @@
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div class="col-sm-5 text-right" style="padding-right: 0px;">
+                                            <div class="col-sm-5 text-right text-left-customize-mobile" style="padding-right: 0px;">
                                                 <div class="btn-group">
                                                     <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
                                                         <i class="fa fa-bars"></i></button>
@@ -208,12 +193,13 @@
                                                             <label for="disabled${listAuthorities_index}"></label>
                                                             </#if>
                                                         </div>
-                                                    <td>
+                                                    <td><div style="white-space: nowrap;">
                                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                                         <input type="hidden" id="idTAU${listAuthorities_index}" value="${listAuthorities.id}"/>
                                                         <button type="submit" id="editAuth${listAuthorities_index}" class="btn btn-primary editButton">Edit</button>
                                                         <button type="submit" id="saveAuth${listAuthorities_index}" class="btn btn-primary saveButton" disabled>Save</button>
                                                         <button type="submit" id="deleteAuth${listAuthorities_index}" class="btn btn-primary deleteButton" disabled>Delete</button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </#list>
@@ -507,18 +493,30 @@
 <script src="../../../resources/dist/js/pages/all_loading.js"></script>
 <script>
 $(function () {
+    
+    $("#tableAuthorization").DataTable({
+        "sDom": '<"top"fl>rt<"bottom"p><"clear">',
+        "iDisplayLength": 25,
+             scrollY: 360,
+              "scrollX": "100%",
+        "columnDefs": [
+                {"width": "130px", "targets": 8}
+            ],
+       scroller: {
+                loadingIndicator: true
+            }
+    });
+    
     if (roleForAdd != null) {
         $("#idRoleAdd").val(roleForAdd);
     }
+    
     $("#saveModalAddMenu").on("click", function () {
         addDataMenu(roleIdForAdd, $('#modalIsCreate').is(':checked'), $('#modalIsUpdate').is(':checked'),
                 $('#modalIsDelete').is(':checked'), $('#modalIsDisabled').is(':checked'),
                 $('#modalMenuid').val(), $('#modalParentMenuid').val());
     });
     $(".select2").select2();
-    $("#tableAuthorization").DataTable({
-        "iDisplayLength": 25
-    });
     
     //logic button if load page for DOM
     $('#tableAuthorization').on('click', '.deleteButton', function(){
@@ -660,11 +658,11 @@ $(function () {
                       return '<div class="center" ><input type="checkbox"  id="disabled'+numberRow+'" disabled checked>'
                              +' <label for="disabled'+numberRow+'"></label>   </div>';  
                     }, 
-                    function () { return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
+                    function () { return '<div style="white-space: nowrap;"><input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
                         + '<input type = "hidden" id = "idTAU'+numberRow+'" value = "'+data.id+'" />'
                         + '<button type = "submit" id = "editAuth'+numberRow+'" class = "btn btn-primary editButton" > Edit </button>'
                         + ' <button type = "submit" id = "saveAuth'+numberRow+'" class = "btn btn-primary saveButton" disabled > Save </button>'
-                        + ' <button type = "submit" id = "deleteAuth'+numberRow+'" class = "btn btn-primary deleteButton" disabled > Delete </button>';}])
+                        + ' <button type = "submit" id = "deleteAuth'+numberRow+'" class = "btn btn-primary deleteButton" disabled > Delete </button></div>';}])
                         .draw()
                         .node();
                 $(rowNode)
