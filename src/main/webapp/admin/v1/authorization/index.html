@@ -193,12 +193,13 @@
                                                             <label for="disabled${listAuthorities_index}"></label>
                                                             </#if>
                                                         </div>
-                                                    <td>
+                                                    <td><div style="white-space: nowrap;">
                                                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                                                         <input type="hidden" id="idTAU${listAuthorities_index}" value="${listAuthorities.id}"/>
                                                         <button type="submit" id="editAuth${listAuthorities_index}" class="btn btn-primary editButton">Edit</button>
                                                         <button type="submit" id="saveAuth${listAuthorities_index}" class="btn btn-primary saveButton" disabled>Save</button>
                                                         <button type="submit" id="deleteAuth${listAuthorities_index}" class="btn btn-primary deleteButton" disabled>Delete</button>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                                 </#list>
@@ -497,6 +498,7 @@ $(function () {
         "sDom": '<"top"fl>rt<"bottom"p><"clear">',
         "iDisplayLength": 25,
              scrollY: 360,
+              "scrollX": "100%",
         "columnDefs": [
                 {"width": "130px", "targets": 8}
             ],
