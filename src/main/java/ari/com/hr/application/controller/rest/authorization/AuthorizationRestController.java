@@ -3,6 +3,7 @@ package ari.com.hr.application.controller.rest.authorization;
 import ari.com.hr.application.dao.SysAuthorizationDao;
 import ari.com.hr.application.dto.GlobalDto;
 import ari.com.hr.application.dto.SysAuthorizationDto;
+import ari.com.hr.application.dto.SysRolesDto;
 import ari.com.hr.application.model.SysAuthorization;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/admin/v1/api/authorization")
 public class AuthorizationRestController {
 
-    Logger log = LoggerFactory.getLogger(this.getClass());
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     SysAuthorizationDao dsSysAuthorization;
@@ -38,7 +39,7 @@ public class AuthorizationRestController {
             @RequestParam(value = "vDisable") boolean vDisable) {
         int inUpdate = dsSysAuthorization.updateAuthorization(id, vInsert, vUpdate, vDelete, vDisable);
 
-        log.debug(id + "inUpdate" + inUpdate);
+        logger.debug(id + "inUpdate" + inUpdate);
 
         GlobalDto globalDto = new GlobalDto();
         globalDto.setId(id);
@@ -60,6 +61,13 @@ public class AuthorizationRestController {
         return saveDataMenu(idRole, vInsert, vUpdate,
                 vDelete, vDisable, MenuId, parentMenuId);
     }
+    
+    @RequestMapping(value = "/viewRoles/", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public SysRolesDto viewRoles(@RequestParam("idRole") Long idRoles) {
+        logger.debug("view roles {}", idRoles);
+        return null;
+    }
 
     @RequestMapping(value = "/deleteMenu/{idAuthorization}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
@@ -77,7 +85,7 @@ public class AuthorizationRestController {
             Long parentMenuId) {
 
         SysAuthorization dataAuthorization = new SysAuthorization();
-        log.debug("-add new menu on id " + idRole
+        logger.debug("-add new menu on id " + idRole
                 + ", menuId : " + MenuId
                 + ", parentId " + parentMenuId
                 + " " + vInsert + " " + vUpdate + " " + vDelete + " " + vDisable);
@@ -97,11 +105,11 @@ public class AuthorizationRestController {
         dataAuthorization.setIsRead(true);
 
         dataAuthorization = dsSysAuthorization.save(dataAuthorization);
-        log.debug("new id menu after add : " + dataAuthorization.getId() + "--");
+        logger.debug("new id menu after add : " + dataAuthorization.getId() + "--");
 
         SysAuthorizationDto dataAuthorizations = dsSysAuthorization.getDataAuthorizationById(dataAuthorization.getId());
-        log.debug("new id menu after get :" + dataAuthorizations.getId() + "--");
-        log.debug("menu name after add : " + dataAuthorizations.getMenuName());
+        logger.debug("new id menu after get :" + dataAuthorizations.getId() + "--");
+        logger.debug("menu name after add : " + dataAuthorizations.getMenuName());
 
         return dataAuthorizations;
     }
