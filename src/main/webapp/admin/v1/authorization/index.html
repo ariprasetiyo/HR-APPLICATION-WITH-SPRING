@@ -49,7 +49,7 @@
                     <!-- Sidebar user panel -->
                     
                     <!-- search form -->
-                    <form action="#" method="get" class="sidebar-form">
+                    <form action="#" method="get" class="sidebar-form">-->
                         <div class="input-group">
                             <input type="text" name="q" class="form-control" placeholder="Search...">
                             <span class="input-group-btn">
@@ -80,7 +80,7 @@
                                     <div class="pull-right form-inline">
                                         <div class="form-group">
                                             <div class="col-sm-7" style="padding-right: 0px;">
-                                                <form method="POST" action="">
+                                                <!--<form method="POST" action="">-->
                                                     <input type="hidden" id="csrf" name="${_csrf.parameterName}" value="${_csrf.token}" />
                                                     <div class="input-group">
                                                         <select class="form-control" name="roles_id">
@@ -100,10 +100,10 @@
                                                             </#list>
                                                         </select>
                                                         <div class="input-group-btn">
-                                                            <button type="submit" class="btn btn-info btn-flat">Action</button>
+                                                            <button id="submitRoles" type="submit" class="btn btn-info btn-flat">Action</button>
                                                         </div>
                                                     </div>
-                                                </form>
+                                               <!-- </form>-->
                                             </div>
                                             <div class="col-sm-5 text-right text-left-customize-mobile" style="padding-right: 0px;">
                                                 <div class="btn-group">
@@ -493,6 +493,10 @@
 <script src="../../../resources/dist/js/pages/all_loading.js"></script>
 <script>
 $(function () {
+    $("#submitRoles").on("click", function(){
+        alert($('select[name=roles_id]').val());
+       viewDataRoles($('select[name=roles_id]').val());
+    });
     
     $("#tableAuthorization").DataTable({
         "sDom": '<"top"fl>rt<"bottom"p><"clear">',
@@ -603,6 +607,30 @@ $(function () {
                     tr.remove();
                 });
                 return false;
+            }
+        });
+    }
+    
+    function viewDataRoles(idRole){
+        $.ajax({
+            type: "POST",
+            url: "api/authorization/viewRoles/",
+            headers: {'X-XSRF-TOKEN': $("#csrf").val()},
+            data : {
+                idRole : idRole
+            },
+            dataType: "json",
+            success: function (data, textStatus, jqXHR) {
+                alert("berhasil");
+                //alert(data.id);
+                //$('rowId'+data.id).remove();
+                
+                //var tr = $('#idRole' + data.id).closest('tr');
+                //tr.css("background-color", "#00acd6");
+                //tr.fadeOut(400, function () {
+                //    tr.remove();
+                //});
+                //return false;
             }
         });
     }
