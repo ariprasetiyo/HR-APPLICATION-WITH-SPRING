@@ -128,7 +128,25 @@
                                 <div class="box-body">
                                     <!-- /.box-header -->
                                     <div class="box-body">
-                                        <table id="tableAuthorization" class="table table-bordered table-striped">
+                                     	<table id="tableAuthorization" class="table table-bordered table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th><div class="center" >No</div></th>
+                                                    <th><div class="center" >Name menu</div></th>
+                                                    <th><div class="center" >Create Time</div></th>
+                                                    <th><div class="center" >Modify Time</div></th>
+                                                    <th><div class="center" >Is Create</div></th>
+                                                    <th><div class="center" >Is Update</div></th>
+                                                    <th><div class="center" >Is Delete</div></th>
+                                                    <th><div class="center" >Is Disabled</div></th>
+                                                    <th><div class="center" >Action</div></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                        
+                                        <!-- <table id="tableAuthorizationss" class="table table-bordered table-striped">
                                             <thead>
                                                 <tr>
                                                     <th><div class="center" >No</div></th>
@@ -207,7 +225,7 @@
                                                 </#if>
                                             </tbody>
 
-                                        </table>
+                                        </table> -->
                                     </div>
                                     <!-- /.box-body -->
                                 </div>
@@ -495,10 +513,10 @@
 $(function () {
     $("#submitRoles").on("click", function(){
         alert($('select[name=roles_id]').val());
-       viewDataRoles($('select[name=roles_id]').val());
+    	viewAuthorizationList($('select[name=roles_id]').val());
     });
     
-    $("#tableAuthorization").DataTable({
+    $("#tableAuthorizationa").DataTable({
         "sDom": '<"top"fl>rt<"bottom"p><"clear">',
         "iDisplayLength": 25,
              scrollY: 360,
@@ -610,30 +628,125 @@ $(function () {
             }
         });
     }
+    viewAuthorizationList(1);
     
-    function viewDataRoles(idRole){
+    function viewAuthorizationList(idRole) {
+    	//dataTables ajax logic
+        $('#tableAuthorization').DataTable({
+            /*
+             * l - Length changing
+             f - Filtering input
+             t - The table!
+             i - Information
+             p - Pagination
+             r - pRocessing
+             < and > - div elements
+             <"class" and > - div with a class
+             Examples: <"wrapper"flipt>, <lf<t>ip>
+             */
+            "sDom": '<"top"fl>rt<"bottom"p><"clear">',
+            serverSide: true,
+            ordering: false,
+            searching: false,
+            ajax: function (data, callback, settings) {
+            	$.ajax({
+                	type: "POST",
+                    url: "api/authorization/list/"+idRole,
+                    headers: {'X-XSRF-TOKEN': $("#csrf").val()},
+                    data: {
+                        limit: data.length,
+                        offset: data.start,
+                        search: data.search.value
+                    },
+                    dataType: "json",
+                    beforeSend: function () {},
+                    success: function (dataResponse, textStatus, jqXHR) {
+                    	var out = [];
+                        var idUser = null;
+                        function buttonAction(i, idUser) {
+                            return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
+                                    + '<input type = "hidden" id = "idData' + idUser + '" class="idDataHide' + i + '" /> '
+                                    + '<button type = "submit" id = "editAuth' + i + '" class = "btn btn-primary editButton" > Edit </button> '
+                                    + '<button type = "submit" id = "deleteAuth' + i + '" class = "btn btn-primary deleteButton" > Delete </button>';
+                        }
+                        for (var i = 0, ien = dataResponse.length; i < ien; i++) {
+                            idUser = dataResponse[i].id;
+                            out.push([i + 1,
+                            	dataResponse[i].menuName,
+                                dataResponse[i].createdTime,
+                                dataResponse[i].modifiedTime,
+                                dataResponse[i].isInsert,
+                                dataResponse[i].isUpdate,
+                                dataResponse[i].isDelete,
+                                dataResponse[i].disabled,
+                                buttonAction(i, idUser)
+                            ]);
+                        }
+                        
+                        setTimeout(function () {
+                            callback({
+                                draw: data.draw,
+                                data: out,
+                                recordsTotal: dataResponse.totalRecord,
+                                recordsFiltered: dataResponse.totalRecord
+                            });
+                        }, 50);
+                    },
+                    complete: function () {
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    }
+                });
+            },
+            scrollY: 360,
+            scroller: {
+                loadingIndicator: true
+            }
+        });	
+    }
+        
+    /* function viewAuthorizationList(idRole){
         $.ajax({
             type: "POST",
-            url: "api/authorization/viewRoles/",
+            url: "api/authorization/list/"+idRole,
             headers: {'X-XSRF-TOKEN': $("#csrf").val()},
-            data : {
-                idRole : idRole
-            },
             dataType: "json",
-            success: function (data, textStatus, jqXHR) {
-                alert("berhasil");
-                //alert(data.id);
-                //$('rowId'+data.id).remove();
-                
-                //var tr = $('#idRole' + data.id).closest('tr');
-                //tr.css("background-color", "#00acd6");
-                //tr.fadeOut(400, function () {
-                //    tr.remove();
-                //});
-                //return false;
+            success: function (dataResponse, callback, jqXHR) {
+                var out = [];
+                var idUser = null;
+
+                function buttonAction(i, idUser) {
+                    return '<input type = "hidden" name = "${_csrf.parameterName}" value = "${_csrf.token}" />'
+                            + '<input type = "hidden" id = "idData' + idUser + '" class="idDataHide' + i + '" /> '
+                            + '<button type = "submit" id = "editAuth' + i + '" class = "btn btn-primary editButton" > Edit </button> '
+                            + '<button type = "submit" id = "deleteAuth' + i + '" class = "btn btn-primary deleteButton" > Delete </button>';
+                }
+
+               for (var i = 0, ien = dataResponse.length; i < ien; i++) {
+                    idUser = dataResponse[i].id;
+                    out.push([i + 1,
+                    	dataResponse[i].menuName,
+                        dataResponse[i].createdTime,
+                        dataResponse[i].modifiedTime,
+                        dataResponse[i].isInsert,
+                        dataResponse[i].isUpdate,
+                        dataResponse[i].isDelete,
+                        dataResponse[i].isDisabled,
+                        buttonAction(i, idUser)
+                    ]);
+                }
+
+                setTimeout(function () {
+                    callback({
+                        draw: data.draw,
+                        data: out,
+                        recordsTotal: dataResponse.totalRecord,
+                        recordsFiltered: dataResponse.totalRecord
+                    });
+                }, 50);
             }
         });
-    }
+    } */
 
     function addDataMenu(id, vInsert, vDelete, vUpdate, vDisable, menuId, parentId) {
         var csrfToken = $("#csrf").val();

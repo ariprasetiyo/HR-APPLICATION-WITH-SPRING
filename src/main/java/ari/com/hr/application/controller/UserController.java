@@ -1,4 +1,4 @@
-package ari.com.hr.application.controller.user;
+package ari.com.hr.application.controller;
 
 import ari.com.hr.application.dao.SysRolesDao;
 import ari.com.hr.application.model.SysRoles;

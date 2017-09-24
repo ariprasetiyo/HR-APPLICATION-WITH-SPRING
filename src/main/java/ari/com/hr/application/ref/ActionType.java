@@ -6,7 +6,7 @@
 package ari.com.hr.application.ref;
 
 
-public enum EnumActionType {
+public enum ActionType {
     UPLOAD_FILE("Upload file"),
     UPADATE("Update"),
     APPROVAL("Approval"),
@@ -16,7 +16,7 @@ public enum EnumActionType {
 
     private String name;
 
-    EnumActionType(String name) {
+    ActionType(String name) {
         this.name = name;
     }
 

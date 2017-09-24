@@ -3,3 +3,5 @@ logs
 applogs
 bin
 .settings/
+.classpath
+.project

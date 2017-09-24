@@ -11,45 +11,24 @@ import java.util.Date;
  *
  * @author ari-prasetiyo
  */
-public class SysAuthorizationDto {
+public class SysAuthorizationDto extends Dto {
 
-    private String roleName;
-    private String url;
+	private String roleName;
+	private String url;
 
-    private String menuName;
+	private String menuName;
 
-    private Long parentId;
+	private Long parentId;
 
-    private Long id;
-    
+	private Long id;
 
-    private boolean isUpdate;
+	private boolean isUpdate;
 
-    private boolean isDelete;
+	private boolean isDelete;
 
-    private boolean isInsert;
+	private boolean isInsert;
 
-    private boolean isRead;
-    
-    private Date createTime;
-    
-    private Date modifyTime;
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getModifyTime() {
-        return modifyTime;
-    }
-
-    public void setModifyTime(Date modifyTime) {
-        this.modifyTime = modifyTime;
-    }
+	private boolean isRead;
 
     public String getMenuName() {
         return menuName;
@@ -127,10 +106,10 @@ public class SysAuthorizationDto {
         this.roleName = roleName;
         this.url = patternDispatcherUrl;
     }
+    
+    public SysAuthorizationDto(){};
 
     public SysAuthorizationDto(Date createTime, Date modifyTime, Long id, String menuName, Long parentId, boolean isUpdate, boolean isDelete, boolean isInsert, boolean isRead) {
-        this.createTime = createTime;
-        this.modifyTime = modifyTime;
         this.id = id;
         this.menuName = menuName;
         this.parentId = parentId;
@@ -139,4 +118,12 @@ public class SysAuthorizationDto {
         this.isInsert = isInsert;
         this.isRead = isRead;
     }
+
+	@Override
+	public String toString() {
+		return "SysAuthorizationDto [roleName=" + roleName + ", url=" + url + ", menuName=" + menuName + ", parentId="
+				+ parentId + ", id=" + id + ", isUpdate=" + isUpdate + ", isDelete=" + isDelete + ", isInsert="
+				+ isInsert + ", isRead=" + isRead + "]";
+	}
+   
 }

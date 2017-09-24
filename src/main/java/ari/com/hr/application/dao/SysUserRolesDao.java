@@ -41,5 +41,8 @@ public interface SysUserRolesDao extends PagingAndSortingRepository<SysUserRoles
     
     @Query("delete from SysUserRoles where sysUser.id = :nUserId")
     public Integer deleteByUserId(@Param("nUserId") Long userId);
+    
+//    @Query("delete from SysUserRoles where sysUser.id = :userId")
+//    public int deleteUserRoles(@Param("userId") long userId);
 
 }

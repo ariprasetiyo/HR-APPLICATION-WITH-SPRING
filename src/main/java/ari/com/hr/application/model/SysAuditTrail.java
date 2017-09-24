@@ -1,7 +1,7 @@
 
 package ari.com.hr.application.model;
 
-import ari.com.hr.application.ref.EnumActionType;
+import ari.com.hr.application.ref.ActionType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -11,7 +11,7 @@ import javax.persistence.Table;
 public class SysAuditTrail extends ModelSerializable {
     
     @Column(name = "action_type")
-    EnumActionType actionType;
+    ActionType actionType;
     
     
 }

@@ -1,11 +1,9 @@
-package ari.com.hr.application.controller.rest.authorization;
+package ari.com.hr.application.controller.rest;
 
-import ari.com.hr.application.dao.SysAuthorizationDao;
-import ari.com.hr.application.dto.GlobalDto;
-import ari.com.hr.application.dto.SysAuthorizationDto;
-import ari.com.hr.application.dto.SysRolesDto;
-import ari.com.hr.application.model.SysAuthorization;
+import java.util.List;
+
 import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import ari.com.hr.application.dao.SysAuthorizationDao;
+import ari.com.hr.application.dto.GlobalDto;
+import ari.com.hr.application.dto.SysAuthorizationDto;
+import ari.com.hr.application.dto.SysRolesDto;
+import ari.com.hr.application.services.AuthorizationService;
+import ari.com.hr.application.util.Logs;
+
 @RestController
 @RequestMapping("/admin/v1/api/authorization")
 public class AuthorizationRestController {
@@ -28,6 +33,9 @@ public class AuthorizationRestController {
 
     @Autowired
     SysAuthorizationDao dsSysAuthorization;
+    
+    @Autowired
+    AuthorizationService authorizationService;
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
@@ -39,18 +47,17 @@ public class AuthorizationRestController {
             @RequestParam(value = "vDisable") boolean vDisable) {
         int inUpdate = dsSysAuthorization.updateAuthorization(id, vInsert, vUpdate, vDelete, vDisable);
 
-        logger.debug(id + "inUpdate" + inUpdate);
+        Logs.logDebug(logger,"{} inUpdate {}", id, inUpdate);
 
         GlobalDto globalDto = new GlobalDto();
         globalDto.setId(id);
         globalDto.setCount(inUpdate);
 
-        return new ResponseEntity(globalDto, HttpStatus.OK);
+        return new ResponseEntity<GlobalDto>(globalDto, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/addMenu/{idRoles}", method = RequestMethod.POST,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    @Transactional
     public SysAuthorizationDto authorizationAddMenu(@PathVariable("idRoles") Long idRole,
             @RequestParam("vInsert") boolean vInsert,
             @RequestParam("vUpdate") boolean vUpdate,
@@ -58,59 +65,30 @@ public class AuthorizationRestController {
             @RequestParam("vDisable") boolean vDisable,
             @RequestParam("modelMenuId") Long MenuId,
             @RequestParam("modelParentMenuId") Long parentMenuId) {
-        return saveDataMenu(idRole, vInsert, vUpdate,
+        return authorizationService.saveDataMenu(idRole, vInsert, vUpdate,
                 vDelete, vDisable, MenuId, parentMenuId);
     }
-    
-    @RequestMapping(value = "/viewRoles/", method = RequestMethod.POST,
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public SysRolesDto viewRoles(@RequestParam("idRole") Long idRoles) {
-        logger.debug("view roles {}", idRoles);
-        return null;
-    }
-
+       
+	@RequestMapping(value = "/list/{idRole}", method = RequestMethod.POST)
+	public ResponseEntity<List<SysAuthorizationDto>> viewAuthorizationList(@PathVariable("idRole") Long idRole) {
+		return new ResponseEntity<List<SysAuthorizationDto>>(authorizationService.getAuthorizationList(idRole),
+				HttpStatus.OK);
+	}
+	
     @RequestMapping(value = "/deleteMenu/{idAuthorization}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<GlobalDto> deleteMenu(@PathVariable("idAuthorization") Long id) {
         dsSysAuthorization.delete(id);
         GlobalDto globalDto = new GlobalDto();
         globalDto.setId(id);
-
-        return new ResponseEntity(globalDto, HttpStatus.OK);
+        return new ResponseEntity<GlobalDto>(globalDto, HttpStatus.OK);
+    }
+    
+    @RequestMapping(value = "/viewRoles/", method = RequestMethod.POST,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public SysRolesDto viewRoles(@RequestParam("idRole") Long idRoles) {
+        //logger.debug("view roles {}", idRoles);
+        return null;
     }
 
-    private SysAuthorizationDto saveDataMenu(Long idRole, boolean vInsert,
-            boolean vUpdate, boolean vDelete,
-            boolean vDisable, Long MenuId,
-            Long parentMenuId) {
-
-        SysAuthorization dataAuthorization = new SysAuthorization();
-        logger.debug("-add new menu on id " + idRole
-                + ", menuId : " + MenuId
-                + ", parentId " + parentMenuId
-                + " " + vInsert + " " + vUpdate + " " + vDelete + " " + vDisable);
-        dataAuthorization.setSysMenu(MenuId);
-
-        if (parentMenuId == null) {
-            dataAuthorization.setParent(null);
-        } else {
-            dataAuthorization.setParent(parentMenuId);
-        }
-
-        dataAuthorization.setSysRoles(idRole);
-        dataAuthorization.setIsDelete(vDelete);
-        dataAuthorization.setIsInsert(vInsert);
-        dataAuthorization.setIsUpdate(vUpdate);
-        dataAuthorization.setDisabled(vDisable);
-        dataAuthorization.setIsRead(true);
-
-        dataAuthorization = dsSysAuthorization.save(dataAuthorization);
-        logger.debug("new id menu after add : " + dataAuthorization.getId() + "--");
-
-        SysAuthorizationDto dataAuthorizations = dsSysAuthorization.getDataAuthorizationById(dataAuthorization.getId());
-        logger.debug("new id menu after get :" + dataAuthorizations.getId() + "--");
-        logger.debug("menu name after add : " + dataAuthorizations.getMenuName());
-
-        return dataAuthorizations;
-    }
 }

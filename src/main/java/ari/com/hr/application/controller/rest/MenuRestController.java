@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ari.com.hr.application.controller.rest.menu;
+package ari.com.hr.application.controller.rest;
 
 import ari.com.hr.application.dao.SysMenusDao;
 import ari.com.hr.application.model.SysMenus;

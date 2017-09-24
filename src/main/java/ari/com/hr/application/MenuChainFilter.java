@@ -11,8 +11,9 @@ package ari.com.hr.application;
  */
 import ari.com.hr.application.dao.SysAuthorizationDao;
 import ari.com.hr.application.dao.SysRolesDao;
-import ari.com.hr.application.dao.services.SysListMenu;
 import ari.com.hr.application.model.SysRoles;
+import ari.com.hr.application.services.MenuService;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,7 @@ public class MenuChainFilter implements Filter {
         String name = auth.getName();
 
         //Convert Object to List
-        List listAuthorities = new ArrayList(auth.getAuthorities());
+        List<?> listAuthorities = new ArrayList<Object>(auth.getAuthorities());
         List<String> listAuthoritiesString = new ArrayList<>(listAuthorities.size());
         for (Object xx : listAuthorities) {
             listAuthoritiesString.add(xx.toString());
@@ -76,7 +77,7 @@ public class MenuChainFilter implements Filter {
         }
 
         StringBuilder tmpScript = new StringBuilder();
-        String listMenu = SysListMenu.getScreenMenu(listLongId, 0, sysAuthorizationDao, tmpScript).toString();
+        String listMenu = MenuService.getScreenMenu(listLongId, 0, sysAuthorizationDao, tmpScript).toString();
         servletRequest.setAttribute("scriptMenu", listMenu);
         filterChain.doFilter(servletRequest, servletResponse);
     }
